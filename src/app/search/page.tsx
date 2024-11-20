@@ -20,11 +20,11 @@ const ListPage = async () => {
       owner,
     },
   });
- console.log(stuff); */ }
+// console.log(stuff); */ }
   return (
     <main>
       <Container id="list" fluid className="py-3">
-        This is the account page
+        This is the buy page
       </Container>
     </main>
   );

@@ -11,6 +11,7 @@ import {
   PersonFill,
   PersonPlusFill,
 } from 'react-bootstrap-icons';
+import SearchBar from './SearchBar';
 
 const NavBar: React.FC = () => {
   const { data: session } = useSession();
@@ -19,32 +20,14 @@ const NavBar: React.FC = () => {
   const role = userWithRole?.randomKey;
   const pathName = usePathname();
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="dark" expand="lg">
       <Container>
-        <Navbar.Brand href="/">Next.js Application Template</Navbar.Brand>
+        <Navbar.Brand className="me-auto" href="/">
+          TextSwap
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            {currentUser
-              ? [
-                  <Nav.Link
-                    id="add-stuff-nav"
-                    href="/add"
-                    key="add"
-                    active={pathName === '/add'}
-                  >
-                    Add Stuff
-                  </Nav.Link>,
-                  <Nav.Link
-                    id="list-stuff-nav"
-                    href="/list"
-                    key="list"
-                    active={pathName === '/list'}
-                  >
-                    List Stuff
-                  </Nav.Link>,
-                ]
-              : ''}
+          <Nav>
             {currentUser && role === 'ADMIN' ? (
               <Nav.Link
                 id="admin-stuff-nav"
@@ -54,6 +37,49 @@ const NavBar: React.FC = () => {
               >
                 Admin
               </Nav.Link>
+            ) : (
+              ''
+            )}
+          </Nav>
+          <Nav className="nav-search-bar d-none d-lg-flex">
+            <SearchBar />
+          </Nav>
+          <Nav className="ms-auto">
+            {currentUser ? (
+              <>
+                <Nav.Link
+                  id="buy-books-nav"
+                  href="/buy"
+                  key="buy"
+                  active={pathName === '/buy'}
+                >
+                  Buy
+                </Nav.Link>
+                <Nav.Link
+                  id="sell-books-nav"
+                  href="/sell"
+                  key="sell"
+                  active={pathName === '/sell'}
+                >
+                  Sell
+                </Nav.Link>
+                <Nav.Link
+                  id="cart-nav"
+                  href="/cart"
+                  key="cart"
+                  active={pathName === '/cart'}
+                >
+                  Cart
+                </Nav.Link>
+                <Nav.Link
+                  id="account-nav"
+                  href="/account"
+                  key="account"
+                  active={pathName === '/account'}
+                >
+                  Account
+                </Nav.Link>
+              </>
             ) : (
               ''
             )}
@@ -94,6 +120,13 @@ const NavBar: React.FC = () => {
                 </NavDropdown.Item>
               </NavDropdown>
             )}
+          </Nav>
+          <Nav className="d-lg-none w-100">
+            <NavDropdown id="search-dropdown" title="Search">
+              <div className="collapse-search-bar">
+                <SearchBar />
+              </div>
+            </NavDropdown>
           </Nav>
         </Navbar.Collapse>
       </Container>

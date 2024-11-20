@@ -14,17 +14,17 @@ const ListPage = async () => {
       // eslint-disable-next-line @typescript-eslint/comma-dangle
     } | null,
   );
-  { /* const owner = (session && session.user && session.user.email) || '';
+  { /* const owner = (session && session.user && session.user.email) || ' ';
   const stuff = await prisma.stuff.findMany({
     where: {
       owner,
     },
   });
- console.log(stuff); */ }
+// console.log(stuff); */ }
   return (
     <main>
       <Container id="list" fluid className="py-3">
-        This is the account page
+        This is the cart page
       </Container>
     </main>
   );
