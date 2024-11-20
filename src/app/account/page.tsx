@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 import { adminProtectedPage } from '@/lib/page-protection';
 import authOptions from '@/lib/authOptions';
 
-const AdminPage = async () => {
+const AccountPage = async () => {
   const session = await getServerSession(authOptions);
   adminProtectedPage(
     session as {
@@ -13,10 +13,10 @@ const AdminPage = async () => {
   return (
     <main>
       <Container id="list" fluid className="py-3">
-        This is the admin page
+        This is the account page
       </Container>
     </main>
   );
 };
 
-export default AdminPage;
+export default AccountPage;

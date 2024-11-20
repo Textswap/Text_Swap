@@ -1,21 +1,22 @@
 import { getServerSession } from 'next-auth';
+import { Container } from 'react-bootstrap';
+import { adminProtectedPage } from '@/lib/page-protection';
 import authOptions from '@/lib/authOptions';
-import { loggedInProtectedPage } from '@/lib/page-protection';
-import AddStuffForm from '@/components/AddStuffForm';
 
-const AddStuff = async () => {
-  // Protect the page, only logged in users can access it.
+const BuyPage = async () => {
   const session = await getServerSession(authOptions);
-  loggedInProtectedPage(
+  adminProtectedPage(
     session as {
       user: { email: string; id: string; randomKey: string };
     } | null,
   );
   return (
     <main>
-      <AddStuffForm />
+      <Container id="list" fluid className="py-3">
+        This is the buy page
+      </Container>
     </main>
   );
 };
 
-export default AddStuff;
+export default BuyPage;
