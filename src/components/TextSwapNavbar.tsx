@@ -19,6 +19,7 @@ const NavBar: React.FC = () => {
   const userWithRole = session?.user as { email: string; randomKey: string };
   const role = userWithRole?.randomKey;
   const pathName = usePathname();
+
   return (
     <Navbar bg="dark" expand="lg">
       <Container>
@@ -135,3 +136,4 @@ const NavBar: React.FC = () => {
 };
 
 export default NavBar;
+
