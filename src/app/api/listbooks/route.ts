@@ -1,3 +1,5 @@
+/* eslint-disable import/prefer-default-export */
+
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { mkdir, writeFile } from 'fs/promises';
@@ -10,17 +12,30 @@ export async function POST(request: Request) {
     const formData = await request.formData();
 
     // Validate required fields
-    const requiredFields = ['title', 'author', 'isbn', 'category', 'price', 'condition'];
+    const requiredFields = [
+      'title',
+      'author',
+      'isbn',
+      'category',
+      'price',
+      'condition',
+    ];
     for (const field of requiredFields) {
       if (!formData.get(field)) {
-        return NextResponse.json({ error: `Missing required field: ${field}` }, { status: 400 });
+        return NextResponse.json(
+          { error: `Missing required field: ${field}` },
+          { status: 400 },
+        );
       }
     }
 
     // Parse and validate the price
     const price = parseFloat(formData.get('price') as string);
-    if (isNaN(price) || price < 0) {
-      return NextResponse.json({ error: 'Invalid price value' }, { status: 400 });
+    if (Number.isNaN(price) || price < 0) {
+      return NextResponse.json(
+        { error: 'Invalid price value' },
+        { status: 400 },
+      );
     }
 
     // Prepare book data
@@ -29,8 +44,12 @@ export async function POST(request: Request) {
       author: formData.get('author') as string,
       isbn: formData.get('isbn') as string,
       category: formData.get('category') as string,
-      price: price,
-      condition: (formData.get('condition') as string)?.toLowerCase() as 'excellent' | 'good' | 'fair' | 'poor',
+      price,
+      condition: (formData.get('condition') as string)?.toLowerCase() as
+        | 'excellent'
+        | 'good'
+        | 'fair'
+        | 'poor',
     };
 
     // Handle image upload if present
@@ -48,7 +67,10 @@ export async function POST(request: Request) {
         imageUrl = `/uploads/${fileName}`;
       } catch (error) {
         console.error('Error uploading image:', error);
-        return NextResponse.json({ error: 'Failed to upload image' }, { status: 500 });
+        return NextResponse.json(
+          { error: 'Failed to upload image' },
+          { status: 500 },
+        );
       }
     }
 
@@ -56,7 +78,7 @@ export async function POST(request: Request) {
     const book = await prisma.book.create({
       data: {
         ...bookData,
-        imageUrl, // Save image URL if available
+        imageUrl,
       },
     });
 
@@ -64,7 +86,9 @@ export async function POST(request: Request) {
     return NextResponse.json(book);
   } catch (error) {
     console.error('Error creating book:', error); // Log the exact error
-    return NextResponse.json({ error: 'Error creating book listing' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Error creating book listing' },
+      { status: 500 },
+    );
   }
-  
 }

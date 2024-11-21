@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+
 'use client';
 
 import React, { useState, useRef } from 'react';
@@ -262,15 +264,6 @@ const ListPage: React.FC = () => {
                 <option value="fair">Fair</option>
                 <option value="poor">Poor</option>
               </select>
-            </div>
-
-            <div className={styles.timestamps}>
-              <p className={styles.timestamp}>
-                Created: {new Date().toLocaleString()}
-              </p>
-              <p className={styles.timestamp}>
-                Last Edited: {new Date().toLocaleString()}
-              </p>
             </div>
 
             {/* Action buttons */}
