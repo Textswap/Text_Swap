@@ -43,3 +43,18 @@ model Stuff {
   condition Condition
   owner     String
 }
+
+model Book {
+  id          String    @id @default(cuid())
+  title       String
+  author      String
+  isbn        String
+  category    String
+  courseName  String?   
+  courseCrn   String?   
+  price       Float
+  condition   Condition
+  imageUrl    String?
+  createdAt   DateTime  @default(now())
+  lastEdited  DateTime  @updatedAt
+}
