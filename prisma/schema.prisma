@@ -55,6 +55,6 @@ model Book {
   price       Float
   condition   Condition
   imageUrl    String?
+  approved    Boolean   @default(false) 
   createdAt   DateTime  @default(now())
-  lastEdited  DateTime  @updatedAt
 }

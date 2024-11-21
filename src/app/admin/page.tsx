@@ -1,48 +1,112 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import styles from '@/styles/AdminPage.module.css';
 
-const AdminPage = () => {
-  const items = [
-    { id: 1, title: 'Textbook Title', condition: 'Good', price: '$10.99' },
-    { id: 2, title: 'Textbook Title', condition: 'Good', price: '$10.99' },
-    { id: 3, title: 'Textbook Title', condition: 'Good', price: '$10.99' },
-    { id: 4, title: 'Textbook Title', condition: 'Good', price: '$10.99' },
-    { id: 5, title: 'Textbook Title', condition: 'Good', price: '$10.99' },
-    { id: 6, title: 'Textbook Title', condition: 'Good', price: '$10.99' },
-  ];
+interface Book {
+  id: number;
+  title: string;
+  condition: string;
+  price: string;
+  image_url: string;
+}
+
+const AdminPage: React.FC = () => {
+  const [books, setBooks] = useState<Book[]>([]);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await fetch('/api/adminapproval');
+        if (!response.ok) {
+          throw new Error('Failed to fetch books');
+        }
+        const data = await response.json();
+        setBooks(data);
+      } catch (error) {
+        console.error('Error fetching books:', error);
+      }
+    };
+
+    fetchBooks();
+  }, []);
+
+  const handleApprove = async (id: number) => {
+    try {
+      const response = await fetch(`/api/adminapproval/approve/${id}`, {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to approve book');
+      }
+
+      // Remove the approved book from the state
+      setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
+    } catch (error) {
+      console.error('Error approving book:', error);
+      alert('Error approving book.');
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await fetch(`/api/adminapproval/delete/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete book');
+      }
+
+      // Remove the deleted book from the state
+      setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
+    } catch (error) {
+      console.error('Error deleting book:', error);
+      alert('Error deleting book.');
+    }
+  };
 
   return (
     <main>
       <Container className={styles.container} fluid>
         <h1 className={styles.title}>Admin Page</h1>
         <Row>
-          {items.map((item) => (
-            <Col key={item.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
+          {books.map((book) => (
+            <Col key={book.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
               <Card className={styles.card}>
                 <Card.Img
                   variant="top"
-                  src="https://via.placeholder.com/150"
-                  alt="Textbook image"
+                  src={book.image_url}
+                  alt="Book image"
                   className={styles.cardImage}
                 />
                 <Card.Body className={styles.cardBody}>
                   <Card.Title className={styles.cardTitle}>
-                    {item.title}
+                    {book.title}
                   </Card.Title>
                   <Card.Text className={styles.cardText}>
                     Condition:
-                    {item.condition}
+                    {book.condition}
                   </Card.Text>
                   <Card.Text className={styles.cardText}>
-                    {item.price}
+                    Price:
+                    {book.price}
                   </Card.Text>
                   <div className={styles.cardButtons}>
-                    <Button variant="success" className={styles.button}>
+                    <Button
+                      variant="success"
+                      className={styles.button}
+                      onClick={() => handleApprove(book.id)}
+                    >
                       Approve
                     </Button>
-                    <Button variant="danger" className={styles.button}>
+                    <Button
+                      variant="danger"
+                      className={styles.button}
+                      onClick={() => handleDelete(book.id)}
+                    >
                       Delete
                     </Button>
                   </div>

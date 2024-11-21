@@ -79,6 +79,7 @@ export async function POST(request: Request) {
       data: {
         ...bookData,
         imageUrl,
+        approved: false,
       },
     });
 
