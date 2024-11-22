@@ -44,7 +44,6 @@ model Stuff {
   owner     String
 }
 
-<<<<<<< HEAD
 enum Department {
   Mathematics
   Arts
@@ -76,7 +75,6 @@ model Textbooks {
   condition   Condition
   isbn        String
 }
-=======
 model Book {
   id          String    @id @default(cuid())
   title       String
@@ -91,4 +89,3 @@ model Book {
   approved    Boolean   @default(false) 
   createdAt   DateTime  @default(now())
 }
->>>>>>> Ellie
