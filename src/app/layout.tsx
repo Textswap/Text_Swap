@@ -4,6 +4,7 @@ import './globals.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from '@/components/TextSwapNavbar';
 import Providers from './providers';
+import Buy from '@/components/Buy';
 
 
 const inter = Inter({ subsets: ['latin'] });
@@ -24,8 +25,10 @@ export default function RootLayout({
       <body className={classString}>
         <Providers>
           <NavBar />
+          
           {children}
           {/* <Footer /> */}
+          
         </Providers>
       </body>
     </html>

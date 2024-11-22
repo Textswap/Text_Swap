@@ -43,3 +43,35 @@ model Stuff {
   condition Condition
   owner     String
 }
+
+enum Department {
+  Mathematics
+  Arts
+  Science
+  ComputerScience
+}
+
+enum Course {
+  Algebra
+  History
+  Physics
+  Literature
+  Algorithms
+}
+
+enum Format {
+  Hardcover
+  eBook
+  Paperback
+}
+
+model Textbooks {
+  id          Int   @id @default(autoincrement())
+  title       String
+  price       Int
+  department  Department
+  course      Course
+  format      Format
+  condition   Condition
+  isbn        String
+}
