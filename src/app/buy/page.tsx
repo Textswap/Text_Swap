@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Form } from 'react-bootstrap';
 import defaultTextbooks from '@/components/defaultTextbooks';
+import styles from './BuyPageClient.module.css';
 
 const BuyPageClient: React.FC = () => {
   const [maxPrice, setMaxPrice] = useState(1000);
@@ -56,97 +57,111 @@ const BuyPageClient: React.FC = () => {
       <Row>
         {/* Filters Section */}
         <Col xs={12} md={3}>
-          <h3 className="text-center text-success">Filters</h3>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Maximum Price: ${maxPrice}</Form.Label>
-              <Form.Range
-                min="0"
-                max="1000"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(Number(e.target.value))}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Select
-                value={filters.department}
-                onChange={(e) => handleFilterChange('department', e.target.value)}
-              >
-                <option value="">Select Department</option>
-                <option value="Mathematics">Mathematics</option>
-                <option value="Arts">Arts</option>
-                <option value="Science">Science</option>
-                <option value="Computer Science">Computer Science</option>
-              </Form.Select>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Select
-                value={filters.course}
-                onChange={(e) => handleFilterChange('course', e.target.value)}
-              >
-                <option value="">Select Course</option>
-                <option value="Algebra">Algebra</option>
-                <option value="History">History</option>
-                <option value="Physics">Physics</option>
-                <option value="Literature">Literature</option>
-                <option value="Algorithms">Algorithms</option>
-              </Form.Select>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Select
-                value={filters.format}
-                onChange={(e) => handleFilterChange('format', e.target.value)}
-              >
-                <option value="">Select Format</option>
-                <option value="Hardcover">Hardcover</option>
-                <option value="Paperback">Paperback</option>
-                <option value="eBook">eBook</option>
-              </Form.Select>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Control
-                type="text"
-                placeholder="Search by Keywords"
-                value={filters.keywords}
-                onChange={(e) => handleFilterChange('keywords', e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Control
-                type="text"
-                placeholder="Search by ISBN"
-                value={filters.isbn}
-                onChange={(e) => handleFilterChange('isbn', e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group>
-              {['Fair', 'Good', 'Excellent'].map((condition) => (
-                <Form.Check
-                  key={condition}
-                  type="checkbox"
-                  label={condition}
-                  checked={filters.conditions.has(condition)}
-                  onChange={() => handleConditionChange(condition)}
+          <div className={styles.filtersSection}>
+            <h3 className={styles.filtersTitle}>Filters</h3>
+            <Form>
+              <Form.Group className="mb-3">
+                <Form.Label>Maximum Price: ${maxPrice}</Form.Label>
+                <input
+                  type="range"
+                  min="0"
+                  max="1000"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(Number(e.target.value))}
+                  className={styles.rangeSlider}
+                  style={{
+                    background: `linear-gradient(to right, #1b4a3d ${
+                      (maxPrice / 1000) * 100
+                    }%, #ddd ${(maxPrice / 1000) * 100}%)`,
+                  }}
                 />
-              ))}
-            </Form.Group>
-          </Form>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Select
+                  className={styles.selectField}
+                  value={filters.department}
+                  onChange={(e) => handleFilterChange('department', e.target.value)}
+                >
+                  <option value="">Select Department</option>
+                  <option value="Mathematics">Mathematics</option>
+                  <option value="Arts">Arts</option>
+                  <option value="Science">Science</option>
+                  <option value="Computer Science">Computer Science</option>
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Select
+                  className={styles.selectField}
+                  value={filters.course}
+                  onChange={(e) => handleFilterChange('course', e.target.value)}
+                >
+                  <option value="">Select Course</option>
+                  <option value="Algebra">Algebra</option>
+                  <option value="History">History</option>
+                  <option value="Physics">Physics</option>
+                  <option value="Literature">Literature</option>
+                  <option value="Algorithms">Algorithms</option>
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Select
+                  className={styles.selectField}
+                  value={filters.format}
+                  onChange={(e) => handleFilterChange('format', e.target.value)}
+                >
+                  <option value="">Select Format</option>
+                  <option value="Hardcover">Hardcover</option>
+                  <option value="Paperback">Paperback</option>
+                  <option value="eBook">eBook</option>
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Control
+                  className={styles.inputField}
+                  type="text"
+                  placeholder="Search by Keywords"
+                  value={filters.keywords}
+                  onChange={(e) => handleFilterChange('keywords', e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Control
+                  className={styles.inputField}
+                  type="text"
+                  placeholder="Search by ISBN"
+                  value={filters.isbn}
+                  onChange={(e) => handleFilterChange('isbn', e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group>
+                {['Fair', 'Good', 'Excellent'].map((condition) => (
+                  <Form.Check
+                    key={condition}
+                    type="checkbox"
+                    label={condition}
+                    checked={filters.conditions.has(condition)}
+                    onChange={() => handleConditionChange(condition)}
+                  />
+                ))}
+              </Form.Group>
+            </Form>
+          </div>
         </Col>
 
         {/* Textbook List Section */}
-        <Col xs={12} md={9}>
+        <Col xs={12} md={9} className={styles.textbookList}>
           <h3 className="text-center text-success">Available Textbooks</h3>
           {filteredTextbooks.length > 0 ? (
             <Row className="g-4">
               {filteredTextbooks.map((book) => (
                 <Col key={book.id} xs={12} sm={6} md={4}>
-                  <Card className="h-100">
+                  <Card className={styles.textbookCard}>
                     <Card.Body>
                       <Card.Title>{book.title}</Card.Title>
                       <Card.Text>
