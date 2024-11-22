@@ -35,20 +35,18 @@ const BuyPageClient: React.FC = () => {
     const matchesDepartment = !filters.department || book.department === filters.department;
     const matchesCourse = !filters.course || book.course === filters.course;
     const matchesFormat = !filters.format || book.format === filters.format;
-    const matchesKeywords =
-      !filters.keywords || book.title.toLowerCase().includes(filters.keywords.toLowerCase());
+    const matchesKeywords = !filters.keywords || book.title.toLowerCase().includes(filters.keywords.toLowerCase());
     const matchesISBN = !filters.isbn || book.isbn.includes(filters.isbn);
-    const matchesCondition =
-      filters.conditions.size === 0 || filters.conditions.has(book.condition);
+    const matchesCondition = filters.conditions.size === 0 || filters.conditions.has(book.condition);
 
     return (
-      matchesPrice &&
-      matchesDepartment &&
-      matchesCourse &&
-      matchesFormat &&
-      matchesKeywords &&
-      matchesISBN &&
-      matchesCondition
+      matchesPrice
+      && matchesDepartment
+      && matchesCourse
+      && matchesFormat
+      && matchesKeywords
+      && matchesISBN
+      && matchesCondition
     );
   });
 
@@ -61,7 +59,10 @@ const BuyPageClient: React.FC = () => {
             <h3 className={styles.filtersTitle}>Filters</h3>
             <Form>
               <Form.Group className="mb-3">
-                <Form.Label>Maximum Price: ${maxPrice}</Form.Label>
+                <Form.Label>
+                  Maximum Price: $
+                  {maxPrice}
+                </Form.Label>
                 <input
                   type="range"
                   min="0"
@@ -165,19 +166,30 @@ const BuyPageClient: React.FC = () => {
                     <Card.Body>
                       <Card.Title>{book.title}</Card.Title>
                       <Card.Text>
-                        <strong>Price:</strong> ${book.price}
+                        <strong>Price:</strong>
+                        {' '}
+                        $
+                        {book.price}
                       </Card.Text>
                       <Card.Text>
-                        <strong>Department:</strong> {book.department}
+                        <strong>Department:</strong>
+                        {' '}
+                        {book.department}
                       </Card.Text>
                       <Card.Text>
-                        <strong>Condition:</strong> {book.condition}
+                        <strong>Condition:</strong>
+                        {' '}
+                        {book.condition}
                       </Card.Text>
                       <Card.Text>
-                        <strong>Format:</strong> {book.format}
+                        <strong>Format:</strong>
+                        {' '}
+                        {book.format}
                       </Card.Text>
                       <Card.Text>
-                        <strong>ISBN:</strong> {book.isbn}
+                        <strong>ISBN:</strong>
+                        {' '}
+                        {book.isbn}
                       </Card.Text>
                     </Card.Body>
                   </Card>
