@@ -78,7 +78,7 @@ const AdminPage: React.FC = () => {
               <Card className={styles.card}>
                 <Card.Img
                   variant="top"
-                  src={book.image_url}
+                  src={book.image_url ? `/uploads/${book.image_url}` : 'https://via.placeholder.com/150'}
                   alt="Book image"
                   className={styles.cardImage}
                 />
