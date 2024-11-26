@@ -1,11 +1,42 @@
 /* eslint-disable import/prefer-default-export */
 
+// src/app/api/listbooks/route.ts
+
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { mkdir, writeFile } from 'fs/promises';
-import path from 'path';
+import { v2 as cloudinary } from 'cloudinary';
 
 const prisma = new PrismaClient();
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: 'drikcnunl',
+  api_key: '377153313932479',
+  api_secret: '5iQKLeIwYBU8ojYTiv9XLwjKpq0',
+});
+
+function uploadImageToCloudinary(
+  buffer: Buffer,
+  folder: string,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder },
+      (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        if (result?.secure_url) {
+          return resolve(result.secure_url);
+        }
+        return reject(
+          new Error('Failed to retrieve secure URL from Cloudinary response.'),
+        );
+      },
+    );
+    uploadStream.end(buffer);
+  });
+}
 
 export async function POST(request: Request) {
   try {
@@ -44,6 +75,8 @@ export async function POST(request: Request) {
       author: formData.get('author') as string,
       isbn: formData.get('isbn') as string,
       category: formData.get('category') as string,
+      courseName: formData.get('courseName') as string | null,
+      courseCrn: formData.get('courseCrn') as string | null,
       price,
       condition: (formData.get('condition') as string)?.toLowerCase() as
         | 'excellent'
@@ -59,16 +92,11 @@ export async function POST(request: Request) {
     if (imageFile) {
       try {
         const buffer = Buffer.from(await imageFile.arrayBuffer());
-        const fileName = `${Date.now()}-${imageFile.name.replace(/[^a-zA-Z0-9.-]/g, '')}`;
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-        await mkdir(uploadDir, { recursive: true });
-        const imagePath = path.join(uploadDir, fileName);
-        await writeFile(imagePath, buffer);
-        imageUrl = `/uploads/${fileName}`;
+        imageUrl = await uploadImageToCloudinary(buffer, 'textswap');
       } catch (error) {
-        console.error('Error uploading image:', error);
+        console.error('Error uploading image to Cloudinary:', error);
         return NextResponse.json(
-          { error: 'Failed to upload image' },
+          { error: 'Failed to upload image to Cloudinary' },
           { status: 500 },
         );
       }
@@ -86,7 +114,7 @@ export async function POST(request: Request) {
     // Return the newly created book
     return NextResponse.json(book);
   } catch (error) {
-    console.error('Error creating book:', error); // Log the exact error
+    console.error('Error creating book:', error);
     return NextResponse.json(
       { error: 'Error creating book listing' },
       { status: 500 },

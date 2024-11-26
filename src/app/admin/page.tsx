@@ -1,3 +1,5 @@
+// src/app/admin/page.tsx
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -5,11 +7,11 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import styles from '@/styles/AdminPage.module.css';
 
 interface Book {
-  id: number;
+  id: string;
   title: string;
   condition: string;
   price: string;
-  image_url: string;
+  imageUrl: string;
 }
 
 const AdminPage: React.FC = () => {
@@ -32,7 +34,7 @@ const AdminPage: React.FC = () => {
     fetchBooks();
   }, []);
 
-  const handleApprove = async (id: number) => {
+  const handleApprove = async (id: string) => {
     try {
       const response = await fetch(`/api/adminapproval/approve/${id}`, {
         method: 'POST',
@@ -42,7 +44,6 @@ const AdminPage: React.FC = () => {
         throw new Error('Failed to approve book');
       }
 
-      // Remove the approved book from the state
       setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
     } catch (error) {
       console.error('Error approving book:', error);
@@ -50,21 +51,17 @@ const AdminPage: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     try {
       const response = await fetch(`/api/adminapproval/delete/${id}`, {
         method: 'DELETE',
       });
-
       if (!response.ok) {
         throw new Error('Failed to delete book');
       }
-
-      // Remove the deleted book from the state
       setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
     } catch (error) {
       console.error('Error deleting book:', error);
-      alert('Error deleting book.');
     }
   };
 
@@ -78,10 +75,15 @@ const AdminPage: React.FC = () => {
               <Card className={styles.card}>
                 <Card.Img
                   variant="top"
-                  src={book.image_url ? `/uploads/${book.image_url}` : 'https://via.placeholder.com/150'}
+                  src={
+                    book.imageUrl
+                      ? book.imageUrl
+                      : 'https://via.placeholder.com/150'
+                  }
                   alt="Book image"
                   className={styles.cardImage}
                 />
+
                 <Card.Body className={styles.cardBody}>
                   <Card.Title className={styles.cardTitle}>
                     {book.title}
