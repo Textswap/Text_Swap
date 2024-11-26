@@ -3,7 +3,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Modal } from 'react-bootstrap';
 import styles from '@/styles/AdminPage.module.css';
 
 interface Book {
@@ -16,6 +16,8 @@ interface Book {
 
 const AdminPage: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -51,18 +53,35 @@ const AdminPage: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      const response = await fetch(`/api/adminapproval/delete/${id}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete book');
+  const handleDelete = async () => {
+    if (selectedBook) {
+      try {
+        const response = await fetch(
+          `/api/adminapproval/delete/${selectedBook.id}`,
+          {
+            method: 'DELETE',
+          },
+        );
+        if (!response.ok) {
+          throw new Error('Failed to delete book');
+        }
+        setBooks((prevBooks) => prevBooks.filter((book) => book.id !== selectedBook.id));
+        setShowModal(false); // Close the modal after successful deletion
+      } catch (error) {
+        console.error('Error deleting book:', error);
+        alert('Error deleting book.');
       }
-      setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
-    } catch (error) {
-      console.error('Error deleting book:', error);
     }
+  };
+
+  const handleOpenModal = (book: Book) => {
+    setSelectedBook(book);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedBook(null);
   };
 
   return (
@@ -83,7 +102,6 @@ const AdminPage: React.FC = () => {
                   alt="Book image"
                   className={styles.cardImage}
                 />
-
                 <Card.Body className={styles.cardBody}>
                   <Card.Title className={styles.cardTitle}>
                     {book.title}
@@ -107,7 +125,7 @@ const AdminPage: React.FC = () => {
                     <Button
                       variant="danger"
                       className={styles.button}
-                      onClick={() => handleDelete(book.id)}
+                      onClick={() => handleOpenModal(book)}
                     >
                       Delete
                     </Button>
@@ -117,6 +135,27 @@ const AdminPage: React.FC = () => {
             </Col>
           ))}
         </Row>
+
+        {/* Delete Confirmation Modal */}
+        <Modal show={showModal} onHide={handleCloseModal} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Deletion</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Are you sure you want to delete the textbook
+            {' '}
+            <strong>{selectedBook?.title}</strong>
+            ?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={handleDelete}>
+              Delete
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     </main>
   );
