@@ -14,7 +14,10 @@ const BookCard = ({ book }: { book: Book }) => (
     <Card.Body className="book-card-body">
       <Card.Title className="book-card-title">{book.title}</Card.Title>
       <Card.Text className="book-card-text">{book.subject}</Card.Text>
-      <Card.Text className="book-card-text">${book.price}</Card.Text>
+      <Card.Text className="book-card-text">
+        $
+        {book.price.toFixed(2)}
+      </Card.Text>
       <Card.Text className="book-card-text">{book.condition}</Card.Text>
       <div className="card-buttons">
         <Button variant="success">More Info</Button>

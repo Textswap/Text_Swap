@@ -22,7 +22,8 @@
       "description": "This is a math book",
       "price": 100,
       "condition": "new",
-      "owner": "john@foo.com"
+      "owner": "john@foo.com",
+      "images": ["public/uploads/placeholder.png"]
     },
     {
       "title": "Science Book",
@@ -33,7 +34,8 @@
       "description": "This is a science book",
       "price": 200,
       "condition": "excellent",
-      "owner": "john@foo.com"
+      "owner": "john@foo.com",
+      "images": ["public/uploads/placeholder.png"]
     },
     {
       "title": "History Book",
@@ -44,7 +46,8 @@
       "description": "This is a history book",
       "price": 300,
       "condition": "good",
-      "owner": "jane@foo.com"
+      "owner": "jane@foo.com",
+      "images": ["public/uploads/placeholder.png"]
     }
   ]
 }

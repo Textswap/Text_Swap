@@ -53,6 +53,13 @@ model Stuff {
   owner     String
 }
 
+model BookImage {
+  id            Int       @id @default(autoincrement())
+  bookId        Int
+  book          Book      @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  filePath     String
+}
+
 model Book {
   id            Int       @id @default(autoincrement())
   title         String
@@ -60,6 +67,7 @@ model Book {
   subject       Subject
   courseName    String?
   courseCrn     String?
+  images        BookImage[]
   description   String?
   price         Float
   condition     Condition

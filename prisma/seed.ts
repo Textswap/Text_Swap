@@ -47,27 +47,40 @@ async function main() {
   });
   config.defaultBooks.forEach(async (book, index) => {
     let subject: Subject = 'other';
-    if (book.subject === 'math') {
-      subject = 'math';
-    } else if (book.subject === 'english') {
-      subject = 'english';
-    } else if (book.subject === 'history') {
-      subject = 'history';
-    } else {
-      subject = 'science';
+    switch (book.subject) {
+      case 'math':
+        subject = 'math';
+        break;
+      case 'science':
+        subject = 'science';
+        break;
+      case 'english':
+        subject = 'english';
+        break;
+      case 'history':
+        subject = 'history';
+        break;
+      default:
+        subject = 'other';
     }
-    let condition: Condition = 'poor';
-    if (book.condition === 'fair') {
-      condition = 'fair';
-    } else if (book.condition === 'good') {
-      condition = 'good';
-    } else if (book.condition === 'excellent') {
-      condition = 'excellent';
-    } else {
-      condition = 'new';
+    let condition: Condition = 'new';
+    switch (book.condition) {
+      case 'poor':
+        condition = 'poor';
+        break;
+      case 'fair':
+        condition = 'fair';
+        break;
+      case 'good':
+        condition = 'good';
+        break;
+      case 'excellent':
+        condition = 'excellent';
+        break;
+      default:
+        condition = 'new';
     }
-    console.log(`  Adding book: ${book.title} (${book.owner})`);
-    await prisma.book.upsert({
+    const createdBook = await prisma.book.upsert({
       where: { id: index + 1 },
       update: {},
       create: {
@@ -82,6 +95,16 @@ async function main() {
         owner: book.owner,
       },
     });
+    if (book.images && Array.isArray(book.images)) {
+      for (const imagePath of book.images) {
+        await prisma.bookImage.create({
+          data: {
+            bookId: createdBook.id,
+            filePath: imagePath,
+          },
+        });
+      }
+    }
   });
 }
 main()
