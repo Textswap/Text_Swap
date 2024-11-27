@@ -1,7 +1,8 @@
 {
   "defaultAccounts": [
     { "email": "admin@foo.com", "password": "changeme", "role": "ADMIN" },
-    { "email": "john@foo.com", "password": "changeme" }
+    { "email": "john@foo.com", "password": "changeme" },
+    { "email": "jane@foo.com", "password": "changeme" }
   ],
 
   "defaultData": [
@@ -9,5 +10,41 @@
     { "name": "Bicycle", "quantity": 2, "owner": "john@foo.com", "condition": "poor" },
     { "name": "Banana", "quantity": 2, "owner": "admin@foo.com", "condition": "good" },
     { "name": "Boogie Board", "quantity": 2, "owner": "admin@foo.com", "condition": "excellent" }
+  ],
+
+  "defaultBooks": [
+    {
+      "title": "Math Book",
+      "isbn": "1111111111",
+      "subject": "math",
+      "courseName": "Math 101",
+      "courseCrn": "1111",
+      "description": "This is a math book",
+      "price": 100,
+      "condition": "new",
+      "owner": "john@foo.com"
+    },
+    {
+      "title": "Science Book",
+      "isbn": "2222222222",
+      "subject": "science",
+      "courseName": "Science 101",
+      "courseCrn": "2222",
+      "description": "This is a science book",
+      "price": 200,
+      "condition": "excellent",
+      "owner": "john@foo.com"
+    },
+    {
+      "title": "History Book",
+      "isbn": "3333333333",
+      "subject": "history",
+      "courseName": "History 101",
+      "courseCrn": "3333",
+      "description": "This is a history book",
+      "price": 300,
+      "condition": "good",
+      "owner": "jane@foo.com"
+    }
   ]
 }

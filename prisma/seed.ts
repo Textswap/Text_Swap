@@ -1,4 +1,4 @@
-import { PrismaClient, Role, Condition } from '@prisma/client';
+import { PrismaClient, Role, Condition, Subject } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
 
@@ -42,6 +42,44 @@ async function main() {
         quantity: data.quantity,
         owner: data.owner,
         condition,
+      },
+    });
+  });
+  config.defaultBooks.forEach(async (book, index) => {
+    let subject: Subject = 'other';
+    if (book.subject === 'math') {
+      subject = 'math';
+    } else if (book.subject === 'english') {
+      subject = 'english';
+    } else if (book.subject === 'history') {
+      subject = 'history';
+    } else {
+      subject = 'science';
+    }
+    let condition: Condition = 'poor';
+    if (book.condition === 'fair') {
+      condition = 'fair';
+    } else if (book.condition === 'good') {
+      condition = 'good';
+    } else if (book.condition === 'excellent') {
+      condition = 'excellent';
+    } else {
+      condition = 'new';
+    }
+    console.log(`  Adding book: ${book.title} (${book.owner})`);
+    await prisma.book.upsert({
+      where: { id: index + 1 },
+      update: {},
+      create: {
+        title: book.title,
+        isbn: book.isbn,
+        subject,
+        courseName: book.courseName,
+        courseCrn: book.courseCrn,
+        description: book.description,
+        price: book.price,
+        condition,
+        owner: book.owner,
       },
     });
   });

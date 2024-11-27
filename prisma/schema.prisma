@@ -30,10 +30,19 @@ model User {
 }
 
 enum Condition {
+  new
   excellent
   good
   fair
   poor
+}
+
+enum Subject {
+  math
+  english
+  science
+  history
+  other
 }
 
 model Stuff {
@@ -42,4 +51,17 @@ model Stuff {
   quantity  Int
   condition Condition
   owner     String
+}
+
+model Book {
+  id            Int       @id @default(autoincrement())
+  title         String
+  isbn          String?
+  subject       Subject
+  courseName    String?
+  courseCrn     String?
+  description   String?
+  price         Float
+  condition     Condition
+  owner         String
 }
