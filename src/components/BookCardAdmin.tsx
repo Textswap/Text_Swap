@@ -4,7 +4,7 @@ import { Book } from '@prisma/client';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
-const BookCard = ({ book }: { book: Book }) => (
+const BookCardAdmin = ({ book }: { book: Book }) => (
   <Card className="book-card">
     <Card.Img
       variant="top"
@@ -16,11 +16,16 @@ const BookCard = ({ book }: { book: Book }) => (
       <Card.Text className="book-card-text">{book.subject}</Card.Text>
       <Card.Text className="book-card-text">${book.price}</Card.Text>
       <Card.Text className="book-card-text">{book.condition}</Card.Text>
-      <div className="card-buttons">
-        <Button variant="success">More Info</Button>
+      <div className="admin-card-buttons">
+        <Button className="book-card-button" variant="success">
+          Approve
+        </Button>
+        <Button className="book-card-button" variant="danger">
+          Reject
+        </Button>
       </div>
     </Card.Body>
   </Card>
 );
 
-export default BookCard;
+export default BookCardAdmin;
