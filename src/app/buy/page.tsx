@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Form } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, InputGroup } from 'react-bootstrap';
 import defaultTextbooks from '@/components/defaultTextbooks';
 import styles from './BuyPageClient.module.css';
+import { Search } from 'react-bootstrap-icons';
 
 const BuyPageClient: React.FC = () => {
   const [maxPrice, setMaxPrice] = useState(1000);
@@ -84,7 +85,7 @@ const BuyPageClient: React.FC = () => {
                   value={filters.department}
                   onChange={(e) => handleFilterChange('department', e.target.value)}
                 >
-                  <option value="">Select Department</option>
+                  <option value="">Department</option>
                   <option value="Mathematics">Mathematics</option>
                   <option value="Arts">Arts</option>
                   <option value="Science">Science</option>
@@ -98,7 +99,7 @@ const BuyPageClient: React.FC = () => {
                   value={filters.course}
                   onChange={(e) => handleFilterChange('course', e.target.value)}
                 >
-                  <option value="">Select Course</option>
+                  <option value="">Course</option>
                   <option value="Algebra">Algebra</option>
                   <option value="History">History</option>
                   <option value="Physics">Physics</option>
@@ -113,31 +114,32 @@ const BuyPageClient: React.FC = () => {
                   value={filters.format}
                   onChange={(e) => handleFilterChange('format', e.target.value)}
                 >
-                  <option value="">Select Format</option>
+                  <option value="">Format</option>
                   <option value="Hardcover">Hardcover</option>
                   <option value="Paperback">Paperback</option>
                   <option value="eBook">eBook</option>
                 </Form.Select>
               </Form.Group>
 
-              <Form.Group>
+              <Form.Group className="inputGroup">
                 <Form.Control
-                  className={styles.inputField}
+                  className="inputField"
                   type="text"
-                  placeholder="Search by Keywords"
+                  placeholder="Keywords"
                   value={filters.keywords}
                   onChange={(e) => handleFilterChange('keywords', e.target.value)}
                 />
               </Form.Group>
 
-              <Form.Group>
+              <Form.Group className="inputGroup">
                 <Form.Control
-                  className={styles.inputField}
+                  className="inputField"
                   type="text"
-                  placeholder="Search by ISBN"
+                  placeholder="ISBN"
                   value={filters.isbn}
                   onChange={(e) => handleFilterChange('isbn', e.target.value)}
                 />
+                
               </Form.Group>
 
               <Form.Group>

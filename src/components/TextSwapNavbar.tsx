@@ -21,7 +21,7 @@ const NavBar: React.FC = () => {
   const pathName = usePathname();
 
   // Define paths where the search bar should not appear
-  const hideSearchBarPaths = ['/auth/signin', '/auth/signup'];
+  const hideSearchBarPaths = ['/auth/signin', '/auth/signup', '/'];
   const shouldHideSearchBar = hideSearchBarPaths.includes(pathName);
 
   return (

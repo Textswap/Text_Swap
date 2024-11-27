@@ -15,7 +15,7 @@
     color: #1b4a3d;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
   
 .rangeSlider {
@@ -25,13 +25,12 @@
     background-color: #225f49;
     border-radius: 5px;
     outline: none;
+    margin-bottom: 25px;
 }
   
 .inputField {
-    margin-bottom: 15px;
-    font-size: 16px;
+    font-size: 18px;
     text-align: center;
-    padding: 5px;
     border: 1px solid #ddd;
     border-radius: 3px;
     background-color: #fff;
@@ -41,10 +40,11 @@
     width: 100%;
     margin-bottom: 15px;
     font-size: 16px;
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
+    padding: 7px;
+    border: 2px solid #ddd;
     background-color: #f8f9fa;
+    text-align: center;
+    font-size: 18px;
 }
   
 /* Textbook List Section */
