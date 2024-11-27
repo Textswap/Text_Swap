@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   Row,
@@ -12,6 +12,7 @@ import {
   Modal,
   Table,
 } from 'react-bootstrap';
+import useSWR from 'swr';
 import styles from '@/styles/AdminPage.module.css';
 
 interface Book {
@@ -28,40 +29,23 @@ interface Book {
   createdAt: string;
 }
 
+const fetcher = (url: string) => fetch(url, { cache: 'no-store' }).then((res) => res.json());
+
 const AdminPage: React.FC = () => {
-  const [books, setBooks] = useState<Book[]>([]);
+  const { data: books = [], mutate } = useSWR<Book[]>('/api/adminapproval', fetcher, {
+    refreshInterval: 10000, // Poll every 10 seconds
+  });
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
-
-  useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await fetch('/api/adminapproval');
-        if (!response.ok) {
-          throw new Error('Failed to fetch books');
-        }
-        const data = await response.json();
-        setBooks(data);
-      } catch (error) {
-        console.error('Error fetching books:', error);
-      }
-    };
-
-    fetchBooks();
-  }, []);
 
   const handleApprove = async (id: string) => {
     try {
       const response = await fetch(`/api/adminapproval/approve/${id}`, {
         method: 'POST',
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to approve book');
-      }
-
-      setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
+      if (!response.ok) throw new Error('Failed to approve book');
+      mutate();
     } catch (error) {
       console.error('Error approving book:', error);
       alert('Error approving book.');
@@ -73,14 +57,10 @@ const AdminPage: React.FC = () => {
       try {
         const response = await fetch(
           `/api/adminapproval/delete/${selectedBook.id}`,
-          {
-            method: 'DELETE',
-          },
+          { method: 'DELETE' },
         );
-        if (!response.ok) {
-          throw new Error('Failed to delete book');
-        }
-        setBooks((prevBooks) => prevBooks.filter((book) => book.id !== selectedBook.id));
+        if (!response.ok) throw new Error('Failed to delete book');
+        mutate(); // Trigger revalidation to update data
         setShowDeleteModal(false);
         setSelectedBook(null);
       } catch (error) {
