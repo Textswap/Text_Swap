@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Form, InputGroup } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form } from 'react-bootstrap';
 import defaultTextbooks from '@/components/defaultTextbooks';
 import styles from './BuyPageClient.module.css';
-import { Search } from 'react-bootstrap-icons';
 
 const BuyPageClient: React.FC = () => {
   const [maxPrice, setMaxPrice] = useState(1000);
@@ -41,13 +40,13 @@ const BuyPageClient: React.FC = () => {
     const matchesCondition = filters.conditions.size === 0 || filters.conditions.has(book.condition);
 
     return (
-      matchesPrice
-      && matchesDepartment
-      && matchesCourse
-      && matchesFormat
-      && matchesKeywords
-      && matchesISBN
-      && matchesCondition
+      matchesPrice &&
+      matchesDepartment &&
+      matchesCourse &&
+      matchesFormat &&
+      matchesKeywords &&
+      matchesISBN &&
+      matchesCondition
     );
   });
 
@@ -55,14 +54,15 @@ const BuyPageClient: React.FC = () => {
     <Container fluid className="py-4">
       <Row>
         {/* Filters Section */}
-        <Col xs={12} md={3}>
+        <Col xs={12} md={3}
+          className="d-flex justify-content-center align-items-center"
+          style={{ height: '80vh' }}>
           <div className={styles.filtersSection}>
             <h3 className={styles.filtersTitle}>Filters</h3>
             <Form>
-              <Form.Group className="mb-3">
+              <Form.Group>
                 <Form.Label>
-                  Maximum Price: $
-                  {maxPrice}
+                  Maximum Price: ${maxPrice}
                 </Form.Label>
                 <input
                   type="range"
@@ -108,7 +108,7 @@ const BuyPageClient: React.FC = () => {
                 </Form.Select>
               </Form.Group>
 
-              <Form.Group>
+              <Form.Group className="mb-4">
                 <Form.Select
                   className={styles.selectField}
                   value={filters.format}
@@ -121,9 +121,9 @@ const BuyPageClient: React.FC = () => {
                 </Form.Select>
               </Form.Group>
 
-              <Form.Group className="inputGroup">
+              <Form.Group className="inputGroup mb-2">
                 <Form.Control
-                  className="inputField"
+                  className={styles.inputField}
                   type="text"
                   placeholder="Keywords"
                   value={filters.keywords}
@@ -133,24 +133,28 @@ const BuyPageClient: React.FC = () => {
 
               <Form.Group className="inputGroup">
                 <Form.Control
-                  className="inputField"
+                  className={styles.inputField}
                   type="text"
                   placeholder="ISBN"
                   value={filters.isbn}
                   onChange={(e) => handleFilterChange('isbn', e.target.value)}
                 />
-                
               </Form.Group>
 
-              <Form.Group>
+              <Form.Group as={Row} className="mt-4">
                 {['Fair', 'Good', 'Excellent'].map((condition) => (
-                  <Form.Check
-                    key={condition}
-                    type="checkbox"
-                    label={condition}
-                    checked={filters.conditions.has(condition)}
-                    onChange={() => handleConditionChange(condition)}
-                  />
+                  <Col key={condition} xs="auto" style={{ display: 'flex', alignItems: 'center' }}>
+                    <Form.Check
+                      type="checkbox"
+                      label={condition}
+                      onChange={() => handleConditionChange(condition)}
+                      style={{
+                        transform: 'scale(1.2)',
+                        marginRight: '6px',
+                        appearance: 'none',
+                      }}
+                    />
+                  </Col>
                 ))}
               </Form.Group>
             </Form>
@@ -160,39 +164,57 @@ const BuyPageClient: React.FC = () => {
         {/* Textbook List Section */}
         <Col xs={12} md={9} className={styles.textbookList}>
           <h3 className="text-center text-success">Available Textbooks</h3>
+          <div
+            style={{
+              maxHeight: '80vh', // Limit the height of the section
+              overflowY: 'auto', // Enable vertical scrolling
+              paddingRight: '15px', // Prevent content from being cut off due to scrollbar
+            }}
+          >
           {filteredTextbooks.length > 0 ? (
             <Row className="g-4">
               {filteredTextbooks.map((book) => (
                 <Col key={book.id} xs={12} sm={6} md={4}>
                   <Card className={styles.textbookCard}>
+                  <Card.Img
+                    variant="top"
+                    src={book.picture}
+                    style={{
+                      height: '80%', // Takes up 80% of the card height
+                      objectFit: 'cover', // Ensures the image scales properly
+                    }}
+                  />
                     <Card.Body>
                       <Card.Title>{book.title}</Card.Title>
                       <Card.Text>
-                        <strong>Price:</strong>
-                        {' '}
-                        $
-                        {book.price}
+                        <strong>Price:</strong> ${book.price}
                       </Card.Text>
                       <Card.Text>
-                        <strong>Department:</strong>
-                        {' '}
-                        {book.department}
+                        <strong>Department:</strong> {book.department}
                       </Card.Text>
                       <Card.Text>
-                        <strong>Condition:</strong>
-                        {' '}
-                        {book.condition}
+                        <strong>Condition:</strong> {book.condition}
                       </Card.Text>
                       <Card.Text>
-                        <strong>Format:</strong>
-                        {' '}
-                        {book.format}
+                        <strong>Format:</strong> {book.format}
                       </Card.Text>
                       <Card.Text>
-                        <strong>ISBN:</strong>
-                        {' '}
-                        {book.isbn}
+                        <strong>ISBN:</strong> {book.isbn}
                       </Card.Text>
+                      <button
+                  style={{
+                    backgroundColor: 'green',
+                    color: 'white',
+                    border: 'none',
+                    padding: '10px 20px',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                    marginTop: '10px',
+                    width: '100%', // Full width of the button
+                  }}
+                >
+                  View Details
+                </button>
                     </Card.Body>
                   </Card>
                 </Col>
@@ -201,6 +223,7 @@ const BuyPageClient: React.FC = () => {
           ) : (
             <p className="text-center">No textbooks match your filters.</p>
           )}
+          </div>
         </Col>
       </Row>
     </Container>
