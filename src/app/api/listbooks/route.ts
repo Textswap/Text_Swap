@@ -5,6 +5,7 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
+import { Server } from 'socket.io'; // Importing socket.io
 
 const prisma = new PrismaClient();
 
@@ -14,6 +15,16 @@ cloudinary.config({
   api_key: '377153313932479',
   api_secret: '5iQKLeIwYBU8ojYTiv9XLwjKpq0',
 });
+
+// Function to get Socket.IO instance
+let io: Server;
+
+function getSocketIOInstance() {
+  if (!io) {
+    io = new Server(/* Provide HTTP server here, e.g., http.createServer() */);
+  }
+  return io;
+}
 
 function uploadImageToCloudinary(
   buffer: Buffer,
@@ -110,6 +121,10 @@ export async function POST(request: Request) {
         approved: false,
       },
     });
+
+    // Emit the 'newBookAdded' event after the book is created
+    io = getSocketIOInstance();
+    io.emit('newBookAdded', book);
 
     // Return the newly created book
     return NextResponse.json(book);
