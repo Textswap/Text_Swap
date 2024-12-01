@@ -2,22 +2,22 @@
 .py-4 {
     padding: 1rem 0;
 }
-
+  
 /* Filters Section */
 .filtersSection {
     padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    gap: 40px; /* Consistent spacing between elements */
-    background-color: #e3eee6;
 }
-
+  
 .filtersTitle {
     color: #1b4a3d;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 30px;
 }
-
+  
 .rangeSlider {
     width: 100%;
     appearance: none;
@@ -25,41 +25,34 @@
     background-color: #225f49;
     border-radius: 5px;
     outline: none;
-    margin-bottom: 45px;
+    margin-bottom: 35px;
 }
-
+  
 .inputField {
-    font-size: 18px;
+    margin-bottom: 15px;
+    font-size: 16px;
     text-align: center;
-    border: 1px solid #ffffff;
-    border-radius: 5px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
     background-color: #fff;
-    width: 100%;
-    padding: 6px;
-    box-sizing: border-box; /* Ensure consistent sizing */
-    border: 3px solid #225f49;
 }
   
 .selectField {
     width: 100%;
-    font-size: 18px;
-    padding: 10px;
-    border: 2px solid #225f49;
-    border-radius: 5px;
-    background-color: #ffffff6a;
-    text-align: center;
-    margin-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: #f8f9fa;
 }
-
-.inputGroup {
-    margin-bottom: 20px; /* Adds space between input fields */
-}
-
+  
 /* Textbook List Section */
 .textbookList {
     margin-top: 20px;
 }
-
+  
 .textbookCard {
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -67,9 +60,3 @@
     padding: 15px;
     background-color: #fff;
 }
-
-.textbookList .row {
-    gap: 20px; /* Adds space between cards */
-}
-
-  

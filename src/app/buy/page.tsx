@@ -2,15 +2,15 @@
 
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Form } from 'react-bootstrap';
+import Link from 'next/link';
 import defaultTextbooks from '@/components/defaultTextbooks';
 import styles from './BuyPageClient.module.css';
 
 const BuyPageClient: React.FC = () => {
   const [maxPrice, setMaxPrice] = useState(1000);
   const [filters, setFilters] = useState({
-    department: '',
+    subject: '',
     course: '',
-    format: '',
     keywords: '',
     isbn: '',
     conditions: new Set<string>(),
@@ -32,21 +32,19 @@ const BuyPageClient: React.FC = () => {
 
   const filteredTextbooks = defaultTextbooks.filter((book) => {
     const matchesPrice = book.price <= maxPrice;
-    const matchesDepartment = !filters.department || book.department === filters.department;
+    const matchesSubject = !filters.subject || book.subject === filters.subject;
     const matchesCourse = !filters.course || book.course === filters.course;
-    const matchesFormat = !filters.format || book.format === filters.format;
     const matchesKeywords = !filters.keywords || book.title.toLowerCase().includes(filters.keywords.toLowerCase());
     const matchesISBN = !filters.isbn || book.isbn.includes(filters.isbn);
     const matchesCondition = filters.conditions.size === 0 || filters.conditions.has(book.condition);
 
     return (
-      matchesPrice &&
-      matchesDepartment &&
-      matchesCourse &&
-      matchesFormat &&
-      matchesKeywords &&
-      matchesISBN &&
-      matchesCondition
+      matchesPrice
+      && matchesSubject
+      && matchesCourse
+      && matchesKeywords
+      && matchesISBN
+      && matchesCondition
     );
   });
 
@@ -54,15 +52,19 @@ const BuyPageClient: React.FC = () => {
     <Container fluid className="py-4">
       <Row>
         {/* Filters Section */}
-        <Col xs={12} md={3}
+        <Col
+          xs={12}
+          md={3}
           className="d-flex justify-content-center align-items-center"
-          style={{ height: '80vh' }}>
+          style={{ height: '80vh' }}
+        >
           <div className={styles.filtersSection}>
             <h3 className={styles.filtersTitle}>Filters</h3>
             <Form>
               <Form.Group>
                 <Form.Label>
-                  Maximum Price: ${maxPrice}
+                  Maximum Price: $
+                  {maxPrice}
                 </Form.Label>
                 <input
                   type="range"
@@ -82,10 +84,10 @@ const BuyPageClient: React.FC = () => {
               <Form.Group>
                 <Form.Select
                   className={styles.selectField}
-                  value={filters.department}
-                  onChange={(e) => handleFilterChange('department', e.target.value)}
+                  value={filters.subject}
+                  onChange={(e) => handleFilterChange('subject', e.target.value)}
                 >
-                  <option value="">Department</option>
+                  <option value="">Subject</option>
                   <option value="Mathematics">Mathematics</option>
                   <option value="Arts">Arts</option>
                   <option value="Science">Science</option>
@@ -105,19 +107,6 @@ const BuyPageClient: React.FC = () => {
                   <option value="Physics">Physics</option>
                   <option value="Literature">Literature</option>
                   <option value="Algorithms">Algorithms</option>
-                </Form.Select>
-              </Form.Group>
-
-              <Form.Group className="mb-4">
-                <Form.Select
-                  className={styles.selectField}
-                  value={filters.format}
-                  onChange={(e) => handleFilterChange('format', e.target.value)}
-                >
-                  <option value="">Format</option>
-                  <option value="Hardcover">Hardcover</option>
-                  <option value="Paperback">Paperback</option>
-                  <option value="eBook">eBook</option>
                 </Form.Select>
               </Form.Group>
 
@@ -171,58 +160,64 @@ const BuyPageClient: React.FC = () => {
               paddingRight: '15px', // Prevent content from being cut off due to scrollbar
             }}
           >
-          {filteredTextbooks.length > 0 ? (
-            <Row className="g-4">
-              {filteredTextbooks.map((book) => (
-                <Col key={book.id} xs={12} sm={6} md={4}>
-                  <Card className={styles.textbookCard}>
-                  <Card.Img
-                    variant="top"
-                    src={book.picture}
-                    style={{
-                      height: '80%', // Takes up 80% of the card height
-                      objectFit: 'cover', // Ensures the image scales properly
-                    }}
-                  />
-                    <Card.Body>
-                      <Card.Title>{book.title}</Card.Title>
-                      <Card.Text>
-                        <strong>Price:</strong> ${book.price}
-                      </Card.Text>
-                      <Card.Text>
-                        <strong>Department:</strong> {book.department}
-                      </Card.Text>
-                      <Card.Text>
-                        <strong>Condition:</strong> {book.condition}
-                      </Card.Text>
-                      <Card.Text>
-                        <strong>Format:</strong> {book.format}
-                      </Card.Text>
-                      <Card.Text>
-                        <strong>ISBN:</strong> {book.isbn}
-                      </Card.Text>
-                      <button
-                  style={{
-                    backgroundColor: 'green',
-                    color: 'white',
-                    border: 'none',
-                    padding: '10px 20px',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    marginTop: '10px',
-                    width: '100%', // Full width of the button
-                  }}
-                >
-                  View Details
-                </button>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          ) : (
-            <p className="text-center">No textbooks match your filters.</p>
-          )}
+            {filteredTextbooks.length > 0 ? (
+              <Row className="g-4">
+                {filteredTextbooks.map((book) => (
+                  <Col key={book.id} xs={12} sm={6} md={4}>
+                    <Card className={styles.textbookCard}>
+                      <Card.Img
+                        variant="top"
+                        src={book.picture}
+                        style={{
+                          height: '80%', // Takes up 80% of the card height
+                          objectFit: 'cover', // Ensures the image scales properly
+                        }}
+                      />
+                      <Card.Body>
+                        <Card.Title>{book.title}</Card.Title>
+                        <Card.Text>
+                          <strong>Price:</strong>
+                          {' '}
+                          $
+                          {book.price}
+                        </Card.Text>
+                        <Card.Text>
+                          <strong>Subject:</strong>
+                          {' '}
+                          {book.subject}
+                        </Card.Text>
+                        <Card.Text>
+                          <strong>Condition:</strong>
+                          {' '}
+                          {book.condition}
+                        </Card.Text>
+                        <Card.Text>
+                          <strong>ISBN:</strong>
+                          {' '}
+                          {book.isbn}
+                        </Card.Text>
+                        <Link
+                          href={`/buy/${book.id}`}
+                          style={{
+                            textDecoration: 'none',
+                            display: 'block',
+                            backgroundColor: 'green',
+                            color: 'white',
+                            padding: '10px 20px',
+                            borderRadius: '5px',
+                            textAlign: 'center',
+                          }}
+                        >
+                          View Details
+                        </Link>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            ) : (
+              <p className="text-center">No textbooks match your filters.</p>
+            )}
           </div>
         </Col>
       </Row>

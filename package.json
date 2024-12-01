@@ -29,6 +29,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",
     "react-range": "^1.10.0",
+    "react-router-dom": "^7.0.1",
     "sweetalert": "^2.1.2",
     "ts-node": "10.9.2",
     "yup": "^1.4.0"

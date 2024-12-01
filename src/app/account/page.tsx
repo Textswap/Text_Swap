@@ -11,9 +11,7 @@ const AddStuff = async () => {
     } | null,
   );
   return (
-    <main>
-      
-    </main>
+    <main />
   );
 };
 
