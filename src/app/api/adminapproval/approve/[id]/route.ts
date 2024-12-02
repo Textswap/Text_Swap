@@ -4,19 +4,19 @@
 
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { notifyClients } from '../../stream'; // Ensure this import path is correct
 
-export async function POST(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
+export async function POST(request: Request, { params }: { params: { id: string } }) {
   const { id } = params;
 
   try {
-    // Approve the textbook by updating the `approved` field to `true`
     const updatedBook = await prisma.book.update({
-      where: { id }, // Use `id` as a string
+      where: { id },
       data: { approved: true },
     });
+
+    // Notify all clients of the update
+    notifyClients(updatedBook);
 
     return NextResponse.json({
       message: 'Book approved successfully',

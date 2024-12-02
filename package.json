@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "playwright-development": "npx playwright test",
-    "playwright-ci": "next dev && npx playwright test"
+    "playwright-ci": "next dev && npx playwright test",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
@@ -24,13 +25,16 @@
     "multiselect-react-dropdown": "^2.0.25",
     "next": "14.2.10",
     "next-auth": "^4.24.7",
-    "react": "^18",
-    "react-bootstrap": "^2.10.4",
+    "react": "^18.3.1",
+    "react-bootstrap": "^2.10.6",
     "react-bootstrap-icons": "^1.11.4",
-    "react-dom": "^18",
+    "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.0",
     "react-range": "^1.10.0",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "sweetalert": "^2.1.2",
+    "swr": "^2.2.5",
     "ts-node": "10.9.2",
     "yup": "^1.4.0"
   },
@@ -40,6 +44,7 @@
     "@types/node": "^22.5.4",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "dotenv-cli": "^7.4.4",
     "eslint": "^8",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
@@ -47,7 +52,7 @@
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.3.1",
     "prettier-eslint": "^16.3.0",
-    "prisma": "^5.19.1",
+    "prisma": "^5.22.0",
     "typescript": "^5.4.5"
   }
 }
