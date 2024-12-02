@@ -38,14 +38,62 @@
       "images": ["public/uploads/placeholder.png"]
     },
     {
-      "title": "History Book",
+      "title": "New Math Book",
       "isbn": "3333333333",
-      "subject": "history",
-      "courseName": "History 101",
+      "subject": "math",
+      "courseName": "Math 101",
       "courseCrn": "3333",
-      "description": "This is a history book",
-      "price": 300,
+      "description": "This is a new math book",
+      "price": 100,
+      "condition": "new",
+      "owner": "jane@foo.com",
+      "images": ["public/uploads/placeholder.png"]
+    },
+    {
+      "title": "Excellent English Book",
+      "isbn": "4444444444",
+      "subject": "english",
+      "courseName": "English 100",
+      "courseCrn": "4444",
+      "description": "This is an excellent book",
+      "price": 50.99,
+      "condition": "excellent",
+      "owner": "jane@foo.com",
+      "images": ["public/uploads/placeholder.png"]
+    },
+    {
+      "title": "Good Science Book",
+      "isbn": "5555555555",
+      "subject": "science",
+      "courseName": "Physics 101",
+      "courseCrn": "5555",
+      "description": "This is a good science book",
+      "price": 1.99,
       "condition": "good",
+      "owner": "jane@foo.com",
+      "images": ["public/uploads/placeholder.png"]
+    },
+    {
+      "title": "Fair History Book",
+      "isbn": "6666666666",
+      "subject": "history",
+      "courseName": "Math 101",
+      "courseCrn": "6666",
+      "description": "This is a fair history book",
+      "price": 99.99,
+      "condition": "fair",
+      "owner": "jane@foo.com",
+      "images": ["public/uploads/placeholder.png"]
+    },
+    {
+      "title": "Poor Computer Science Book",
+      "isbn": "3333333333",
+      "subject": "other",
+      "courseName": "ICS 314",
+      "courseCrn": "3333",
+      "description": "This is me testing a long description AGHHHAGHIUGCBEOWUBIVCIOHVUEGNAFSVYBSUC VEBSACU VEWBSCBNVWEBSACNV YHESAV EHBJB WSAKJDC BSAJC BEWC BEWJS FBUEWO HI",
+      "price": 9999999999999.99,
+      "condition": "poor",
       "owner": "jane@foo.com",
       "images": ["public/uploads/placeholder.png"]
     }

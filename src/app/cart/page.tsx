@@ -1,19 +1,35 @@
 import { getServerSession } from 'next-auth';
-import { Container } from 'react-bootstrap';
-import { adminProtectedPage } from '@/lib/page-protection';
-import authOptions from '@/lib/authOptions';
+import { Col, Container, Row } from 'react-bootstrap';
+import { Book } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
+import BookCartCard from '@/components/BookCartCard';
 
 const CartPage = async () => {
-  const session = await getServerSession(authOptions);
-  adminProtectedPage(
-    session as {
-      user: { email: string; id: string; randomKey: string };
-    } | null,
-  );
+  const session = await getServerSession();
+  const owner = session?.user?.email || '';
+  const books: Book[] = await prisma.book.findMany({
+    where: {
+      owner,
+    },
+  });
   return (
     <main>
-      <Container id="list" fluid className="py-3">
-        This is the cart page
+      <Container id="book-cart-list">
+        <Row className="mt-5 mb-2">
+          <Col>
+            <h1>
+              {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
+              Your Cart: {books.length > 0 ? `${books.length} item${books.length > 1 ? 's' : ''}` : 'Empty'}
+            </h1>
+          </Col>
+        </Row>
+        {books.map((book) => (
+          <Row key={book.id}>
+            <Col>
+              <BookCartCard book={book} />
+            </Col>
+          </Row>
+        ))}
       </Container>
     </main>
   );

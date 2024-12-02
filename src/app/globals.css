@@ -2,6 +2,8 @@
 :root {
   --main-color: #225f49;
   --main-color-rgb: 34, 95, 73;
+  --main-color-darker: #1a4a3a;
+  --main-color-darker-rgb: 26, 74, 58;
   --secondary-color: #d3d3d3;
   --secondary-color-rgb: 211, 211, 211;
 }
@@ -164,6 +166,61 @@ body .navbar {
   min-width: 70px;
 }
 /* Book Card */
+
+/* Cart */
+.book-card-wrapper {
+  height: 250px;
+  margin-bottom: 1rem;
+}
+
+.book-card-cart {
+  height: 100%;
+  background: var(--secondary-color) !important;
+}
+
+.book-cart-img {
+  max-height: 150px;
+  object-fit: cover;
+}
+
+.cart-description-box {
+  height: 50px;
+}
+
+.cart-buy-now-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.cart-buy-now {
+  margin: 1rem 0.5rem 1rem 2rem;
+  width: 750px;
+  border-radius: 50px !important;
+  border: 0 !important;
+  background-color: var(--main-color) !important;
+  color: white !important;
+}
+
+.cart-buy-now:hover {
+  background-color: var(--main-color-darker) !important;
+  transition: 0.5s;
+}
+
+.cart-trash-can {
+  margin: 1rem 0rem 1rem 0rem;
+  border: 0 !important;
+  border-radius: 50px !important;
+  background-color: transparent !important;
+  color: black !important;
+}
+
+.cart-trash-can:hover {
+  background-color: var(--main-color-darker) !important;
+  color: white !important;
+  transition: 0.5s;
+}
+/* Cart */
 
 /* Filter */
 .filtersSection {
