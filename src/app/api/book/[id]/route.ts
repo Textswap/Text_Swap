@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 // eslint-disable-next-line import/prefer-default-export
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
-    const bookId = parseInt(params.id, 10); // Convert string to number
+    const bookId = parseInt(params.id, 10);
 
     const book = await prisma.book.findUnique({
       where: { id: bookId },

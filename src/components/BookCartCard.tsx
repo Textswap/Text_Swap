@@ -7,12 +7,17 @@ import Link from 'next/link';
 
 const BookCartCard = ({ book }: { book: Book }) => (
   // wrapper
-  <div className="book-card-wrapper mb-5">
+  <div className="book-cart-wrapper mb-5">
     <Card className="book-card-cart">
       <Row className="h-100" style={{ marginTop: '1rem' }}>
         {/* Book Image */}
-        <Col className="d-flex align-itmes-center" style={{ marginLeft: '1rem' }}>
-          <Card.Img src="https://via.placeholder.com/150" className="book-cart-img" alt="Book Image" />
+        <Col className="d-flex" style={{ marginLeft: '1rem' }}>
+          <Card.Img
+            src="https://via.placeholder.com/150"
+            className="book-cart-img"
+            alt="Book Image"
+            style={{ objectFit: 'cover' }}
+          />
         </Col>
         {/* Book Details */}
         <Col xs={8} className="d-flex flex-column justify-content-between h-100">

@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Book } from '@prisma/client';
-import { Container, Row, Col, Spinner, Alert, Card, Button } from 'react-bootstrap';
+import { Container, Spinner, Alert } from 'react-bootstrap';
+import BookPageCard from '@/components/BookPageCard';
 
 interface BookDetails extends Book {
   images: { filePath: string }[];
@@ -72,48 +73,7 @@ const BookPage = () => {
   if (book) {
     return (
       <Container fluid className="py-3">
-        <Container>
-          <Row>
-            <Col>
-              <Card className="mb-4">
-                <Row className="g-0">
-                  {/* Book Image */}
-                  <Col md={4} className="d-flex justify-content-center">
-                    <Card.Img
-                      src={book.images?.[0]?.filePath || 'https://via.placeholder.com/150'}
-                      className="book-cart-img"
-                      alt="Book Image"
-                    />
-                  </Col>
-
-                  {/* Book Info */}
-                  <Col md={8}>
-                    <Card.Body>
-                      <Card.Title>{book.title}</Card.Title>
-                      <Card.Text>
-                        <strong>Condition:</strong>
-                        {book.condition}
-                      </Card.Text>
-                      <Card.Text>
-                        {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-                        <strong>Price:</strong>${book.price.toFixed(2)}
-                      </Card.Text>
-                      <Card.Text>
-                        <strong>Description:</strong>
-                        {book.description}
-                      </Card.Text>
-
-                      {/* eslint-disable-next-line no-alert */}
-                      <Button variant="primary" onClick={() => alert('Buying functionality here!')}>
-                        Buy Now
-                      </Button>
-                    </Card.Body>
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
+        <BookPageCard book={book} />
       </Container>
     );
   }

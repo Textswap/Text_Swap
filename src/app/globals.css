@@ -169,6 +169,36 @@ body .navbar {
 }
 /* Book Card */
 
+/* Book Page */
+.book-card-wrapper {
+  height: 1000px;
+  margin: 1rem 5rem 5rem 5rem;
+}
+
+.book-card-page {
+  height: 100%;
+  background: var(--secondary-color) !important;
+}
+
+.buy-now {
+  width: 200px;
+  margin: 1rem 0.5rem 1rem 2rem;
+  border-radius: 50px !important;
+  border: 0 !important;
+  background-color: var(--main-color) !important;
+  color: white !important;
+}
+
+.add-to-cart {
+  width: 200px;
+  margin: 1rem 0.5rem 1rem 2rem;
+  border-radius: 50px !important;
+  border: 0 !important;
+  background-color: var(--main-color) !important;
+  color: white !important;
+}
+/* Book Page */
+
 /* Cart */
 .book-link {
   color: black;
@@ -179,7 +209,7 @@ body .navbar {
   text-decoration: underline;
 }
 
-.book-card-wrapper {
+.book-cart-wrapper {
   height: 250px;
   margin-bottom: 1rem;
 }
