@@ -10,9 +10,6 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     const book = await prisma.book.findUnique({
       where: { id: bookId },
-      include: {
-        images: true,
-      },
     });
 
     if (!book) {

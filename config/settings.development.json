@@ -1,101 +1,64 @@
 {
   "defaultAccounts": [
-    { "email": "admin@foo.com", "password": "changeme", "role": "ADMIN" },
-    { "email": "john@foo.com", "password": "changeme" },
-    { "email": "jane@foo.com", "password": "changeme" }
-  ],
-
-  "defaultData": [
-    { "name": "Basket", "quantity": 3, "owner": "john@foo.com", "condition": "excellent" },
-    { "name": "Bicycle", "quantity": 2, "owner": "john@foo.com", "condition": "poor" },
-    { "name": "Banana", "quantity": 2, "owner": "admin@foo.com", "condition": "good" },
-    { "name": "Boogie Board", "quantity": 2, "owner": "admin@foo.com", "condition": "excellent" }
+    { "id": 1, "email": "admin@foo.com", "password": "changeme", "role": "ADMIN" },
+    { "id": 2, "email": "john@foo.com", "password": "changeme" },
+    { "id": 3, "email": "jane@foo.com", "password": "changeme" }
   ],
 
   "defaultBooks": [
     {
-      "title": "Math Book",
-      "isbn": "1111111111",
-      "subject": "math",
-      "courseName": "Math 101",
-      "courseCrn": "1111",
-      "description": "This is a math book",
-      "price": 100,
-      "condition": "new",
-      "owner": "john@foo.com",
-      "images": ["public/uploads/placeholder.png"]
-    },
-    {
-      "title": "Science Book",
-      "isbn": "2222222222",
-      "subject": "science",
-      "courseName": "Science 101",
-      "courseCrn": "2222",
-      "description": "This is a science book",
-      "price": 200,
-      "condition": "excellent",
-      "owner": "john@foo.com",
-      "images": ["public/uploads/placeholder.png"]
-    },
-    {
       "title": "New Math Book",
-      "isbn": "3333333333",
       "subject": "math",
-      "courseName": "Math 101",
-      "courseCrn": "3333",
       "description": "This is a new math book",
-      "price": 100,
+      "price": 10.99,
       "condition": "new",
-      "owner": "jane@foo.com",
-      "images": ["public/uploads/placeholder.png"]
+      "imageUrl": "https://res.cloudinary.com/dqf286rom/image/upload/v1733224809/math_ytjyhd.jpg",
+      "owner": "john@foo.com",
+      "approved": true,
+      "savedBy": [3]
     },
     {
       "title": "Excellent English Book",
-      "isbn": "4444444444",
       "subject": "english",
-      "courseName": "English 100",
-      "courseCrn": "4444",
-      "description": "This is an excellent book",
-      "price": 50.99,
+      "description": "This is an excellent english book",
+      "price": 100.99,
       "condition": "excellent",
-      "owner": "jane@foo.com",
-      "images": ["public/uploads/placeholder.png"]
+      "imageUrl": "https://res.cloudinary.com/dqf286rom/image/upload/v1733224845/english_tksl7s.jpg",
+      "owner": "john@foo.com",
+      "approved": true,
+      "savedBy": [3]
     },
     {
-      "title": "Good Science Book",
-      "isbn": "5555555555",
+      "title": "Fair Science Book",
       "subject": "science",
-      "courseName": "Physics 101",
-      "courseCrn": "5555",
-      "description": "This is a good science book",
-      "price": 1.99,
-      "condition": "good",
-      "owner": "jane@foo.com",
-      "images": ["public/uploads/placeholder.png"]
-    },
-    {
-      "title": "Fair History Book",
-      "isbn": "6666666666",
-      "subject": "history",
-      "courseName": "Math 101",
-      "courseCrn": "6666",
-      "description": "This is a fair history book",
+      "description": "This is a fair science book",
       "price": 99.99,
       "condition": "fair",
-      "owner": "jane@foo.com",
-      "images": ["public/uploads/placeholder.png"]
+      "imageUrl": "https://res.cloudinary.com/dqf286rom/image/upload/v1733224809/science_e3hj1z.jpg",
+      "owner": "john@foo.com",
+      "approved": true,
+      "savedBy": [3]
     },
     {
-      "title": "Poor Computer Science Book",
-      "isbn": "3333333333",
-      "subject": "other",
-      "courseName": "ICS 314",
-      "courseCrn": "3333",
-      "description": "This is me testing a long description AGHHHAGHIUGCBEOWUBIVCIOHVUEGNAFSVYBSUC VEBSACU VEWBSCBNVWEBSACNV YHESAV EHBJB WSAKJDC BSAJC BEWC BEWJS FBUEWO HI",
-      "price": 9999999999999.99,
+      "title": "Poor History Book",
+      "subject": "history",
+      "description": "This is a poor history book",
+      "price": 50.99,
       "condition": "poor",
+      "imageUrl": "https://res.cloudinary.com/dqf286rom/image/upload/v1733224809/history_ybrtka.jpg",
       "owner": "jane@foo.com",
-      "images": ["public/uploads/placeholder.png"]
+      "approved": true,
+      "savedBy": [2]
+    },
+    {
+      "title": "Computer Science Book",
+      "subject": "other",
+      "description": "Testing a long description 20947329830404840485410745843t7028458t496304584748051487085148763570t41y8gfh93vr4gbu9ixewugfibxojewngcfy8bxn9jew8ncg8yrh98g237hx8r3rh3428cfymb43",
+      "price": 0,
+      "condition": "new",
+      "owner": "jane@foo.com",
+      "approved": true,
+      "savedBy": [2]
     }
   ]
 }

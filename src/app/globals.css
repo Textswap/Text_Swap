@@ -189,6 +189,11 @@ body .navbar {
   color: white !important;
 }
 
+.buy-now:hover {
+  background-color: var(--main-color-darker) !important;
+  transition: 0.5s;
+}
+
 .add-to-cart {
   width: 200px;
   margin: 1rem 0.5rem 1rem 2rem;
@@ -196,6 +201,11 @@ body .navbar {
   border: 0 !important;
   background-color: var(--main-color) !important;
   color: white !important;
+}
+
+.add-to-cart:hover {
+  background-color: var(--main-color-darker) !important;
+  transition: 0.5s;
 }
 /* Book Page */
 

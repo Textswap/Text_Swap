@@ -8,7 +8,7 @@ const BookPageCard = ({ book }: { book: Book }) => (
     <Card className="book-card-page">
       <Row className="h-100">
         {/* Book Image */}
-        <Col className="d-flex" style={{ margin: '1rem' }}>
+        <Col className="d-flex" style={{ margin: '1rem', width: '750px' }}>
           <Card.Img
             src="https://via.placeholder.com/750"
             className="book-page-img"
@@ -42,7 +42,7 @@ const BookPageCard = ({ book }: { book: Book }) => (
           </Row>
           {/* Description */}
           <Row>
-            <Col>
+            <Col style={{ maxWidth: '600px', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
               <Card.Text style={{ fontSize: '1rem' }} className="text-muted">
                 {book.description}
               </Card.Text>
