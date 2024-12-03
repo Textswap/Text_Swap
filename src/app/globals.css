@@ -6,6 +6,8 @@
   --main-color-darker-rgb: 26, 74, 58;
   --secondary-color: #d3d3d3;
   --secondary-color-rgb: 211, 211, 211;
+  --secondary-color-darker: #b3b3b3;
+  --secondary-color-darker-rgb: 179, 179, 179;
 }
 /* color scheme */
 
@@ -168,6 +170,15 @@ body .navbar {
 /* Book Card */
 
 /* Cart */
+.book-link {
+  color: black;
+  text-decoration: none;
+}
+
+.book-link:hover {
+  text-decoration: underline;
+}
+
 .book-card-wrapper {
   height: 250px;
   margin-bottom: 1rem;
@@ -212,12 +223,11 @@ body .navbar {
   border: 0 !important;
   border-radius: 50px !important;
   background-color: transparent !important;
-  color: black !important;
+  color: red !important;
 }
 
 .cart-trash-can:hover {
-  background-color: var(--main-color-darker) !important;
-  color: white !important;
+  color: darkred !important;
   transition: 0.5s;
 }
 /* Cart */

@@ -3,8 +3,9 @@
 import { Book } from '@prisma/client';
 import { Image, Card, Button, Row, Col } from 'react-bootstrap';
 import { Trash } from 'react-bootstrap-icons';
+import Link from 'next/link';
 
-const BookCard = ({ book }: { book: Book }) => (
+const BookCartCard = ({ book }: { book: Book }) => (
   // wrapper
   <div className="book-card-wrapper mb-5">
     <Card className="book-card-cart">
@@ -15,7 +16,9 @@ const BookCard = ({ book }: { book: Book }) => (
         </Col>
         {/* Book Details */}
         <Col xs={8} className="d-flex flex-column justify-content-between h-100">
-          <Card.Title style={{ fontSize: '2rem' }}>{book.title}</Card.Title>
+          <Link className="book-link" href={`/book/${book.id}`}>
+            <Card.Title style={{ fontSize: '2rem' }}>{book.title}</Card.Title>
+          </Link>
           {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
           <Card.Text style={{ fontSize: '1rem' }}>Condition: {book.condition}</Card.Text>
           {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
@@ -80,4 +83,4 @@ const BookCard = ({ book }: { book: Book }) => (
   </div>
 );
 
-export default BookCard;
+export default BookCartCard;
