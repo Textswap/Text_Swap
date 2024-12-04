@@ -1,28 +1,46 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+import { Card, Col, Container, Button, Form, Row } from 'react-bootstrap';
+import { createUser } from '@/lib/dbActions';
 import { BookCheck } from 'lucide-react';
 
-/** The sign in page. */
-const SignIn = () => {
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const target = e.target as typeof e.target & {
-      email: { value: string };
-      password: { value: string };
-    };
-    const email = target.email.value;
-    const password = target.password.value;
-    const result = await signIn('credentials', {
-      callbackUrl: '/buy',
-      email,
-      password,
-    });
+type SignUpForm = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  // acceptTerms: boolean;
+};
 
-    if (result?.error) {
-      console.error('Sign in failed: ', result.error);
-    }
+/** The sign up page. */
+const SignUp = () => {
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().required('Email is required').email('Email is invalid'),
+    password: Yup.string()
+      .required('Password is required')
+      .min(6, 'Password must be at least 6 characters')
+      .max(40, 'Password must not exceed 40 characters'),
+    confirmPassword: Yup.string()
+      .required('Confirm Password is required')
+      .oneOf([Yup.ref('password'), ''], 'Confirm Password does not match'),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpForm>({
+    resolver: yupResolver(validationSchema),
+  });
+
+  const onSubmit = async (data: SignUpForm) => {
+    // console.log(JSON.stringify(data, null, 2));
+    await createUser(data);
+    // After creating, signIn with redirect to the add page
+    await signIn('credentials', { callbackUrl: '/add', ...data });
   };
 
   return (
@@ -81,11 +99,11 @@ const SignIn = () => {
                     fontWeight: 'bold',
                   }}
                 >
-                  Log In
+                  Sign Up
                 </p>
-                <Form method="post" onSubmit={handleSubmit}>
+
+                <Form onSubmit={handleSubmit(onSubmit)}>
                   <Form.Group
-                    controlId="formBasicEmail"
                     className="form-group"
                     style={{ paddingTop: '20px' }}
                   >
@@ -94,10 +112,19 @@ const SignIn = () => {
                     >
                       Email
                     </Form.Label>
-                    <input name="email" type="text" className="form-control" />
+                    <input
+                      type="text"
+                      {...register('email')}
+                      className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                    />
+                    <div className="invalid-feedback">
+                      {errors.email?.message}
+                    </div>
                   </Form.Group>
+
                   <Form.Group
-                    style={{ paddingTop: '30px', paddingBottom: '20px' }}
+                    className="form-group"
+                    style={{ paddingTop: '15px' }}
                   >
                     <Form.Label
                       style={{ marginBottom: '0.1rem', color: '#225f49' }}
@@ -105,10 +132,31 @@ const SignIn = () => {
                       Password
                     </Form.Label>
                     <input
-                      name="password"
                       type="password"
-                      className="form-control"
+                      {...register('password')}
+                      className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                     />
+                    <div className="invalid-feedback">
+                      {errors.password?.message}
+                    </div>
+                  </Form.Group>
+                  <Form.Group
+                    className="form-group"
+                    style={{ paddingTop: '15px', paddingBottom: '25px' }}
+                  >
+                    <Form.Label
+                      style={{ marginBottom: '0.1rem', color: '#225f49' }}
+                    >
+                      Confirm Password
+                    </Form.Label>
+                    <input
+                      type="password"
+                      {...register('confirmPassword')}
+                      className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
+                    />
+                    <div className="invalid-feedback">
+                      {errors.confirmPassword?.message}
+                    </div>
                   </Form.Group>
                   <Form.Group className="form-group py-3">
                     <Row>
@@ -122,9 +170,16 @@ const SignIn = () => {
                             borderColor: 'white',
                           }}
                         >
-                          Log In
+                          Sign Up
                         </Button>
                       </Col>
+                      {/*
+                      <Col>
+                        <Button type="button" onClick={() => reset()} className="btn btn-warning float-right">
+                          Reset
+                        </Button>
+                      </Col>
+                    */}
                     </Row>
                   </Form.Group>
                 </Form>
@@ -137,8 +192,8 @@ const SignIn = () => {
                 }}
               />
               <Card.Footer className="d-flex justify-content-center align-items-center">
-                Don&apos;t have an account?&nbsp;
-                <a href="/auth/signup">Sign up</a>
+                Already have an account?&nbsp;
+                <a href="/auth/signin">Log in</a>
               </Card.Footer>
             </Card>
           </Col>
@@ -148,4 +203,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;
