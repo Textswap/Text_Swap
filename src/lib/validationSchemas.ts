@@ -9,7 +9,7 @@ export const AddBookSchema = Yup.object({
   courseCrn: Yup.string().optional(),
   description: Yup.string().optional(),
   price: Yup.number().positive().required(),
-  condition: Yup.string().oneOf(['excellent', 'good', 'fair', 'poor']).required(),
+  condition: Yup.string().oneOf(['new', 'excellent', 'good', 'fair', 'poor']).required(),
   imageURL: Yup.string().optional(),
   owner: Yup.string().required(),
 });

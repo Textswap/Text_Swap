@@ -1,204 +1,219 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable no-alert */
-// components/BookListingForm.tsx
+/* eslint-disable import/no-extraneous-dependencies */
+import React from 'react';
+import { Form, Button, Container } from 'react-bootstrap';
+import { Formik, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import axios from 'axios';
+import { useSession } from 'next-auth/react'; // Using next-auth to get the session
+import { useRouter } from 'next/navigation';
 
-// components/BookListingForm.tsx
+// Validation schema
+const AddBookSchema = Yup.object({
+  title: Yup.string().required('Title is required'),
+  isbn: Yup.string().optional(),
+  subject: Yup.string().oneOf(['math', 'english', 'science', 'history', 'other']).required('Subject is required'),
+  courseName: Yup.string().optional(),
+  courseCrn: Yup.string().optional(),
+  description: Yup.string().optional(),
+  price: Yup.number().positive().required('Price is required'),
+  condition: Yup.string().oneOf(['new', 'excellent', 'good', 'fair', 'poor']).required('Condition is required'),
+  owner: Yup.string().required('Owner is required'),
+});
 
-'use client';
+const AddBookForm = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
-import React, { useState, useRef } from 'react';
-import { Camera, X } from 'react-bootstrap-icons';
-import styles from '../app/sell/SellPage.module.css';
-
-const SellBookForm: React.FC = () => {
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const formRef = useRef<HTMLFormElement>(null);
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.result) {
-          setImagePreview(reader.result.toString());
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-
-    const file = e.dataTransfer.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.result) {
-          setImagePreview(reader.result.toString());
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleRemoveImage = () => {
-    setImagePreview(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-
+  const onSubmit = async (values: any) => {
     try {
-      const formData = new FormData(e.currentTarget);
+      console.log('Submitting book data:', values);
 
-      if (fileInputRef.current?.files?.[0]) {
-        formData.set('image', fileInputRef.current.files[0]);
-      }
+      const bookData = {
+        ...values,
+        approved: false, // Set approved as false initially
+      };
 
-      const response = await fetch('/api/listbooks', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json',
-        },
-      });
+      const response = await axios.post('/api/sell', bookData);
 
-      const responseText = await response.text();
+      console.log('Response from server:', response.data);
 
-      if (!response.ok) {
-        const errorData = JSON.parse(responseText);
-        throw new Error(errorData.error || 'Failed to create book listing');
-      }
-
-      const book = JSON.parse(responseText);
-      formRef.current?.reset();
-      setImagePreview(null);
-      alert('Book listed successfully!');
+      alert('Book added successfully!');
+      router.push('/');
     } catch (error) {
-      alert(error instanceof Error ? error.message : 'Failed to create book listing. Please try again.');
-    } finally {
-      setLoading(false);
+      console.error('Error during form submission:', error);
+      alert('An error occurred while adding the book.');
     }
   };
+
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className={styles.form}>
-      <div
-        className={`${styles.imageUpload} ${isDragging ? styles.dragging : ''}`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
+    <Container>
+      <Formik
+        initialValues={{
+          title: '',
+          isbn: '',
+          subject: '',
+          courseName: '',
+          courseCrn: '',
+          description: '',
+          price: '',
+          condition: 'new',
+          owner: session?.user?.email || '',
+        }}
+        validationSchema={AddBookSchema}
+        onSubmit={onSubmit}
       >
-        <input
-          type="file"
-          id="imageUrl"
-          accept="image/*"
-          onChange={handleImageChange}
-          ref={fileInputRef}
-          className={styles.hiddenInput}
-        />
-        {imagePreview ? (
-          <div className={styles.imagePreviewContainer}>
-            <img src={imagePreview} alt="Preview" className={styles.imagePreview} />
-            <div className={styles.overlayActions}>
-              <label htmlFor="imageUrl" className={styles.uploadLabelOverlay}>
-                <Camera className={styles.cameraIcon} />
-              </label>
-              <button type="button" className={styles.removeButton} onClick={handleRemoveImage}>
-                <X className={styles.removeIcon} />
-              </button>
-            </div>
-          </div>
-        ) : (
-          <label htmlFor="imageUrl" className={styles.uploadLabel}>
-            <Camera className={styles.cameraLargeIcon} />
-            <span className={styles.uploadText}>Drop an image here or click to upload</span>
-          </label>
+        {({ values, handleChange, handleBlur, handleSubmit, errors, touched }) => (
+          <Form noValidate onSubmit={handleSubmit}>
+            {/* Title */}
+            <Form.Group controlId="title">
+              <Form.Label>Title</Form.Label>
+              <Field
+                type="text"
+                name="title"
+                className={`form-control ${errors.title && touched.title ? 'is-invalid' : ''}`}
+                value={values.title}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <ErrorMessage name="title" component="div" className="invalid-feedback" />
+            </Form.Group>
+
+            {/* ISBN (Optional) */}
+            <Form.Group controlId="isbn">
+              <Form.Label>ISBN (Optional)</Form.Label>
+              <Field
+                type="text"
+                name="isbn"
+                className="form-control"
+                value={values.isbn}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+            </Form.Group>
+
+            {/* Subject */}
+            <Form.Group controlId="subject">
+              <Form.Label>Subject</Form.Label>
+              <Field
+                as="select"
+                name="subject"
+                className={`form-control ${errors.subject && touched.subject ? 'is-invalid' : ''}`}
+                value={values.subject}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              >
+                <option value="">Select Subject</option>
+                <option value="math">Math</option>
+                <option value="english">English</option>
+                <option value="science">Science</option>
+                <option value="history">History</option>
+                <option value="other">Other</option>
+              </Field>
+              <ErrorMessage name="subject" component="div" className="invalid-feedback" />
+            </Form.Group>
+
+            {/* Course Name (Optional) */}
+            <Form.Group controlId="courseName">
+              <Form.Label>Course Name (Optional)</Form.Label>
+              <Field
+                type="text"
+                name="courseName"
+                className="form-control"
+                value={values.courseName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+            </Form.Group>
+
+            {/* Course CRN (Optional) */}
+            <Form.Group controlId="courseCrn">
+              <Form.Label>Course CRN (Optional)</Form.Label>
+              <Field
+                type="text"
+                name="courseCrn"
+                className="form-control"
+                value={values.courseCrn}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+            </Form.Group>
+
+            {/* Description (Optional) */}
+            <Form.Group controlId="description">
+              <Form.Label>Description (Optional)</Form.Label>
+              <Field
+                type="text"
+                name="description"
+                className="form-control"
+                value={values.description}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+            </Form.Group>
+
+            {/* Price */}
+            <Form.Group controlId="price">
+              <Form.Label>Price</Form.Label>
+              <Field
+                type="number"
+                name="price"
+                className={`form-control ${errors.price && touched.price ? 'is-invalid' : ''}`}
+                value={values.price}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <ErrorMessage name="price" component="div" className="invalid-feedback" />
+            </Form.Group>
+
+            {/* Condition */}
+            <Form.Group controlId="condition">
+              <Form.Label>Condition</Form.Label>
+              <Field
+                as="select"
+                name="condition"
+                className={`form-control ${errors.condition && touched.condition ? 'is-invalid' : ''}`}
+                value={values.condition}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              >
+                <option value="new">New</option>
+                <option value="excellent">Excellent</option>
+                <option value="good">Good</option>
+                <option value="fair">Fair</option>
+                <option value="poor">Poor</option>
+              </Field>
+              <ErrorMessage name="condition" component="div" className="invalid-feedback" />
+            </Form.Group>
+
+            {/* Owner */}
+            <Form.Group controlId="owner">
+              <Form.Label>Owner</Form.Label>
+              <Field
+                type="email"
+                name="owner"
+                className={`form-control ${errors.owner && touched.owner ? 'is-invalid' : ''}`}
+                value={values.owner}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                readOnly
+              />
+              <ErrorMessage name="owner" component="div" className="invalid-feedback" />
+            </Form.Group>
+
+            <Button type="submit" variant="primary" className="mt-4">
+              Add Book
+            </Button>
+          </Form>
         )}
-      </div>
-
-      <div className={styles.formFields}>
-        <div className={styles.field}>
-          <label htmlFor="title">Book Title</label>
-          <input type="text" id="title" name="title" placeholder="Enter the book title" required />
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="author">Author</label>
-          <input type="text" id="author" name="author" placeholder="Enter the author's name" required />
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="isbn">ISBN</label>
-          <input type="text" id="isbn" name="isbn" placeholder="Enter the ISBN number" required />
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="category">Subject</label>
-          <select id="category" name="category" required defaultValue="">
-            <option value="" disabled>
-              Select the subject
-            </option>
-            {/* Add options here */}
-          </select>
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="courseName">Course Name</label>
-          <input type="text" id="courseName" name="courseName" placeholder="Enter the course name" />
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="courseCrn">Course CRN</label>
-          <input type="text" id="courseCrn" name="courseCrn" placeholder="Enter the course CRN" />
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="price">Price</label>
-          <input type="number" id="price" name="price" step="0.01" placeholder="Enter the price ($)" required />
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="condition">Condition</label>
-          <select id="condition" name="condition" required defaultValue="">
-            <option value="" disabled>
-              Select the condition
-            </option>
-            {/* Add condition options */}
-          </select>
-        </div>
-
-        <div className={styles.buttons}>
-          <button type="submit" className={styles.confirmButton} disabled={loading}>
-            {loading ? 'Creating...' : 'Confirm'}
-          </button>
-          <button type="button" className={styles.deleteButton} disabled={loading}>
-            Delete
-          </button>
-        </div>
-      </div>
-    </form>
+      </Formik>
+    </Container>
   );
 };
 
-export default SellBookForm;
+export default AddBookForm;
