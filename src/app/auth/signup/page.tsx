@@ -80,7 +80,8 @@ const SignUp = () => {
                     textAlign: 'center',
                   }}
                 >
-                  TextSwap{' '}
+                  TextSwap
+                  {' '}
                   <BookCheck
                     style={{
                       width: '60px',

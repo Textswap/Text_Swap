@@ -62,7 +62,8 @@ const SignIn = () => {
                     textAlign: 'center',
                   }}
                 >
-                  TextSwap{' '}
+                  TextSwap
+                  {' '}
                   <BookCheck
                     style={{
                       width: '60px',

@@ -1,6 +1,6 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
-import styles from '../Styles/LandingPage.module.css';
 import {
   Book,
   Cart,
@@ -10,6 +10,7 @@ import {
 } from 'react-bootstrap-icons';
 import { BookCheck } from 'lucide-react';
 import Link from 'next/link';
+import styles from '../Styles/LandingPage.module.css';
 
 const Home = () => {
   const words = ['SMART', 'AFFORDABLE', 'EASY'];
@@ -26,9 +27,9 @@ const Home = () => {
         setTypedText(fullText.slice(0, typedText.length + 1));
       }, typingSpeed);
       return () => clearTimeout(timeout);
-    } else {
-      setIsTypingComplete(true);
     }
+    setIsTypingComplete(true);
+    return undefined; // Explicit return when no timeout is set
   }, [typedText, fullText]);
 
   // Word rotation effect
@@ -42,29 +43,42 @@ const Home = () => {
 
   // Static boxes
   const boxes = [
-    { text: 'Find Affordable Textbooks', icon: <Book /> },
+    { id: 1, text: 'Find Affordable Textbooks', icon: <Book /> },
     {
+      id: 2,
       text: (
         <>
-          Sell Your <br />
+          Sell Your
+          {' '}
+          <br />
           Textbooks Easily
         </>
       ),
       icon: <CurrencyDollar />,
     },
     {
+      id: 3,
       text: (
         <>
-          Filter Books <br /> Your Way
+          Filter Books
+          {' '}
+          <br />
+          {' '}
+          Your Way
         </>
       ),
       icon: <Search />,
     },
-    { text: 'Add to Your Cart', icon: <Cart /> },
+    { id: 4, text: 'Add to Your Cart', icon: <Cart /> },
     {
+      id: 5,
       text: (
         <>
-          Sign Up <br /> For Full Access
+          Sign Up
+          {' '}
+          <br />
+          {' '}
+          For Full Access
         </>
       ),
       icon: <PersonPlus />,
@@ -95,26 +109,29 @@ const Home = () => {
         {/* Dynamic Tagline */}
         <div className={styles['home-tagline']}>
           <p>
-            Find Your Next Textbook, <br />
-            the{' '}
+            Find Your Next Textbook,
+            {' '}
+            <br />
+            the
+            {' '}
             <span key={currentWordIndex} className={styles['home-flip-word']}>
               {` ${words[currentWordIndex]} `}
-            </span>{' '}
+            </span>
+            {' '}
             way
           </p>
         </div>
 
         {/* CTA Button */}
         <Link href="/auth/signup">
-          <button className={styles['home-cta-button']}>Get Started</button>
+          <button className={styles['home-cta-button']} type="button">Get Started</button>
         </Link>
       </div>
 
-      {/* Rotating Boxes */}
       <div className={styles['boxes-section']}>
         <div className={styles['boxes-container']}>
-          {boxes.map((box, index) => (
-            <div key={index} className={styles['box']}>
+          {boxes.map((box) => (
+            <div key={box.id} className={styles.box}>
               <div className={styles['box-content']}>
                 <div className={styles['box-icon']}>{box.icon}</div>
                 <div className={styles['box-text']}>{box.text}</div>
