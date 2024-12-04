@@ -20,6 +20,10 @@ const NavBar: React.FC = () => {
   const role = userWithRole?.randomKey;
   const pathName = usePathname();
 
+  // Define paths where the search bar should not appear
+  const hideSearchBarPaths = ['/auth/signin', '/auth/signup', '/'];
+  const shouldHideSearchBar = hideSearchBarPaths.includes(pathName);
+
   return (
     <Navbar bg="dark" expand="lg">
       <Container>
@@ -38,13 +42,13 @@ const NavBar: React.FC = () => {
               >
                 Admin
               </Nav.Link>
-            ) : (
-              ''
-            )}
+            ) : null}
           </Nav>
-          <Nav className="nav-search-bar d-none d-lg-flex">
-            <SearchBar />
-          </Nav>
+          {!shouldHideSearchBar && (
+            <Nav className="nav-search-bar d-none d-lg-flex">
+              <SearchBar />
+            </Nav>
+          )}
           <Nav className="ms-auto">
             {currentUser ? (
               <>
@@ -81,9 +85,7 @@ const NavBar: React.FC = () => {
                   Account
                 </Nav.Link>
               </>
-            ) : (
-              ''
-            )}
+            ) : null}
           </Nav>
           <Nav>
             {session ? (
@@ -122,13 +124,15 @@ const NavBar: React.FC = () => {
               </NavDropdown>
             )}
           </Nav>
-          <Nav className="d-lg-none w-100">
-            <NavDropdown id="search-dropdown" title="Search">
-              <div className="collapse-search-bar">
-                <SearchBar />
-              </div>
-            </NavDropdown>
-          </Nav>
+          {!shouldHideSearchBar && (
+            <Nav className="d-lg-none w-100">
+              <NavDropdown id="search-dropdown" title="Search">
+                <div className="collapse-search-bar">
+                  <SearchBar />
+                </div>
+              </NavDropdown>
+            </Nav>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>

@@ -1,9 +1,42 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Card, Form } from 'react-bootstrap';
 
-/** The sign in page. */
+const styles = {
+  main: {
+    backgroundColor: '#225f49',
+    height: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  card: {
+    backgroundColor: 'lightGray',
+    padding: '50px',
+    width: '600px',
+  },
+  title: {
+    fontSize: '2.5em',
+  },
+  formGroup: {
+    paddingTop: '20px',
+  },
+  formGroupPassword: {
+    paddingTop: '30px',
+    paddingBottom: '20px',
+  },
+  button: {
+    backgroundColor: '#225f49',
+    borderRadius: '20px',
+  },
+  divider: {
+    border: '0',
+    borderTop: '4px solid #225f49',
+    marginBottom: '20px',
+  },
+};
+
 const SignIn = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -13,6 +46,7 @@ const SignIn = () => {
     };
     const email = target.email.value;
     const password = target.password.value;
+
     const result = await signIn('credentials', {
       callbackUrl: '/buy',
       email,
@@ -25,58 +59,32 @@ const SignIn = () => {
   };
 
   return (
-    <main style={{ backgroundColor: '#225f49', height: '100vh', alignItems: 'center', justifyContent: 'center' }}>
-      <Container>
-        <Row className="justify-content-center">
-          <Col xs={5}>
-            <Card
-              className="shadow"
-              style={{
-                backgroundColor: 'lightGray',
-                padding: '50px',
-                width: '600px',
-              }}
-            >
-              <Card.Body>
-                <h1 className="mb-4" style={{ fontSize: '2.5em' }}>Log In</h1>
-                <Form method="post" onSubmit={handleSubmit}>
-                  <Form.Group controlId="formBasicEmail" className="form-group" style={{ paddingTop: '20px' }}>
-                    <Form.Label style={{ marginBottom: '0.1rem' }}>Email</Form.Label>
-                    <input name="email" type="text" className="form-control" />
-                  </Form.Group>
-                  <Form.Group style={{ paddingTop: '30px', paddingBottom: '20px' }}>
-                    <Form.Label style={{ marginBottom: '0.1rem' }}>Password</Form.Label>
-                    <input name="password" type="password" className="form-control" />
-                  </Form.Group>
-                  <Form.Group className="form-group py-3">
-                    <Row>
-                      <Col>
-                        <Button
-                          type="submit"
-                          className="btn btn-primary w-100"
-                          style={{ backgroundColor: '#225f49', borderRadius: '20px' }}
-                        >
-                          Log In
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Form.Group>
-                </Form>
-              </Card.Body>
-              <hr style={{
-                border: '0',
-                borderTop: '4px solid #225f49',
-                marginBottom: '20px',
-              }}
-              />
-              <Card.Footer className="d-flex justify-content-center align-items-center">
-                Don&apos;t have an account?&nbsp;
-                <a href="/auth/signup">Sign up</a>
-              </Card.Footer>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+    <main style={styles.main}>
+      <Card className="shadow" style={styles.card}>
+        <Card.Body>
+          <h1 className="mb-4" style={styles.title}>Log In</h1>
+          <Form method="post" onSubmit={handleSubmit}>
+            <Form.Group controlId="formBasicEmail" className="form-group" style={styles.formGroup}>
+              <Form.Label>Email</Form.Label>
+              <input name="email" type="text" className="form-control" />
+            </Form.Group>
+            <Form.Group style={styles.formGroupPassword}>
+              <Form.Label>Password</Form.Label>
+              <input name="password" type="password" className="form-control" />
+            </Form.Group>
+            <Form.Group className="form-group py-3">
+              <Button type="submit" className="btn btn-primary w-100" style={styles.button}>
+                Log In
+              </Button>
+            </Form.Group>
+          </Form>
+        </Card.Body>
+        <hr style={styles.divider} />
+        <Card.Footer className="d-flex justify-content-center align-items-center">
+          Don&apos;t have an account?&nbsp;
+          <a href="/auth/signup">Sign up</a>
+        </Card.Footer>
+      </Card>
     </main>
   );
 };
