@@ -1,13 +1,65 @@
+/* eslint-disable max-len */
+
 'use server';
 
-import { Stuff, Book, Condition, Subject } from '@prisma/client';
+import { Book, Condition, Subject } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
+import cloudinary from 'cloudinary';
 import { prisma } from './prisma';
 
 /**
+ * Handle condition conversion
+ */
+function getConditionValue(condition: string): Condition {
+  switch (condition) {
+    case 'poor':
+      return 'poor';
+    case 'excellent':
+      return 'excellent';
+    case 'good':
+      return 'good';
+    case 'fair':
+      return 'fair';
+    default:
+      return 'new';
+  }
+}
+
+/**
+ * Handle subject conversion
+ */
+function getSubjectValue(subject: string): Subject {
+  switch (subject) {
+    case 'math':
+      return 'math';
+    case 'english':
+      return 'english';
+    case 'science':
+      return 'science';
+    case 'history':
+      return 'history';
+    default:
+      return 'other';
+  }
+}
+
+/**
+ * Upload the image to Cloudinary
+ */
+async function uploadImageToCloudinary(imagePath: string): Promise<string> {
+  try {
+    const uploadedImage = await cloudinary.v2.uploader.upload(imagePath);
+    return uploadedImage.secure_url; // Return the secure URL
+  } catch (error) {
+    console.error('Error uploading image to Cloudinary', error);
+    throw new Error('Image upload failed');
+  }
+}
+
+/**
  * Adds a new book to the database.
- * @param book, an object with the following properties: title, isbn, subject, courseName, courseCrn, description, price, owner, condition, images.
+ * @param book, an object with the following properties: title, isbn, subject, courseName, courseCrn, description, price, condition, imageURL, owner.
  */
 export async function addBook(book: {
   title: string;
@@ -19,47 +71,19 @@ export async function addBook(book: {
   price: number;
   owner: string;
   condition: string;
-  images?: string[];
+  image?: string;
 }) {
-  let condition: Condition = 'new';
-  switch (book.condition) {
-    case 'poor':
-      condition = 'poor';
-      break;
-    case 'excellent':
-      condition = 'excellent';
-      break;
-    case 'good':
-      condition = 'good';
-      break;
-    case 'fair':
-      condition = 'fair';
-      break;
-    default:
-      condition = 'new';
-      break;
+  const condition = getConditionValue(book.condition);
+  const subject = getSubjectValue(book.subject);
+
+  // Upload the image if it exists
+  let imageURL = '';
+  if (book.image) {
+    imageURL = await uploadImageToCloudinary(book.image); // Upload image and get URL
   }
 
-  let subject: Subject = 'other';
-  switch (book.subject) {
-    case 'math':
-      subject = 'math';
-      break;
-    case 'english':
-      subject = 'english';
-      break;
-    case 'science':
-      subject = 'science';
-      break;
-    case 'history':
-      subject = 'history';
-      break;
-    default:
-      subject = 'other';
-      break;
-  }
-  // Create the book
-  const createdBook = await prisma.book.create({
+  // Create the book in the database
+  await prisma.book.create({
     data: {
       title: book.title,
       isbn: book.isbn,
@@ -70,70 +94,31 @@ export async function addBook(book: {
       price: book.price,
       condition,
       owner: book.owner,
+      imageURL: imageURL || '',
     },
   });
-
-  // Add images if any are provided
-  if (book.images && book.images.length > 0) {
-    for (const imagePath of book.images) {
-      await prisma.bookImage.create({
-        data: {
-          bookId: createdBook.id,
-          filePath: imagePath, // Store the image file path
-        },
-      });
-    }
-  }
-
-  // After adding, redirect to the buy page
+  // Redirect to the buy page after adding the book
   redirect('/buy');
 }
 
 /**
  * Edits an existing stuff in the database.
- * @param stuff, an object with the following properties: id, name, quantity, owner, condition.
+ * @param book, an object with the following properties: title, isbn, subject, courseName, courseCrn, description, price, condition, imageURL, owner.
  */
-export async function editBook(book: Book & { images?: string[] }) {
-  let condition: Condition = 'new';
-  switch (book.condition) {
-    case 'poor':
-      condition = 'poor';
-      break;
-    case 'excellent':
-      condition = 'excellent';
-      break;
-    case 'good':
-      condition = 'good';
-      break;
-    case 'fair':
-      condition = 'fair';
-      break;
-    default:
-      condition = 'new';
-      break;
+export async function editBook(book: Book & { image?: string }) {
+  const condition = getConditionValue(book.condition);
+  const subject = getSubjectValue(book.subject);
+
+  // Upload the image if it exists
+  let imageURL = '';
+  if (book.image) {
+    imageURL = await uploadImageToCloudinary(book.image); // Upload image and get URL
   }
-  let subject: Subject = 'other';
-  switch (book.subject) {
-    case 'math':
-      subject = 'math';
-      break;
-    case 'english':
-      subject = 'english';
-      break;
-    case 'science':
-      subject = 'science';
-      break;
-    case 'history':
-      subject = 'history';
-      break;
-    default:
-      subject = 'other';
-      break;
-  }
-  const updatedBook = await prisma.book.update({
+
+  // Update the book record in the database
+  await prisma.book.update({
     where: { id: book.id },
     data: {
-      id: book.id,
       title: book.title,
       isbn: book.isbn,
       subject,
@@ -143,103 +128,47 @@ export async function editBook(book: Book & { images?: string[] }) {
       price: book.price,
       condition,
       owner: book.owner,
+      imageURL: imageURL || '',
     },
   });
-  // Handle images - Delete old images and add new ones if any
-  if (book.images && book.images.length > 0) {
-    // Delete all existing images for the book
-    await prisma.bookImage.deleteMany({
-      where: { bookId: book.id },
-    });
 
-    // Add new images
-    for (const imagePath of book.images) {
-      await prisma.bookImage.create({
-        data: {
-          bookId: updatedBook.id,
-          filePath: imagePath, // Store the image file path
-        },
-      });
-    }
-  }
+  // Redirect to the buy page after editing the book
   redirect('/buy');
 }
 
 /**
- * Deletes an existing book from the database.
+ * Deletes an existing book from the database and optionally removes the image from Cloudinary.
  * @param id, the id of the book to delete.
  */
 export async function deleteBook(id: number) {
-  // Delete associated images for the book
-  await prisma.bookImage.deleteMany({
-    where: { bookId: id },
+  // Find the book to get the image URL (or public_id)
+  const book = await prisma.book.findUnique({
+    where: { id },
+    select: { imageURL: true },
   });
 
-  // Delete the book record
+  if (book && book.imageURL) {
+    try {
+      // Extract the public_id from the Cloudinary URL
+      const publicId = book.imageURL.split('/').pop()?.split('.')[0];
+
+      if (publicId) {
+        // Delete the image from Cloudinary
+        await cloudinary.v2.uploader.destroy(publicId);
+        console.log(`Deleted image from Cloudinary: ${publicId}`);
+      }
+    } catch (error) {
+      console.error('Error deleting image from Cloudinary', error);
+    }
+  }
+
+  // Delete the book record from the database
   await prisma.book.delete({
     where: { id },
   });
 
-  // After deleting, redirect to the list page
+  // Redirect to the buy page after deleting the book
   redirect('/buy');
-}
-
-/**
- * Adds a new stuff to the database.
- * @param stuff, an object with the following properties: name, quantity, owner, condition.
- */
-export async function addStuff(stuff: { name: string; quantity: number; owner: string; condition: string }) {
-  // console.log(`addStuff data: ${JSON.stringify(stuff, null, 2)}`);
-  let condition: Condition = 'good';
-  if (stuff.condition === 'poor') {
-    condition = 'poor';
-  } else if (stuff.condition === 'excellent') {
-    condition = 'excellent';
-  } else {
-    condition = 'fair';
-  }
-  await prisma.stuff.create({
-    data: {
-      name: stuff.name,
-      quantity: stuff.quantity,
-      owner: stuff.owner,
-      condition,
-    },
-  });
-  // After adding, redirect to the list page
-  redirect('/list');
-}
-
-/**
- * Edits an existing stuff in the database.
- * @param stuff, an object with the following properties: id, name, quantity, owner, condition.
- */
-export async function editStuff(stuff: Stuff) {
-  // console.log(`editStuff data: ${JSON.stringify(stuff, null, 2)}`);
-  await prisma.stuff.update({
-    where: { id: stuff.id },
-    data: {
-      name: stuff.name,
-      quantity: stuff.quantity,
-      owner: stuff.owner,
-      condition: stuff.condition,
-    },
-  });
-  // After updating, redirect to the list page
-  redirect('/list');
-}
-
-/**
- * Deletes an existing stuff from the database.
- * @param id, the id of the stuff to delete.
- */
-export async function deleteStuff(id: number) {
-  // console.log(`deleteStuff id: ${id}`);
-  await prisma.stuff.delete({
-    where: { id },
-  });
-  // After deleting, redirect to the list page
-  redirect('/list');
 }
 
 /**

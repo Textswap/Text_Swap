@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+
 'use client';
 
 import { useState } from 'react';
@@ -31,9 +33,7 @@ const BookCartCard = ({ book }: { book: Book }) => {
             <Link className="book-link" href={`/book/${book.id}`}>
               <Card.Title style={{ fontSize: '2rem' }}>{book.title}</Card.Title>
             </Link>
-            {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
             <Card.Text style={{ fontSize: '1rem' }}>Condition: {book.condition}</Card.Text>
-            {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
             <Card.Text style={{ fontSize: '1.25rem' }}>${book.price.toFixed(2)}</Card.Text>
             <div className="cart-description-box">
               <Card.Text style={{ fontSize: '0.75rem' }} className="text-truncate text-muted">
@@ -65,7 +65,6 @@ const BookCartCard = ({ book }: { book: Book }) => {
                 overflow: 'hidden',
               }}
             >
-              {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
               Sold by {book.owner}
             </small>
           </Col>
