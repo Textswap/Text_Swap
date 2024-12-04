@@ -1,41 +1,8 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { Button, Card, Form } from 'react-bootstrap';
-
-const styles = {
-  main: {
-    backgroundColor: '#225f49',
-    height: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  card: {
-    backgroundColor: 'lightGray',
-    padding: '50px',
-    width: '600px',
-  },
-  title: {
-    fontSize: '2.5em',
-  },
-  formGroup: {
-    paddingTop: '20px',
-  },
-  formGroupPassword: {
-    paddingTop: '30px',
-    paddingBottom: '20px',
-  },
-  button: {
-    backgroundColor: '#225f49',
-    borderRadius: '20px',
-  },
-  divider: {
-    border: '0',
-    borderTop: '4px solid #225f49',
-    marginBottom: '20px',
-  },
-};
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { BookCheck } from 'lucide-react';
 
 const SignIn = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,32 +26,124 @@ const SignIn = () => {
   };
 
   return (
-    <main style={styles.main}>
-      <Card className="shadow" style={styles.card}>
-        <Card.Body>
-          <h1 className="mb-4" style={styles.title}>Log In</h1>
-          <Form method="post" onSubmit={handleSubmit}>
-            <Form.Group controlId="formBasicEmail" className="form-group" style={styles.formGroup}>
-              <Form.Label>Email</Form.Label>
-              <input name="email" type="text" className="form-control" />
-            </Form.Group>
-            <Form.Group style={styles.formGroupPassword}>
-              <Form.Label>Password</Form.Label>
-              <input name="password" type="password" className="form-control" />
-            </Form.Group>
-            <Form.Group className="form-group py-3">
-              <Button type="submit" className="btn btn-primary w-100" style={styles.button}>
-                Log In
-              </Button>
-            </Form.Group>
-          </Form>
-        </Card.Body>
-        <hr style={styles.divider} />
-        <Card.Footer className="d-flex justify-content-center align-items-center">
-          Don&apos;t have an account?&nbsp;
-          <a href="/auth/signup">Sign up</a>
-        </Card.Footer>
-      </Card>
+    <main
+      style={{
+        backgroundColor: '#e1f4e2',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '5rem 0',
+      }}
+    >
+      {' '}
+      <Container>
+        <Row className="justify-content-center">
+          <Col xs={5}>
+            <Card
+              className="shadow"
+              style={{
+                backgroundColor: '#c8e6c9',
+                padding: '50px',
+                width: '600px',
+              }}
+            >
+              <Card.Body>
+                <h1
+                  className="mb-4"
+                  style={{
+                    fontSize: '4rem',
+                    fontWeight: '900',
+                    background: 'linear-gradient(to right, #39af3f, #318768)',
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    textAlign: 'center',
+                  }}
+                >
+                  TextSwap
+                  {' '}
+                  <BookCheck
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      color: '#318768',
+                    }}
+                  />
+                </h1>
+                <p
+                  className="mb-4"
+                  style={{
+                    fontSize: '1.8em',
+                    color: '#225f49',
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  Log In
+                </p>
+                <Form method="post" onSubmit={handleSubmit}>
+                  <Form.Group
+                    controlId="formBasicEmail"
+                    className="form-group"
+                    style={{ paddingTop: '20px' }}
+                  >
+                    <Form.Label
+                      style={{ marginBottom: '0.1rem', color: '#225f49' }}
+                    >
+                      Email
+                    </Form.Label>
+                    <input name="email" type="text" className="form-control" />
+                  </Form.Group>
+                  <Form.Group
+                    style={{ paddingTop: '30px', paddingBottom: '20px' }}
+                  >
+                    <Form.Label
+                      style={{ marginBottom: '0.1rem', color: '#225f49' }}
+                    >
+                      Password
+                    </Form.Label>
+                    <input
+                      name="password"
+                      type="password"
+                      className="form-control"
+                    />
+                  </Form.Group>
+                  <Form.Group className="form-group py-3">
+                    <Row>
+                      <Col>
+                        <Button
+                          type="submit"
+                          className="btn btn-primary w-100"
+                          style={{
+                            backgroundColor: '#225f49',
+                            borderRadius: '20px',
+                            borderColor: 'white',
+                          }}
+                        >
+                          Log In
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form.Group>
+                </Form>
+              </Card.Body>
+              <hr
+                style={{
+                  border: '0',
+                  borderTop: '4px solid #225f49',
+                  marginBottom: '20px',
+                }}
+              />
+              <Card.Footer className="d-flex justify-content-center align-items-center">
+                Don&apos;t have an account?&nbsp;
+                <a href="/auth/signup">Sign up</a>
+              </Card.Footer>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </main>
   );
 };
