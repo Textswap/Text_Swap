@@ -20,6 +20,7 @@ async function main() {
         where: { email: account.email },
         update: {},
         create: {
+          id: account.id,
           email: account.email,
           password,
           role,
@@ -29,7 +30,7 @@ async function main() {
   );
   // Create books using forEach
   await Promise.all(
-    config.defaultBooks.map(async (book, index) => {
+    config.defaultBooks.map(async (book) => {
       let subject: Subject = 'other';
       switch (book.subject) {
         case 'math':
@@ -64,17 +65,32 @@ async function main() {
         default:
           condition = 'new';
       }
+      console.log(`  Creating book: ${book.title} with owner: ${book.owner}`);
       // Create the book
       const createdBook = await prisma.book.upsert({
-        where: { id: index + 1 }, // Use 0 or another fallback logic if there's no id
-        update: {},
+        where: {
+          title_owner: {
+            title: book.title,
+            owner: book.owner,
+          },
+        },
+        update: {
+          title: book.title,
+          subject,
+          description: book.description,
+          price: book.price,
+          condition,
+          imageURL: book.imageURL,
+          owner: book.owner,
+          approved: book.approved,
+        },
         create: {
           title: book.title,
           subject,
           description: book.description,
           price: book.price,
           condition,
-          imageURL: book.imageUrl,
+          imageURL: book.imageURL,
           owner: book.owner,
           approved: book.approved,
         },
@@ -84,25 +100,19 @@ async function main() {
       if (book.savedBy && book.savedBy.length > 0) {
         await Promise.all(
           book.savedBy.map(async (userId) => {
-            // Check if the saved book association already exists
-            const existingSavedBook = await prisma.savedBook.findUnique({
+            await prisma.savedBook.upsert({
               where: {
                 userId_bookId: {
                   userId,
                   bookId: createdBook.id,
                 },
               },
+              update: {}, // No need to update anything if it exists
+              create: {
+                userId,
+                bookId: createdBook.id,
+              },
             });
-
-            // If it doesn't exist, create the saved book association
-            if (!existingSavedBook) {
-              await prisma.savedBook.create({
-                data: {
-                  userId,
-                  bookId: createdBook.id,
-                },
-              });
-            }
           }),
         );
       }

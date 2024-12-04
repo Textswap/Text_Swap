@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/prefer-default-export
+
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
@@ -11,6 +13,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
     const book = await prisma.book.findUnique({
       where: { id: bookId },
     });
+
+    console.log('Full book object:', book);
 
     if (!book) {
       return NextResponse.json({ error: 'Book not found' }, { status: 404 });

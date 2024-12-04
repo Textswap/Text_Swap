@@ -12,7 +12,7 @@
       "description": "This is a new math book",
       "price": 10.99,
       "condition": "new",
-      "imageUrl": "https://res.cloudinary.com/dqf286rom/image/upload/v1733224809/math_ytjyhd.jpg",
+      "imageURL": "https://res.cloudinary.com/dqf286rom/image/upload/v1733224809/math_ytjyhd.jpg",
       "owner": "john@foo.com",
       "approved": true,
       "savedBy": [3]
@@ -23,7 +23,7 @@
       "description": "This is an excellent english book",
       "price": 100.99,
       "condition": "excellent",
-      "imageUrl": "https://res.cloudinary.com/dqf286rom/image/upload/v1733224845/english_tksl7s.jpg",
+      "imageURL": "https://res.cloudinary.com/dqf286rom/image/upload/v1733224845/english_tksl7s.jpg",
       "owner": "john@foo.com",
       "approved": true,
       "savedBy": [3]
@@ -34,7 +34,7 @@
       "description": "This is a fair science book",
       "price": 99.99,
       "condition": "fair",
-      "imageUrl": "https://res.cloudinary.com/dqf286rom/image/upload/v1733224809/science_e3hj1z.jpg",
+      "imageURL": "https://res.cloudinary.com/dqf286rom/image/upload/v1733224809/science_e3hj1z.jpg",
       "owner": "john@foo.com",
       "approved": true,
       "savedBy": [3]
@@ -45,7 +45,7 @@
       "description": "This is a poor history book",
       "price": 50.99,
       "condition": "poor",
-      "imageUrl": "https://res.cloudinary.com/dqf286rom/image/upload/v1733224809/history_ybrtka.jpg",
+      "imageURL": "https://res.cloudinary.com/dqf286rom/image/upload/v1733224809/history_ybrtka.jpg",
       "owner": "jane@foo.com",
       "approved": true,
       "savedBy": [2]
@@ -56,6 +56,7 @@
       "description": "Testing a long description 20947329830404840485410745843t7028458t496304584748051487085148763570t41y8gfh93vr4gbu9ixewugfibxojewngcfy8bxn9jew8ncg8yrh98g237hx8r3rh3428cfymb43",
       "price": 0,
       "condition": "new",
+      "imageURL": "https://res.cloudinary.com/dqf286rom/image/upload/v1733279386/cs_pfc9yh.jpg",
       "owner": "jane@foo.com",
       "approved": true,
       "savedBy": [2]

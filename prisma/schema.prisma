@@ -50,10 +50,12 @@ model Book {
   description String?
   price       Float
   condition   Condition
-  imageURL    String?
+  imageURL    String
   owner       String
   approved    Boolean     @default(false)
   savedBy     SavedBook[]
+
+  @@unique([title, owner])
 }
 
 model SavedBook {

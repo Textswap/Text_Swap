@@ -6,12 +6,18 @@ import BookCartCard from '@/components/BookCartCard';
 
 const CartPage = async () => {
   const session = await getServerSession();
-  const owner = session?.user?.email || '';
-  const books: Book[] = await prisma.book.findMany({
+  const userEmail = session?.user?.email || '';
+  const savedBooks = await prisma.savedBook.findMany({
     where: {
-      owner,
+      user: {
+        email: userEmail,
+      },
+    },
+    include: {
+      book: true,
     },
   });
+  const books: Book[] = savedBooks.map((savedBook) => savedBook.book);
   return (
     <main>
       <Container id="book-cart-list">
