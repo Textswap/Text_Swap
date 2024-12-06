@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap-icons';
 import { BookCheck } from 'lucide-react';
 import Link from 'next/link';
-import styles from '../Styles/LandingPage.module.css';
+import styles from '../styles/LandingPage.module.css';
 
 const Home = () => {
   const words = ['SMART', 'AFFORDABLE', 'EASY'];
