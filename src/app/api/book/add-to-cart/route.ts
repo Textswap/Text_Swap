@@ -26,6 +26,21 @@ export async function POST(request: NextRequest) {
 
     const userId = Number(user.id);
 
+    // Fetch the book to check if the current user is the owner
+    const book = await prisma.book.findUnique({
+      where: { id: bookId },
+      select: { owner: true },
+    });
+
+    if (!book) {
+      return NextResponse.json({ message: 'Book not found' }, { status: 404 });
+    }
+
+    // Check if the user is trying to add their own book
+    if (book.owner === user.email) {
+      return NextResponse.json({ message: 'You cannot add your own book to the cart' }, { status: 400 });
+    }
+
     // Check if the book is in the user's cart
     const existingSavedBook = await prisma.savedBook.findUnique({
       where: {

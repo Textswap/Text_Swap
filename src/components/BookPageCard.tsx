@@ -62,10 +62,8 @@ const BookPageCard = ({ book }: { book: Book }) => {
           <Col className="d-flex flex-column" style={{ margin: '1rem' }}>
             <Row style={{ marginBottom: '1.5rem' }}>
               <Card.Title style={{ fontSize: '3rem', marginBottom: '1rem' }}>{book.title}</Card.Title>
-              {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
               <Card.Text style={{ fontSize: '1.5rem', marginBottom: '0rem' }}>${book.price.toFixed(2)}</Card.Text>
               <Card.Text style={{ fontSize: '1.25rem' }}>
-                {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
                 Condition: {book.condition.charAt(0).toUpperCase() + book.condition.slice(1)}
               </Card.Text>
             </Row>
@@ -88,10 +86,42 @@ const BookPageCard = ({ book }: { book: Book }) => {
                 </Button>
               </Col>
             </Row>
+            {/* More Info */}
+            <Row style={{ marginTop: '0rem' }}>
+              <Col>
+                <Card.Text>
+                  <span className="book-info-label">ISBN: </span>
+                  <span className="book-info-value">{book.isbn}</span>
+                </Card.Text>
+                <Card.Text>
+                  <span className="book-info-label">Subject: </span>
+                  <span className="book-info-value">{book.subject}</span>
+                </Card.Text>
+                <Card.Text>
+                  <span className="book-info-label">Course Name: </span>
+                  <span className="book-info-value">{book.courseName}</span>
+                </Card.Text>
+                <Card.Text>
+                  <span className="book-info-label">Course CRN: </span>
+                  <span className="book-info-value">{book.courseCrn}</span>
+                </Card.Text>
+              </Col>
+            </Row>
             {/* Description */}
             <Row>
-              <Col style={{ maxWidth: '600px', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
-                <Card.Text style={{ fontSize: '1rem' }} className="text-muted">
+              <Col style={{ maxWidth: '600px', wordWrap: 'break-word', overflowWrap: 'break-word', marginTop: '1rem' }}>
+                Description: <br />
+                <Card.Text
+                  style={{
+                    fontSize: '1rem',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    display: '-webkit-box',
+                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: 4,
+                  }}
+                  className="text-muted"
+                >
                   {book.description}
                 </Card.Text>
               </Col>
@@ -107,7 +137,6 @@ const BookPageCard = ({ book }: { book: Book }) => {
                   }}
                   alt="Seller"
                 />
-                {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
                 <small className="ms-2 text-nowrap">Sold by {book.owner}</small>
               </Col>
             </Row>

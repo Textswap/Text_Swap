@@ -10,7 +10,8 @@ import axios from 'axios';
 
 const BookCardAdmin = ({ book }: { book: Book }) => {
   const [imageSrc, setImageSrc] = useState<string>(book.imageURL || 'https://via.placeholder.com/750');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingApprove, setIsLoadingApprove] = useState<boolean>(false);
+  const [isLoadingRemove, setIsLoadingRemove] = useState<boolean>(false);
 
   /* prints for debugging images
   console.log('Image URL:', book.imageURL);
@@ -23,30 +24,28 @@ const BookCardAdmin = ({ book }: { book: Book }) => {
     setImageSrc('https://via.placeholder.com/750');
   };
   const handleApprove = async () => {
-    setIsLoading(true);
+    setIsLoadingApprove(true);
     try {
       const response = await axios.put('/api/book/approve-book', {
         bookId: book.id,
       });
       if (response.status === 200) {
-        // Optionally, you can update the book state locally here to show the approved status
         console.log('Book approved successfully!');
-        // You can refresh the page or refetch the books here if necessary
+        window.location.reload();
       }
     } catch (error) {
       console.error('Error approving book:', error);
     } finally {
-      setIsLoading(false);
+      setIsLoadingApprove(false);
     }
   };
 
   const handleRemove = async () => {
-    setIsLoading(true);
+    setIsLoadingRemove(true);
     try {
       const response = await axios.delete('/api/book/remove-book', {
         data: { bookId: book.id },
       });
-      console.log('Response from remove API:', response);
       if (response.status === 200) {
         console.log('Book removed successfully!');
         window.location.reload();
@@ -55,9 +54,9 @@ const BookCardAdmin = ({ book }: { book: Book }) => {
       }
     } catch (error) {
       console.error('Error removing book:', error);
-      setIsLoading(false);
+      setIsLoadingRemove(false);
     } finally {
-      setIsLoading(false);
+      setIsLoadingRemove(false);
     }
   };
   return (
@@ -76,11 +75,6 @@ const BookCardAdmin = ({ book }: { book: Book }) => {
         <Card.Text>
           <strong>Condition:</strong> {book.condition}
         </Card.Text>
-        {book.isbn && (
-          <Card.Text>
-            <strong>ISBN:</strong> {book.isbn}
-          </Card.Text>
-        )}
         <div className="admin-buttons">
           <Button
             className="approve-button"
@@ -97,9 +91,9 @@ const BookCardAdmin = ({ book }: { book: Book }) => {
               marginRight: '1rem',
             }}
             onClick={handleApprove}
-            disabled={isLoading}
+            disabled={isLoadingApprove}
           >
-            {isLoading ? 'Approving...' : 'Approve'}
+            {isLoadingApprove ? 'Approving...' : 'Approve'}
           </Button>
           <Button
             className="remove-button"
@@ -116,9 +110,9 @@ const BookCardAdmin = ({ book }: { book: Book }) => {
               marginLeft: '1rem',
             }}
             onClick={handleRemove}
-            disabled={isLoading}
+            disabled={isLoadingRemove}
           >
-            {isLoading ? 'Removing...' : 'Remove'}
+            {isLoadingRemove ? 'Removing...' : 'Remove'}
           </Button>
         </div>
       </Card.Body>

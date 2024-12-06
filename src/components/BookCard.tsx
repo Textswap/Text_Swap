@@ -40,11 +40,6 @@ const BookCard = ({ book }: { book: Book }) => {
         <Card.Text>
           <strong>Condition:</strong> {book.condition}
         </Card.Text>
-        {book.isbn && (
-          <Card.Text>
-            <strong>ISBN:</strong> {book.isbn}
-          </Card.Text>
-        )}
         <div className="details-wrapper">
           <Button
             className="view-details"

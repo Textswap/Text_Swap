@@ -7,7 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import { Book } from '@prisma/client';
-import BookBuyCard from '@/components/BookBuyCard';
+import BookBuyCard from '@/components/BookCard';
 import styles from './BuyPageClient.module.css';
 
 const BuyPageClient: React.FC = () => {
