@@ -13,7 +13,11 @@ const AdminPage = async () => {
       user: { email: string; id: string; randomKey: string };
     } | null,
   );
-  const books: Book[] = await prisma.book.findMany({});
+  const books: Book[] = await prisma.book.findMany({
+    where: {
+      approved: false,
+    },
+  });
   return (
     <main>
       <Container id="list" fluid className="py-3">

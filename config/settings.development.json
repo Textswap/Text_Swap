@@ -2,13 +2,17 @@
   "defaultAccounts": [
     { "id": 1, "email": "admin@foo.com", "password": "changeme", "role": "ADMIN" },
     { "id": 2, "email": "john@foo.com", "password": "changeme" },
-    { "id": 3, "email": "jane@foo.com", "password": "changeme" }
+    { "id": 3, "email": "jane@foo.com", "password": "changeme" },
+    { "id": 4, "email": "user@foo.com", "password": "changeme" }
   ],
 
   "defaultBooks": [
     {
       "title": "New Math Book",
+      "isbn": "978-3-16-148410-4",
       "subject": "math",
+      "courseName": "Math 101",
+      "courseCrn": "12345",
       "description": "This is a new math book",
       "price": 10.99,
       "condition": "new",
@@ -19,7 +23,10 @@
     },
     {
       "title": "Excellent English Book",
+      "isbn": "978-3-16-148410-4",
       "subject": "english",
+      "courseName": "Math 101",
+      "courseCrn": "12345",
       "description": "This is an excellent english book",
       "price": 100.99,
       "condition": "excellent",
@@ -30,7 +37,10 @@
     },
     {
       "title": "Fair Science Book",
+      "isbn": "978-3-16-148410-4",
       "subject": "science",
+      "courseName": "Science 101",
+      "courseCrn": "12345",
       "description": "This is a fair science book",
       "price": 99.99,
       "condition": "fair",
@@ -41,7 +51,10 @@
     },
     {
       "title": "Poor History Book",
+      "isbn": "978-3-16-148410-4",
       "subject": "history",
+      "courseName": "History 101",
+      "courseCrn": "12345",
       "description": "This is a poor history book",
       "price": 50.99,
       "condition": "poor",
@@ -52,14 +65,82 @@
     },
     {
       "title": "Computer Science Book",
+      "isbn": "978-3-16-148410-4",
       "subject": "other",
-      "description": "Testing a long description 20947329830404840485410745843t7028458t496304584748051487085148763570t41y8gfh93vr4gbu9ixewugfibxojewngcfy8bxn9jew8ncg8yrh98g237hx8r3rh3428cfymb43",
+      "courseName": "ICS 314",
+      "courseCrn": "12345",
+      "description": "This is a new computer science book",
       "price": 0,
       "condition": "new",
       "imageURL": "https://res.cloudinary.com/dqf286rom/image/upload/v1733279386/cs_pfc9yh.jpg",
       "owner": "jane@foo.com",
       "approved": true,
       "savedBy": [2]
+    },
+    {
+      "title": "Unnaproved Book 1",
+      "isbn": "978-3-16-148410-4",
+      "subject": "other",
+      "courseName": "Class 101",
+      "courseCrn": "1111",
+      "description": "This is an unapproved book awaiting review",
+      "price": 100,
+      "condition": "new",
+      "imageURL": "https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=1200",
+      "owner": "user@foo.com",
+      "approved": false
+    },
+    {
+      "title": "Unnaproved Book 2",
+      "isbn": "978-3-16-148410-4",
+      "subject": "other",
+      "courseName": "Class 102",
+      "courseCrn": "2222",
+      "description": "This is an unapproved book awaiting review. It delves into the intricacies of the subject matter with a depth and clarity that is unparalleled. The author has meticulously crafted each chapter to build upon the previous one, ensuring a comprehensive understanding of the topic. The book is filled with illustrative examples, detailed explanations, and thought-provoking questions that challenge the reader to think critically. Whether you are a novice or an expert, this book offers valuable insights and knowledge that will enhance your understanding and appreciation of the subject. It is a must-read for anyone looking to deepen their knowledge and expand their horizons.",
+      "price": 200,
+      "condition": "excellent",
+      "imageURL": "https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=1200",
+      "owner": "user@foo.com",
+      "approved": false
+    },
+    {
+      "title": "Unnaproved Book 3",
+      "isbn": "978-3-16-148410-4",
+      "subject": "other",
+      "courseName": "Class 103",
+      "courseCrn": "3333",
+      "description": "This is an unapproved book awaiting review. It delves into the intricacies of the subject matter with a depth and clarity that is unparalleled. The author has meticulously crafted each chapter to build upon the previous one, ensuring a comprehensive understanding of the topic. The book is filled with illustrative examples, detailed explanations, and thought-provoking questions that challenge the reader to think critically. Whether you are a novice or an expert, this book offers valuable insights and knowledge that will enhance your understanding and appreciation of the subject. It is a must-read for anyone looking to deepen their knowledge and expand their horizons.",
+      "price": 300,
+      "condition": "good",
+      "imageURL": "https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=1200",
+      "owner": "user@foo.com",
+      "approved": false
+    },
+    {
+      "title": "Unnaproved Book 4",
+      "isbn": "978-3-16-148410-4",
+      "subject": "other",
+      "courseName": "Class 104",
+      "courseCrn": "4444",
+      "description": "This is an unapproved book awaiting review. It delves into the intricacies of the subject matter with a depth and clarity that is unparalleled. The author has meticulously crafted each chapter to build upon the previous one, ensuring a comprehensive understanding of the topic. The book is filled with illustrative examples, detailed explanations, and thought-provoking questions that challenge the reader to think critically. Whether you are a novice or an expert, this book offers valuable insights and knowledge that will enhance your understanding and appreciation of the subject. It is a must-read for anyone looking to deepen their knowledge and expand their horizons.",
+      "price": 400,
+      "condition": "fair",
+      "imageURL": "https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=1200",
+      "owner": "user@foo.com",
+      "approved": false
+    },
+    {
+      "title": "Unnaproved Book 5",
+      "isbn": "978-3-16-148410-4",
+      "subject": "other",
+      "courseName": "Class 105",
+      "courseCrn": "5555",
+      "description": "This is an unapproved book awaiting review. It delves into the intricacies of the subject matter with a depth and clarity that is unparalleled. The author has meticulously crafted each chapter to build upon the previous one, ensuring a comprehensive understanding of the topic. The book is filled with illustrative examples, detailed explanations, and thought-provoking questions that challenge the reader to think critically. Whether you are a novice or an expert, this book offers valuable insights and knowledge that will enhance your understanding and appreciation of the subject. It is a must-read for anyone looking to deepen their knowledge and expand their horizons.",
+      "price": 500,
+      "condition": "poor",
+      "imageURL": "https://static.scientificamerican.com/sciam/cache/file/1DDFE633-2B85-468D-B28D05ADAE7D1AD8_source.jpg?w=1200",
+      "owner": "user@foo.com",
+      "approved": false
     }
   ]
 }

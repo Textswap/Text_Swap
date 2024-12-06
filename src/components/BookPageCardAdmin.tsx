@@ -3,10 +3,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Book } from '@prisma/client';
 import { Image, Card, Button, Col, Row } from 'react-bootstrap';
+import axios from 'axios';
 
-const BookPageCard = ({ book }: { book: Book }) => {
+const BookPageCardAdmin = ({ book }: { book: Book }) => {
   const [imageSrc, setImageSrc] = useState<string>(book.imageURL || 'https://via.placeholder.com/750');
   const [isLoadingAddToCart, setIsLoadingAddToCart] = useState<boolean>(false);
+  const [isLoadingRemoveBook, setIsLoadingRemoveBook] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -50,6 +52,28 @@ const BookPageCard = ({ book }: { book: Book }) => {
     }
   };
 
+  const handleRemove = async () => {
+    setIsLoadingRemoveBook(true);
+    setError(null);
+    try {
+      const response = await axios.delete('/api/book/remove-book', {
+        data: { bookId: book.id },
+      });
+
+      if (response.status === 200) {
+        console.log('Book removed successfully!');
+        router.push('/');
+      } else {
+        setError('Failed to remove book');
+        console.log('Failed to remove book:', response);
+      }
+    } catch (err) {
+      console.error('Error removing book:', err);
+      setError('Failed to remove book');
+    } finally {
+      setIsLoadingRemoveBook(false);
+    }
+  };
   return (
     <div className="book-card-wrapper">
       <Card className="book-card-page">
@@ -111,6 +135,14 @@ const BookPageCard = ({ book }: { book: Book }) => {
                 <small className="ms-2 text-nowrap">Sold by {book.owner}</small>
               </Col>
             </Row>
+            {/* Admin Exclusive Remove Button */}
+            <Row>
+              <Col className="mt-4">
+                <Button variant="danger" onClick={handleRemove} disabled={isLoadingRemoveBook}>
+                  {isLoadingRemoveBook ? 'Removing...' : 'Remove Book'}
+                </Button>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Card>
@@ -118,4 +150,4 @@ const BookPageCard = ({ book }: { book: Book }) => {
   );
 };
 
-export default BookPageCard;
+export default BookPageCardAdmin;

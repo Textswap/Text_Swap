@@ -57,7 +57,7 @@ const BookCardAdmin = ({ book }: { book: Book }) => {
       console.error('Error removing book:', error);
       setIsLoading(false);
     } finally {
-      setIsLoading(false); // Reset loading state
+      setIsLoading(false);
     }
   };
   return (

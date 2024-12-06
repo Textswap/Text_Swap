@@ -76,7 +76,10 @@ async function main() {
         },
         update: {
           title: book.title,
+          isbn: book.isbn,
           subject,
+          courseName: book.courseName,
+          courseCrn: book.courseCrn,
           description: book.description,
           price: book.price,
           condition,
@@ -86,7 +89,10 @@ async function main() {
         },
         create: {
           title: book.title,
+          isbn: book.isbn,
           subject,
+          courseName: book.courseName,
+          courseCrn: book.courseCrn,
           description: book.description,
           price: book.price,
           condition,

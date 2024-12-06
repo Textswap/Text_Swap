@@ -2,12 +2,25 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { Book } from '@prisma/client';
+import { Book, Condition, Subject } from '@prisma/client';
 import { Container, Spinner, Alert } from 'react-bootstrap';
+import { useSession } from 'next-auth/react';
 import BookPageCard from '@/components/BookPageCard';
+import BookPageCardAdmin from '@/components/BookPageCardAdmin';
 
-interface BookDetails extends Book {
-  images: { filePath: string }[];
+interface BookDetails {
+  id: number;
+  title: string;
+  isbn: string | null;
+  subject: Subject;
+  courseName: string | null;
+  courseCrn: string | null;
+  description: string | null;
+  price: number;
+  condition: Condition;
+  imageURL: string;
+  owner: string;
+  approved: boolean;
 }
 
 const BookPage = () => {
@@ -15,6 +28,8 @@ const BookPage = () => {
   const [book, setBook] = useState<BookDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { data: session, status } = useSession();
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -50,6 +65,26 @@ const BookPage = () => {
     fetchBook();
   }, [id]);
 
+  useEffect(() => {
+    if (session?.user?.email) {
+      const fetchUserRole = async () => {
+        try {
+          const response = await fetch('/api/user');
+          if (response.ok) {
+            const data = await response.json();
+            setUserRole(data.role);
+          } else {
+            setError('Failed to fetch user role');
+          }
+        } catch (err) {
+          setError('Error fetching user role');
+        }
+      };
+
+      fetchUserRole();
+    }
+  }, [session]);
+
   // Loading spinner
   if (loading) {
     return (
@@ -69,15 +104,14 @@ const BookPage = () => {
     );
   }
 
-  // Render book details
+  // Render book pages, check if user is Admin
   if (book) {
     return (
       <Container fluid className="py-3">
-        <BookPageCard book={book} />
+        {userRole === 'ADMIN' ? <BookPageCardAdmin book={book} /> : <BookPageCard book={book} />}
       </Container>
     );
   }
-
   return null;
 };
 
