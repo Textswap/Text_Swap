@@ -15,7 +15,6 @@ type SignUpForm = {
   confirmPassword: string;
 };
 
-/** The sign up page. */
 const SignUp = () => {
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email is invalid'),
@@ -39,7 +38,7 @@ const SignUp = () => {
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
   const onSubmit = async (data: SignUpForm) => {
-    setErrorMessage(null); // Reset any previous error messages
+    setErrorMessage(null);
     try {
       const userExists = await checkUserExists(data.email);
       if (userExists) {
@@ -47,9 +46,7 @@ const SignUp = () => {
         return;
       }
 
-      // Create the user if no account exists
       await createUser(data);
-      // Sign in and redirect to the add page
       await signIn('credentials', { callbackUrl: '/add', ...data });
     } catch (error) {
       setErrorMessage('An error occurred while creating the account. Please try again.');
@@ -65,25 +62,25 @@ const SignUp = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '5rem 0',
+        padding: '2rem 1rem', // Adjusted for better responsiveness
       }}
     >
       <Container>
         <Row className="justify-content-center">
-          <Col xs={5}>
+          <Col xs={12} sm={10} md={8} lg={6} xl={5}>
             <Card
               className="shadow"
               style={{
                 backgroundColor: '#c8e6c9',
-                padding: '50px',
-                width: '600px',
+                padding: '2rem',
+                borderRadius: '1rem',
               }}
             >
               <Card.Body>
                 <h1
                   className="mb-4"
                   style={{
-                    fontSize: '4rem',
+                    fontSize: '3rem', // Adjusted font size for smaller screens
                     fontWeight: '900',
                     background: 'linear-gradient(to right, #39af3f, #318768)',
                     WebkitBackgroundClip: 'text',
@@ -95,16 +92,17 @@ const SignUp = () => {
                   TextSwap{' '}
                   <BookCheck
                     style={{
-                      width: '60px',
-                      height: '60px',
+                      width: '50px',
+                      height: '50px',
                       color: '#318768',
+                      marginLeft: '10px',
                     }}
                   />
                 </h1>
                 <p
                   className="mb-4"
                   style={{
-                    fontSize: '1.8em',
+                    fontSize: '1.2rem',
                     color: '#225f49',
                     textAlign: 'center',
                     fontWeight: 'bold',
@@ -120,12 +118,13 @@ const SignUp = () => {
                 )}
 
                 <Form onSubmit={handleSubmit(onSubmit)}>
-                  <Form.Group
-                    className="form-group"
-                    style={{ paddingTop: '20px' }}
-                  >
+                  <Form.Group className="form-group">
                     <Form.Label
-                      style={{ marginBottom: '0.1rem', color: '#225f49' }}
+                      style={{ 
+                        marginBottom: '0.5rem',
+                        color: '#225f49',
+                        fontWeight: 'bold', 
+                      }}
                     >
                       Email
                     </Form.Label>
@@ -139,12 +138,13 @@ const SignUp = () => {
                     </div>
                   </Form.Group>
 
-                  <Form.Group
-                    className="form-group"
-                    style={{ paddingTop: '15px' }}
-                  >
+                  <Form.Group className="form-group mt-3">
                     <Form.Label
-                      style={{ marginBottom: '0.1rem', color: '#225f49' }}
+                      style={{ 
+                        marginBottom: '0.5rem',
+                        color: '#225f49',
+                        fontWeight: 'bold', 
+                      }}
                     >
                       Password
                     </Form.Label>
@@ -157,12 +157,14 @@ const SignUp = () => {
                       {errors.password?.message}
                     </div>
                   </Form.Group>
-                  <Form.Group
-                    className="form-group"
-                    style={{ paddingTop: '15px', paddingBottom: '25px' }}
-                  >
+
+                  <Form.Group className="form-group mt-3">
                     <Form.Label
-                      style={{ marginBottom: '0.1rem', color: '#225f49' }}
+                      style={{ 
+                        marginBottom: '0.5rem',
+                        color: '#225f49',
+                        fontWeight: 'bold', 
+                      }}
                     >
                       Confirm Password
                     </Form.Label>
@@ -175,35 +177,36 @@ const SignUp = () => {
                       {errors.confirmPassword?.message}
                     </div>
                   </Form.Group>
+
                   <Form.Group className="form-group py-3">
-                    <Row>
-                      <Col>
-                        <Button
-                          type="submit"
-                          className="btn btn-primary w-100"
-                          style={{
-                            backgroundColor: '#225f49',
-                            borderRadius: '20px',
-                            borderColor: 'white',
-                          }}
-                        >
-                          Sign Up
-                        </Button>
-                      </Col>
-                    </Row>
+                    <Button
+                      type="submit"
+                      className="btn btn-primary w-100"
+                      style={{
+                        backgroundColor: '#225f49',
+                        borderRadius: '20px',
+                        borderColor: 'white',
+                        padding: '0.75rem',
+                        fontSize: '1rem',
+                      }}
+                    >
+                      Sign Up
+                    </Button>
                   </Form.Group>
                 </Form>
               </Card.Body>
               <hr
                 style={{
                   border: '0',
-                  borderTop: '4px solid #225f49',
-                  marginBottom: '20px',
+                  borderTop: '2px solid #225f49',
+                  margin: '1rem 0',
                 }}
               />
               <Card.Footer className="d-flex justify-content-center align-items-center">
                 Already have an account?&nbsp;
-                <a href="/auth/signin">Log in</a>
+                <a href="/auth/signin" style={{ color: '#225f49' }}>
+                  Log in
+                </a>
               </Card.Footer>
             </Card>
           </Col>
