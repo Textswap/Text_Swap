@@ -6,17 +6,59 @@ import { useState } from 'react';
 import { Book } from '@prisma/client';
 import { Card, Button } from 'react-bootstrap';
 import Link from 'next/link';
+import axios from 'axios';
 
 const BookCardAdmin = ({ book }: { book: Book }) => {
   const [imageSrc, setImageSrc] = useState<string>(book.imageURL || 'https://via.placeholder.com/750');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  /* prints for debugging
   console.log('Image URL:', book.imageURL);
   console.log('Image URL type:', typeof book.imageURL);
   console.log('Image URL exists:', book.imageURL !== undefined && book.imageURL !== null);
+  */
 
   const handleImageError = () => {
     console.log('Failed to load image');
     setImageSrc('https://via.placeholder.com/750');
+  };
+  const handleApprove = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.put('/api/book/approve-book', {
+        bookId: book.id,
+      });
+      if (response.status === 200) {
+        // Optionally, you can update the book state locally here to show the approved status
+        console.log('Book approved successfully!');
+        // You can refresh the page or refetch the books here if necessary
+      }
+    } catch (error) {
+      console.error('Error approving book:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRemove = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.delete('/api/book/remove-book', {
+        data: { bookId: book.id },
+      });
+      console.log('Response from remove API:', response);
+      if (response.status === 200) {
+        console.log('Book removed successfully!');
+        window.location.reload();
+      } else {
+        console.log('Failed to remove book:', response);
+      }
+    } catch (error) {
+      console.error('Error removing book:', error);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false); // Reset loading state
+    }
   };
   return (
     <Card className="book-card">
@@ -54,8 +96,10 @@ const BookCardAdmin = ({ book }: { book: Book }) => {
               padding: '10px',
               marginRight: '1rem',
             }}
+            onClick={handleApprove}
+            disabled={isLoading}
           >
-            Approve
+            {isLoading ? 'Approving...' : 'Approve'}
           </Button>
           <Button
             className="remove-button"
@@ -71,8 +115,10 @@ const BookCardAdmin = ({ book }: { book: Book }) => {
               padding: '10px',
               marginLeft: '1rem',
             }}
+            onClick={handleRemove}
+            disabled={isLoading}
           >
-            Remove
+            {isLoading ? 'Removing...' : 'Remove'}
           </Button>
         </div>
       </Card.Body>

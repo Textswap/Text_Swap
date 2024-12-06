@@ -5,7 +5,6 @@
 import { Book, Condition, Subject } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
-import cloudinary from 'cloudinary';
 import { prisma } from './prisma';
 
 /**
@@ -45,19 +44,6 @@ function getSubjectValue(subject: string): Subject {
 }
 
 /**
- * Upload the image to Cloudinary
- */
-async function uploadImageToCloudinary(imagePath: string): Promise<string> {
-  try {
-    const uploadedImage = await cloudinary.v2.uploader.upload(imagePath);
-    return uploadedImage.secure_url; // Return the secure URL
-  } catch (error) {
-    console.error('Error uploading image to Cloudinary', error);
-    throw new Error('Image upload failed');
-  }
-}
-
-/**
  * Adds a new book to the database.
  * @param book, an object with the following properties: title, isbn, subject, courseName, courseCrn, description, price, condition, imageURL, owner.
  */
@@ -76,11 +62,7 @@ export async function addBook(book: {
   const condition = getConditionValue(book.condition);
   const subject = getSubjectValue(book.subject);
 
-  // Upload the image if it exists
-  let imageURL = '';
-  if (book.image) {
-    imageURL = await uploadImageToCloudinary(book.image); // Upload image and get URL
-  }
+  const imageURL = '';
 
   // Create the book in the database
   await prisma.book.create({
@@ -98,76 +80,6 @@ export async function addBook(book: {
     },
   });
   // Redirect to the buy page after adding the book
-  redirect('/buy');
-}
-
-/**
- * Edits an existing stuff in the database.
- * @param book, an object with the following properties: title, isbn, subject, courseName, courseCrn, description, price, condition, imageURL, owner.
- */
-export async function editBook(book: Book & { image?: string }) {
-  const condition = getConditionValue(book.condition);
-  const subject = getSubjectValue(book.subject);
-
-  // Upload the image if it exists
-  let imageURL = '';
-  if (book.image) {
-    imageURL = await uploadImageToCloudinary(book.image); // Upload image and get URL
-  }
-
-  // Update the book record in the database
-  await prisma.book.update({
-    where: { id: book.id },
-    data: {
-      title: book.title,
-      isbn: book.isbn,
-      subject,
-      courseName: book.courseName,
-      courseCrn: book.courseCrn,
-      description: book.description,
-      price: book.price,
-      condition,
-      owner: book.owner,
-      imageURL: imageURL || '',
-    },
-  });
-
-  // Redirect to the buy page after editing the book
-  redirect('/buy');
-}
-
-/**
- * Deletes an existing book from the database and optionally removes the image from Cloudinary.
- * @param id, the id of the book to delete.
- */
-export async function deleteBook(id: number) {
-  // Find the book to get the image URL (or public_id)
-  const book = await prisma.book.findUnique({
-    where: { id },
-    select: { imageURL: true },
-  });
-
-  if (book && book.imageURL) {
-    try {
-      // Extract the public_id from the Cloudinary URL
-      const publicId = book.imageURL.split('/').pop()?.split('.')[0];
-
-      if (publicId) {
-        // Delete the image from Cloudinary
-        await cloudinary.v2.uploader.destroy(publicId);
-        console.log(`Deleted image from Cloudinary: ${publicId}`);
-      }
-    } catch (error) {
-      console.error('Error deleting image from Cloudinary', error);
-    }
-  }
-
-  // Delete the book record from the database
-  await prisma.book.delete({
-    where: { id },
-  });
-
-  // Redirect to the buy page after deleting the book
   redirect('/buy');
 }
 

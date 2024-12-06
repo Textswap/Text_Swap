@@ -23,13 +23,22 @@ const AdminPage = async () => {
               <h1 className="text-center">Admin Page</h1>
             </Col>
           </Row>
-          <Row xs={1} md={2} lg={3} className="g-4">
-            {books.map((book) => (
-              <Col key={book.id}>
-                <BookCardAdmin book={book} />
+          {/* Check if there are books to display */}
+          {books.length === 0 ? (
+            <Row>
+              <Col className="text-center">
+                <p>No unapproved books available.</p>
               </Col>
-            ))}
-          </Row>
+            </Row>
+          ) : (
+            <Row xs={1} md={2} lg={3} className="g-4">
+              {books.map((book) => (
+                <Col key={book.id}>
+                  <BookCardAdmin book={book} />
+                </Col>
+              ))}
+            </Row>
+          )}
         </Container>
       </Container>
     </main>

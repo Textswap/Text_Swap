@@ -1,11 +1,11 @@
 import { getServerSession } from 'next-auth';
-import { Container } from 'react-bootstrap';
-import { adminProtectedPage } from '@/lib/page-protection';
+import { loggedInProtectedPage } from '@/lib/page-protection';
 import authOptions from '@/lib/authOptions';
+import { Container } from 'react-bootstrap';
 
 const AccountPage = async () => {
   const session = await getServerSession(authOptions);
-  adminProtectedPage(
+  loggedInProtectedPage(
     session as {
       user: { email: string; id: string; randomKey: string };
     } | null,

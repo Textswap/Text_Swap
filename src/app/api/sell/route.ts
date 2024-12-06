@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     // Destructure the book data
-    const { title, isbn, subject, courseName, courseCrn, description, price, condition, owner } = body;
+    const { title, isbn, subject, courseName, courseCrn, description, price, condition, owner, imageURL } = body;
 
     // Validate the incoming data (basic check)
     if (!title || !subject || !price || !condition || !owner) {
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
         condition,
         owner,
         approved: false,
-        imageURL: '',
+        imageURL: imageURL || '',
       },
     });
 

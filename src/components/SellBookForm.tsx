@@ -6,7 +6,7 @@ import { Form, Button, Container } from 'react-bootstrap';
 import { Formik, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { useSession } from 'next-auth/react'; // Using next-auth to get the session
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 // Validation schema
@@ -19,6 +19,7 @@ const AddBookSchema = Yup.object({
   description: Yup.string().optional(),
   price: Yup.number().positive().required('Price is required'),
   condition: Yup.string().oneOf(['new', 'excellent', 'good', 'fair', 'poor']).required('Condition is required'),
+  imageURL: Yup.string().optional(),
   owner: Yup.string().required('Owner is required'),
 });
 
@@ -32,7 +33,7 @@ const AddBookForm = () => {
 
       const bookData = {
         ...values,
-        approved: false, // Set approved as false initially
+        approved: false,
       };
 
       const response = await axios.post('/api/sell', bookData);
@@ -64,6 +65,7 @@ const AddBookForm = () => {
           price: '',
           condition: 'new',
           owner: session?.user?.email || '',
+          imageURL: '',
         }}
         validationSchema={AddBookSchema}
         onSubmit={onSubmit}
@@ -191,19 +193,17 @@ const AddBookForm = () => {
               <ErrorMessage name="condition" component="div" className="invalid-feedback" />
             </Form.Group>
 
-            {/* Owner */}
-            <Form.Group controlId="owner">
-              <Form.Label>Owner</Form.Label>
+            {/* Image URL */}
+            <Form.Group controlId="imageURL">
+              <Form.Label>Image URL (Optional)</Form.Label>
               <Field
-                type="email"
-                name="owner"
-                className={`form-control ${errors.owner && touched.owner ? 'is-invalid' : ''}`}
-                value={values.owner}
+                type="text"
+                name="imageURL"
+                className="form-control"
+                value={values.imageURL}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                readOnly
               />
-              <ErrorMessage name="owner" component="div" className="invalid-feedback" />
             </Form.Group>
 
             <Button type="submit" variant="primary" className="mt-4">

@@ -9,7 +9,7 @@ import { Container } from 'react-bootstrap';
 import SellBookForm from '@/components/SellBookForm';
 import styles from './SellPage.module.css';
 
-const ListPage: React.FC = () => (
+const ListPage = () => (
   <main className={styles.main}>
     <Container fluid className={styles.container}>
       <h1 className={styles.title}>List a book</h1>

@@ -25,7 +25,7 @@ const BookPage = () => {
 
       try {
         console.log('Fetching book with ID:', id); // Debug log
-        const response = await fetch(`/api/book/${id}`);
+        const response = await fetch(`/api/book/book-page/${id}`);
 
         console.log('Response status:', response.status); // Debug log
 

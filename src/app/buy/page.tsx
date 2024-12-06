@@ -25,7 +25,7 @@ const BuyPageClient: React.FC = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await fetch('/api/books');
+        const response = await fetch('/api/book/buy-page');
         if (!response.ok) {
           throw new Error('Failed to fetch books');
         }
