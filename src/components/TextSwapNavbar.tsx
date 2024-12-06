@@ -6,7 +6,6 @@ import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { BoxArrowRight, Lock, PersonFill, PersonPlusFill } from 'react-bootstrap-icons';
-import SearchBar from './SearchBar';
 
 const NavBar: React.FC = () => {
   const { data: session } = useSession();
@@ -30,9 +29,6 @@ const NavBar: React.FC = () => {
             ) : (
               ''
             )}
-          </Nav>
-          <Nav className="nav-search-bar d-none d-lg-flex">
-            <SearchBar />
           </Nav>
           <Nav className="ms-auto">
             {currentUser ? (
@@ -78,13 +74,6 @@ const NavBar: React.FC = () => {
                 </NavDropdown.Item>
               </NavDropdown>
             )}
-          </Nav>
-          <Nav className="d-lg-none w-100">
-            <NavDropdown id="search-dropdown" title="Search">
-              <div className="collapse-search-bar">
-                <SearchBar />
-              </div>
-            </NavDropdown>
           </Nav>
         </Navbar.Collapse>
       </Container>
