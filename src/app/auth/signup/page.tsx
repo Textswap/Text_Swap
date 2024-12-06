@@ -4,15 +4,15 @@ import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Card, Col, Container, Button, Form, Row } from 'react-bootstrap';
-import { createUser } from '@/lib/dbActions';
+import { Card, Col, Container, Button, Form, Row, Alert } from 'react-bootstrap';
+import { createUser, checkUserExists } from '@/lib/dbActions';
 import { BookCheck } from 'lucide-react';
+import React from 'react';
 
 type SignUpForm = {
   email: string;
   password: string;
   confirmPassword: string;
-  // acceptTerms: boolean;
 };
 
 /** The sign up page. */
@@ -36,11 +36,24 @@ const SignUp = () => {
     resolver: yupResolver(validationSchema),
   });
 
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+
   const onSubmit = async (data: SignUpForm) => {
-    // console.log(JSON.stringify(data, null, 2));
-    await createUser(data);
-    // After creating, signIn with redirect to the add page
-    await signIn('credentials', { callbackUrl: '/add', ...data });
+    setErrorMessage(null); // Reset any previous error messages
+    try {
+      const userExists = await checkUserExists(data.email);
+      if (userExists) {
+        setErrorMessage('Account already exists with this email address.');
+        return;
+      }
+
+      // Create the user if no account exists
+      await createUser(data);
+      // Sign in and redirect to the add page
+      await signIn('credentials', { callbackUrl: '/add', ...data });
+    } catch (error) {
+      setErrorMessage('An error occurred while creating the account. Please try again.');
+    }
   };
 
   return (
@@ -55,7 +68,6 @@ const SignUp = () => {
         padding: '5rem 0',
       }}
     >
-      {' '}
       <Container>
         <Row className="justify-content-center">
           <Col xs={5}>
@@ -80,8 +92,7 @@ const SignUp = () => {
                     textAlign: 'center',
                   }}
                 >
-                  TextSwap
-                  {' '}
+                  TextSwap{' '}
                   <BookCheck
                     style={{
                       width: '60px',
@@ -101,6 +112,12 @@ const SignUp = () => {
                 >
                   Sign Up
                 </p>
+
+                {errorMessage && (
+                  <Alert variant="danger" className="mb-4">
+                    {errorMessage}
+                  </Alert>
+                )}
 
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <Form.Group
@@ -173,13 +190,6 @@ const SignUp = () => {
                           Sign Up
                         </Button>
                       </Col>
-                      {/*
-                      <Col>
-                        <Button type="button" onClick={() => reset()} className="btn btn-warning float-right">
-                          Reset
-                        </Button>
-                      </Col>
-                    */}
                     </Row>
                   </Form.Group>
                 </Form>

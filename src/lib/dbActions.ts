@@ -6,6 +6,25 @@ import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
 
 /**
+ * Checks if a user exists in the database by email.
+ * @param email The email to check.
+ * @returns True if the user exists, otherwise false.
+ */
+export async function checkUserExists(email: string): Promise<boolean> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    return user !== null;
+  } catch (error) {
+    console.error('Error checking user existence:', error);
+    throw new Error('Could not check user existence.');
+  }
+}
+
+/**
  * Adds a new stuff to the database.
  * @param stuff, an object with the following properties: name, quantity, owner, condition.
  */
