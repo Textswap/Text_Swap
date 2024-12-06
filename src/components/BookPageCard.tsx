@@ -1,18 +1,55 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Book } from '@prisma/client';
 import { Image, Card, Button, Col, Row } from 'react-bootstrap';
 
 const BookPageCard = ({ book }: { book: Book }) => {
   const [imageSrc, setImageSrc] = useState<string>(book.imageURL || 'https://via.placeholder.com/750');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
+  /* prints for debugging images
   console.log('Image URL:', book.imageURL);
   console.log('Image URL type:', typeof book.imageURL);
   console.log('Image URL exists:', book.imageURL !== undefined && book.imageURL !== null);
+  */
 
   const handleImageError = () => {
     console.log('Failed to load image');
     setImageSrc('https://via.placeholder.com/750');
   };
+
+  const handleAddToCart = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/book/add-to-cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ bookId: book.id }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || 'An error occurred');
+      } else {
+        console.log('Book added to cart:', data);
+        router.push('/cart');
+      }
+    } catch (err) {
+      setError('Failed to add book to cart');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="book-card-wrapper">
       <Card className="book-card-page">
@@ -35,13 +72,14 @@ const BookPageCard = ({ book }: { book: Book }) => {
             {/* Buttons */}
             <Row style={{ marginBottom: '1.5rem' }}>
               <Col>
+                {/* NEED TO CHANGE ONCLICK */}
                 <Button variant="primary" className="buy-now" onClick={() => console.log('Buy Now')}>
                   Buy Now
                 </Button>
               </Col>
               <Col>
-                <Button variant="secondary" className="add-to-cart" onClick={() => console.log('Add to Cart')}>
-                  Add to Cart
+                <Button variant="secondary" className="add-to-cart" onClick={handleAddToCart} disabled={loading}>
+                  {loading ? 'Adding to Cart...' : 'Add to Cart'}
                 </Button>
               </Col>
             </Row>

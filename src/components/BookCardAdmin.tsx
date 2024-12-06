@@ -12,7 +12,7 @@ const BookCardAdmin = ({ book }: { book: Book }) => {
   const [imageSrc, setImageSrc] = useState<string>(book.imageURL || 'https://via.placeholder.com/750');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  /* prints for debugging
+  /* prints for debugging images
   console.log('Image URL:', book.imageURL);
   console.log('Image URL type:', typeof book.imageURL);
   console.log('Image URL exists:', book.imageURL !== undefined && book.imageURL !== null);

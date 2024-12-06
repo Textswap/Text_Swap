@@ -24,23 +24,23 @@ const BookPage = () => {
       setError(null);
 
       try {
-        console.log('Fetching book with ID:', id); // Debug log
+        console.log('Fetching book with ID:', id);
         const response = await fetch(`/api/book/book-page/${id}`);
 
-        console.log('Response status:', response.status); // Debug log
+        console.log('Response status:', response.status);
 
         if (!response.ok) {
           const errorText = await response.text();
-          console.error('Error response:', errorText); // Log detailed error
+          console.error('Error response:', errorText);
           throw new Error(`Failed to fetch book details: ${errorText}`);
         }
 
         const data = await response.json();
-        console.log('Fetched book data:', data); // Debug log
+        console.log('Fetched book data:', data);
 
         setBook(data);
       } catch (err) {
-        console.error('Detailed error:', err); // Log the full error
+        console.error('Detailed error:', err);
         setError(err instanceof Error ? err.message : 'An unknown error occurred');
       } finally {
         setLoading(false);

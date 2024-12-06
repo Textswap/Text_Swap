@@ -11,13 +11,38 @@ import Link from 'next/link';
 const BookCartCard = ({ book }: { book: Book }) => {
   const [imageSrc, setImageSrc] = useState<string>(book.imageURL || 'https://via.placeholder.com/150');
 
+  /* prints for debugging images
   console.log('Image URL:', book.imageURL);
   console.log('Image URL type:', typeof book.imageURL);
   console.log('Image URL exists:', book.imageURL !== undefined && book.imageURL !== null);
+  */
 
   const handleImageError = () => {
     console.log('Failed to load image');
     setImageSrc('https://via.placeholder.com/150');
+  };
+
+  const handleRemoveBook = async () => {
+    try {
+      const response = await fetch('/api/book/remove-from-cart', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ bookId: book.id }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        console.error(data.message || 'An error occurred');
+      } else {
+        const data = await response.json();
+        console.log('Book removed from cart:', data);
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Failed to remove book from cart:', error);
+    }
   };
   return (
     // wrapper
@@ -84,7 +109,7 @@ const BookCartCard = ({ book }: { book: Book }) => {
               variant="link"
               className="cart-trash-can"
               // add functionality
-              onClick={() => console.log('Delete book from cart')}
+              onClick={handleRemoveBook}
             >
               <Trash />
             </Button>

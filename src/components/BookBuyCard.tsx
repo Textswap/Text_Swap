@@ -14,9 +14,11 @@ const BookCard = ({ book }: { book: Book }) => {
 
   const [imageSrc, setImageSrc] = useState<string>(book.imageURL || 'https://via.placeholder.com/750');
 
+  /* prints for debugging images
   console.log('Image URL:', book.imageURL);
   console.log('Image URL type:', typeof book.imageURL);
   console.log('Image URL exists:', book.imageURL !== undefined && book.imageURL !== null);
+  */
 
   const handleImageError = () => {
     console.log('Failed to load image');
