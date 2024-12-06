@@ -62,7 +62,8 @@ const SignIn = () => {
                     textAlign: 'center',
                   }}
                 >
-                  TextSwap{' '}
+                  TextSwap
+                  {' '}
                   <BookCheck
                     style={{
                       width: '60px',
@@ -83,13 +84,31 @@ const SignIn = () => {
                   Log In
                 </p>
                 <Form method="post" onSubmit={handleSubmit}>
-                  <Form.Group controlId="formBasicEmail" className="form-group" style={{ paddingTop: '20px' }}>
-                    <Form.Label style={{ marginBottom: '0.1rem', color: '#225f49' }}>Email</Form.Label>
+                  <Form.Group
+                    controlId="formBasicEmail"
+                    className="form-group"
+                    style={{ paddingTop: '20px' }}
+                  >
+                    <Form.Label
+                      style={{ marginBottom: '0.1rem', color: '#225f49' }}
+                    >
+                      Email
+                    </Form.Label>
                     <input name="email" type="text" className="form-control" />
                   </Form.Group>
-                  <Form.Group style={{ paddingTop: '30px', paddingBottom: '20px' }}>
-                    <Form.Label style={{ marginBottom: '0.1rem', color: '#225f49' }}>Password</Form.Label>
-                    <input name="password" type="password" className="form-control" />
+                  <Form.Group
+                    style={{ paddingTop: '30px', paddingBottom: '20px' }}
+                  >
+                    <Form.Label
+                      style={{ marginBottom: '0.1rem', color: '#225f49' }}
+                    >
+                      Password
+                    </Form.Label>
+                    <input
+                      name="password"
+                      type="password"
+                      className="form-control"
+                    />
                   </Form.Group>
                   <Form.Group className="form-group py-3">
                     <Row>

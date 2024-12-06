@@ -80,7 +80,8 @@ const SignUp = () => {
                     textAlign: 'center',
                   }}
                 >
-                  TextSwap{' '}
+                  TextSwap
+                  {' '}
                   <BookCheck
                     style={{
                       width: '60px',
@@ -102,33 +103,60 @@ const SignUp = () => {
                 </p>
 
                 <Form onSubmit={handleSubmit(onSubmit)}>
-                  <Form.Group className="form-group" style={{ paddingTop: '20px' }}>
-                    <Form.Label style={{ marginBottom: '0.1rem', color: '#225f49' }}>Email</Form.Label>
+                  <Form.Group
+                    className="form-group"
+                    style={{ paddingTop: '20px' }}
+                  >
+                    <Form.Label
+                      style={{ marginBottom: '0.1rem', color: '#225f49' }}
+                    >
+                      Email
+                    </Form.Label>
                     <input
                       type="text"
                       {...register('email')}
                       className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                     />
-                    <div className="invalid-feedback">{errors.email?.message}</div>
+                    <div className="invalid-feedback">
+                      {errors.email?.message}
+                    </div>
                   </Form.Group>
 
-                  <Form.Group className="form-group" style={{ paddingTop: '15px' }}>
-                    <Form.Label style={{ marginBottom: '0.1rem', color: '#225f49' }}>Password</Form.Label>
+                  <Form.Group
+                    className="form-group"
+                    style={{ paddingTop: '15px' }}
+                  >
+                    <Form.Label
+                      style={{ marginBottom: '0.1rem', color: '#225f49' }}
+                    >
+                      Password
+                    </Form.Label>
                     <input
                       type="password"
                       {...register('password')}
                       className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                     />
-                    <div className="invalid-feedback">{errors.password?.message}</div>
+                    <div className="invalid-feedback">
+                      {errors.password?.message}
+                    </div>
                   </Form.Group>
-                  <Form.Group className="form-group" style={{ paddingTop: '15px', paddingBottom: '25px' }}>
-                    <Form.Label style={{ marginBottom: '0.1rem', color: '#225f49' }}>Confirm Password</Form.Label>
+                  <Form.Group
+                    className="form-group"
+                    style={{ paddingTop: '15px', paddingBottom: '25px' }}
+                  >
+                    <Form.Label
+                      style={{ marginBottom: '0.1rem', color: '#225f49' }}
+                    >
+                      Confirm Password
+                    </Form.Label>
                     <input
                       type="password"
                       {...register('confirmPassword')}
                       className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
                     />
-                    <div className="invalid-feedback">{errors.confirmPassword?.message}</div>
+                    <div className="invalid-feedback">
+                      {errors.confirmPassword?.message}
+                    </div>
                   </Form.Group>
                   <Form.Group className="form-group py-3">
                     <Row>

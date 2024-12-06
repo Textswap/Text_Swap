@@ -4,7 +4,7 @@
 
 // https://github.com/TZawalich/React_Search_Components
 
-import React from 'react';
+// import React, { ChangeEventHandler, FormEvent } from 'react';
 import { Search } from 'react-bootstrap-icons';
 
 const SearchBar = () => (
@@ -12,7 +12,11 @@ const SearchBar = () => (
     <button type="submit" className="search-button">
       <Search />
     </button>
-    <input type="search" placeholder="Search..." className="search-input" />
+    <input
+      type="search"
+      placeholder="Search..."
+      className="search-input"
+    />
   </div>
 );
 

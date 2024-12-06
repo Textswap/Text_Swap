@@ -1,10 +1,16 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Book, Cart, CurrencyDollar, PersonPlus, Search } from 'react-bootstrap-icons';
+import {
+  Book,
+  Cart,
+  CurrencyDollar,
+  PersonPlus,
+  Search,
+} from 'react-bootstrap-icons';
 import { BookCheck } from 'lucide-react';
 import Link from 'next/link';
-import styles from './styles/LandingPage.module.css';
+import styles from '../Styles/LandingPage.module.css';
 
 const Home = () => {
   const words = ['SMART', 'AFFORDABLE', 'EASY'];
@@ -42,7 +48,9 @@ const Home = () => {
       id: 2,
       text: (
         <>
-          Sell Your <br />
+          Sell Your
+          {' '}
+          <br />
           Textbooks Easily
         </>
       ),
@@ -52,7 +60,11 @@ const Home = () => {
       id: 3,
       text: (
         <>
-          Filter Books <br /> Your Way
+          Filter Books
+          {' '}
+          <br />
+          {' '}
+          Your Way
         </>
       ),
       icon: <Search />,
@@ -62,7 +74,11 @@ const Home = () => {
       id: 5,
       text: (
         <>
-          Sign Up <br /> For Full Access
+          Sign Up
+          {' '}
+          <br />
+          {' '}
+          For Full Access
         </>
       ),
       icon: <PersonPlus />,
@@ -93,20 +109,22 @@ const Home = () => {
         {/* Dynamic Tagline */}
         <div className={styles['home-tagline']}>
           <p>
-            Find Your Next Textbook, <br />
-            the{' '}
+            Find Your Next Textbook,
+            {' '}
+            <br />
+            the
+            {' '}
             <span key={currentWordIndex} className={styles['home-flip-word']}>
               {` ${words[currentWordIndex]} `}
-            </span>{' '}
+            </span>
+            {' '}
             way
           </p>
         </div>
 
         {/* CTA Button */}
         <Link href="/auth/signup">
-          <button className={styles['home-cta-button']} type="button">
-            Get Started
-          </button>
+          <button className={styles['home-cta-button']} type="button">Get Started</button>
         </Link>
       </div>
 
