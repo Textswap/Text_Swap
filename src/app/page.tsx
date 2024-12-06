@@ -13,6 +13,11 @@ import Link from 'next/link';
 import styles from '../styles/LandingPage.module.css';
 
 const Home = () => {
+  // Scroll to top when the component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const words = ['SMART', 'AFFORDABLE', 'EASY'];
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [typedText, setTypedText] = useState('');
