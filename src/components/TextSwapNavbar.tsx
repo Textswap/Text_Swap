@@ -5,7 +5,14 @@
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { BoxArrowRight, Lock, PersonFill, PersonPlusFill } from 'react-bootstrap-icons';
+import {
+  BoxArrowRight,
+  Lock,
+  PersonFill,
+  PersonPlusFill,
+} from 'react-bootstrap-icons';
+import { BookCheck } from 'lucide-react';
+import SearchBar from './SearchBar';
 
 const NavBar: React.FC = () => {
   const { data: session } = useSession();
@@ -18,6 +25,7 @@ const NavBar: React.FC = () => {
       <Container>
         <Navbar.Brand className="me-auto" href="/">
           TextSwap
+          <BookCheck />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
