@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-num Role {
+enum Role {
   USER
   ADMIN
 }
