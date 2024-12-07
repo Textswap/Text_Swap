@@ -2,7 +2,7 @@
 
 'use server';
 
-import { Book, Condition, Subject } from '@prisma/client';
+import { Condition, Subject } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';

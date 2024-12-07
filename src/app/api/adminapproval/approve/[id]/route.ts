@@ -11,7 +11,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
   try {
     const updatedBook = await prisma.book.update({
-      where: { id },
+      where: { id: Number(id) },
       data: { approved: true },
     });
 

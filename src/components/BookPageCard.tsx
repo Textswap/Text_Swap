@@ -146,7 +146,10 @@ const BookPageCard = ({ book }: { book: Book }) => {
                 />
                 <small className="ms-2 text-nowrap">
                   Sold by
-                  {book.owner}
+                  {' '}
+                  <span style={{ color: '#225f49' }}>
+                    {book.owner}
+                  </span>
                 </small>
               </Col>
             </Row>
