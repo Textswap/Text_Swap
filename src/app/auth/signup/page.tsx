@@ -89,7 +89,8 @@ const SignUp = () => {
                     textAlign: 'center',
                   }}
                 >
-                  TextSwap{' '}
+                  TextSwap
+                  {' '}
                   <BookCheck
                     style={{
                       width: '50px',
@@ -120,10 +121,10 @@ const SignUp = () => {
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <Form.Group className="form-group">
                     <Form.Label
-                      style={{ 
+                      style={{
                         marginBottom: '0.5rem',
                         color: '#225f49',
-                        fontWeight: 'bold', 
+                        fontWeight: 'bold',
                       }}
                     >
                       Email
@@ -140,10 +141,10 @@ const SignUp = () => {
 
                   <Form.Group className="form-group mt-3">
                     <Form.Label
-                      style={{ 
+                      style={{
                         marginBottom: '0.5rem',
                         color: '#225f49',
-                        fontWeight: 'bold', 
+                        fontWeight: 'bold',
                       }}
                     >
                       Password
@@ -160,10 +161,10 @@ const SignUp = () => {
 
                   <Form.Group className="form-group mt-3">
                     <Form.Label
-                      style={{ 
+                      style={{
                         marginBottom: '0.5rem',
                         color: '#225f49',
-                        fontWeight: 'bold', 
+                        fontWeight: 'bold',
                       }}
                     >
                       Confirm Password
