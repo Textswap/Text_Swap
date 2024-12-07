@@ -1,9 +1,9 @@
 import { getServerSession } from 'next-auth';
-import authOptions from '@/lib/authOptions';
 import { loggedInProtectedPage } from '@/lib/page-protection';
+import authOptions from '@/lib/authOptions';
+import { Container } from 'react-bootstrap';
 
-const AddStuff = async () => {
-  // Protect the page, only logged in users can access it.
+const AccountPage = async () => {
   const session = await getServerSession(authOptions);
   loggedInProtectedPage(
     session as {
@@ -12,9 +12,11 @@ const AddStuff = async () => {
   );
   return (
     <main>
-      <p>Account</p>
+      <Container id="list" fluid className="py-3">
+        This is the account page
+      </Container>
     </main>
   );
 };
 
-export default AddStuff;
+export default AccountPage;

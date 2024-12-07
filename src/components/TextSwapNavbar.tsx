@@ -18,7 +18,6 @@ const NavBar: React.FC = () => {
   const userWithRole = session?.user as { email: string; randomKey: string };
   const role = userWithRole?.randomKey;
   const pathName = usePathname();
-
   return (
     <Navbar bg="dark" expand="lg">
       <Container>
@@ -27,7 +26,27 @@ const NavBar: React.FC = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav>
+          <Nav className="me-auto">
+            {currentUser
+              ? [
+                  <Nav.Link
+                    id="add-stuff-nav"
+                    href="/add"
+                    key="add"
+                    active={pathName === '/add'}
+                  >
+                    Add Stuff
+                  </Nav.Link>,
+                  <Nav.Link
+                    id="list-stuff-nav"
+                    href="/list"
+                    key="list"
+                    active={pathName === '/list'}
+                  >
+                    List Stuff
+                  </Nav.Link>,
+                ]
+              : ''}
             {currentUser && role === 'ADMIN' ? (
               <Nav.Link
                 id="admin-stuff-nav"
@@ -37,45 +56,29 @@ const NavBar: React.FC = () => {
               >
                 Admin
               </Nav.Link>
-            ) : null}
+            ) : (
+              ''
+            )}
           </Nav>
           <Nav className="ms-auto">
             {currentUser ? (
               <>
-                <Nav.Link
-                  id="buy-books-nav"
-                  href="/buy"
-                  key="buy"
-                  active={pathName === '/buy'}
-                >
+                <Nav.Link id="buy-books-nav" href="/buy" key="buy" active={pathName === '/buy'}>
                   Buy
                 </Nav.Link>
-                <Nav.Link
-                  id="sell-books-nav"
-                  href="/sell"
-                  key="sell"
-                  active={pathName === '/sell'}
-                >
+                <Nav.Link id="sell-books-nav" href="/sell" key="sell" active={pathName === '/sell'}>
                   Sell
                 </Nav.Link>
-                <Nav.Link
-                  id="cart-nav"
-                  href="/cart"
-                  key="cart"
-                  active={pathName === '/cart'}
-                >
+                <Nav.Link id="cart-nav" href="/cart" key="cart" active={pathName === '/cart'}>
                   Cart
                 </Nav.Link>
-                <Nav.Link
-                  id="account-nav"
-                  href="/account"
-                  key="account"
-                  active={pathName === '/account'}
-                >
+                <Nav.Link id="account-nav" href="/account" key="account" active={pathName === '/account'}>
                   Account
                 </Nav.Link>
               </>
-            ) : null}
+            ) : (
+              ''
+            )}
           </Nav>
           <Nav>
             {session ? (

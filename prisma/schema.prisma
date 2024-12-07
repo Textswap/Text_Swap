@@ -7,77 +7,58 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       Int    @id @default(autoincrement())
-  name     String? // Mark as optional with "?"
-  email    String @unique
-  password String
-  role     Role   @default(USER)
-}
-
-model Stuff {
-  id        Int       @id @default(autoincrement())
-  name      String
-  quantity  Int
-  condition Condition
-  owner     String
-}
-
-model Textbooks {
-  id         Int        @id @default(autoincrement())
-  title      String
-  price      Int
-  department Department
-  course     Course
-  format     Format
-  condition  Condition
-  isbn       String
-}
-
-model Book {
-  id         String    @id @default(cuid())
-  title      String
-  author     String
-  isbn       String
-  category   String
-  courseName String?
-  courseCrn  String?
-  price      Float
-  condition  Condition
-  imageUrl   String?
-  createdAt  DateTime  @default(now())
-  approved   Boolean   @default(false)
-}
-
-enum Role {
+num Role {
   USER
   ADMIN
 }
 
+model User {
+  id         Int         @id @default(autoincrement())
+  email      String      @unique
+  password   String
+  role       Role        @default(USER)
+  booksSaved SavedBook[]
+}
+
 enum Condition {
+  new
   excellent
   good
   fair
   poor
 }
 
-enum Department {
-  Mathematics
-  Arts
-  Science
-  ComputerScience
+enum Subject {
+  math
+  english
+  science
+  history
+  other
 }
 
-enum Course {
-  Algebra
-  History
-  Physics
-  Literature
-  Algorithms
+model Book {
+  id          Int         @id @default(autoincrement())
+  title       String
+  isbn        String?
+  subject     Subject
+  courseName  String?
+  courseCrn   String?
+  description String?
+  price       Float
+  condition   Condition
+  imageURL    String
+  owner       String
+  approved    Boolean     @default(false)
+  savedBy     SavedBook[]
+
+  @@unique([title, owner])
 }
 
-enum Format {
-  Hardcover
-  eBook
-  Paperback
+model SavedBook {
+  userId Int
+  bookId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book   Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bookId])
 }
