@@ -1,0 +1,161 @@
+/* Container to hold the layout */
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* Center content vertically */
+  justify-content: space-between; /* Spread content across horizontally */
+  padding: 40px;
+  gap: 40px;
+  height: 100vh; /* Full viewport height */
+  box-sizing: border-box; /* Include padding in height/width calculations */
+}
+
+/* Left Side: Picture */
+.pictureContainer {
+  flex: 1; /* Larger proportion for the picture */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 25px;
+}
+
+.picture {
+  width: 100%;
+  height: auto;
+  max-height: 80vh; /* Limit the picture's height */
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Right Side: Details */
+.detailsContainer {
+  flex: 1; /* Smaller proportion for details */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  padding: 20px;
+  text-align: center; /* Center-align text */
+}
+
+.title {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 1.5rem; /* Slightly larger price text */
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.condition {
+  font-size: 1.5em;
+  color: gray;
+  margin-bottom: 15px;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.button {
+  background-color: green;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.description {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  max-width: 80%; /* Limit text width for better readability */
+}
+
+.sellerContainer {
+  display: flex;
+  flex-direction: column; /* Stack seller info */
+  align-items: center;
+  gap: 10px;
+}
+
+.sellerImage {
+  width: 70px; /* Increase seller profile image size */
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.sellerDetails {
+  margin: 0;
+}
+
+.messageButton {
+  background-color: white;
+  color: green;
+  border: 2px solid green;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 5px;
+  margin-bottom: 50px;
+}
+
+/* Go Back Button */
+.goBackButton {
+  background-color: green;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 1rem;
+  align-self: center; /* Center the button */
+  transition: background-color 0.3s ease;
+}
+
+.goBackButton:hover {
+  background-color: darkgreen;
+}
+
+/* Media Query for Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .pictureContainer {
+    width: 100%;
+    max-height: 300px; /* Limit picture height */
+  }
+
+  .picture {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .detailsContainer {
+    flex: unset; /* Reset flex proportion */
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .buttonsContainer {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .button {
+    width: 100%;
+  }
+}

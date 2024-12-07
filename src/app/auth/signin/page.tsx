@@ -34,26 +34,25 @@ const SignIn = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '5rem 0',
+        padding: '2rem 1rem', // Adjust padding for smaller screens
       }}
     >
-      {' '}
       <Container>
         <Row className="justify-content-center">
-          <Col xs={5}>
+          <Col xs={12} sm={10} md={8} lg={6} xl={5}>
             <Card
               className="shadow"
               style={{
                 backgroundColor: '#c8e6c9',
-                padding: '50px',
-                width: '600px',
+                padding: '2rem',
+                borderRadius: '1rem',
               }}
             >
               <Card.Body>
                 <h1
                   className="mb-4"
                   style={{
-                    fontSize: '4rem',
+                    fontSize: '3rem', // Adjust font size for smaller screens
                     fontWeight: '900',
                     background: 'linear-gradient(to right, #39af3f, #318768)',
                     WebkitBackgroundClip: 'text',
@@ -62,19 +61,20 @@ const SignIn = () => {
                     textAlign: 'center',
                   }}
                 >
-                  TextSwap{' '}
+                  TextSwap
                   <BookCheck
                     style={{
-                      width: '60px',
-                      height: '60px',
+                      width: '50px',
+                      height: '50px',
                       color: '#318768',
+                      marginLeft: '10px',
                     }}
                   />
                 </h1>
                 <p
                   className="mb-4"
                   style={{
-                    fontSize: '1.8em',
+                    fontSize: '1.2rem', // Smaller font size for descriptions
                     color: '#225f49',
                     textAlign: 'center',
                     fontWeight: 'bold',
@@ -83,43 +83,72 @@ const SignIn = () => {
                   Log In
                 </p>
                 <Form method="post" onSubmit={handleSubmit}>
-                  <Form.Group controlId="formBasicEmail" className="form-group" style={{ paddingTop: '20px' }}>
-                    <Form.Label style={{ marginBottom: '0.1rem', color: '#225f49' }}>Email</Form.Label>
-                    <input name="email" type="text" className="form-control" />
+                  <Form.Group controlId="formBasicEmail" className="form-group">
+                    <Form.Label
+                      style={{
+                        marginBottom: '0.5rem',
+                        color: '#225f49',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      Email
+                    </Form.Label>
+                    <input
+                      name="email"
+                      type="text"
+                      className="form-control"
+                      required
+                    />
                   </Form.Group>
-                  <Form.Group style={{ paddingTop: '30px', paddingBottom: '20px' }}>
-                    <Form.Label style={{ marginBottom: '0.1rem', color: '#225f49' }}>Password</Form.Label>
-                    <input name="password" type="password" className="form-control" />
+                  <Form.Group
+                    className="form-group mt-3"
+                    controlId="formBasicPassword"
+                  >
+                    <Form.Label
+                      style={{
+                        marginBottom: '0.5rem',
+                        color: '#225f49',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      Password
+                    </Form.Label>
+                    <input
+                      name="password"
+                      type="password"
+                      className="form-control"
+                      required
+                    />
                   </Form.Group>
                   <Form.Group className="form-group py-3">
-                    <Row>
-                      <Col>
-                        <Button
-                          type="submit"
-                          className="btn btn-primary w-100"
-                          style={{
-                            backgroundColor: '#225f49',
-                            borderRadius: '20px',
-                            borderColor: 'white',
-                          }}
-                        >
-                          Log In
-                        </Button>
-                      </Col>
-                    </Row>
+                    <Button
+                      type="submit"
+                      className="btn btn-primary w-100"
+                      style={{
+                        backgroundColor: '#225f49',
+                        borderRadius: '20px',
+                        borderColor: 'white',
+                        padding: '0.75rem',
+                        fontSize: '1rem',
+                      }}
+                    >
+                      Log In
+                    </Button>
                   </Form.Group>
                 </Form>
               </Card.Body>
               <hr
                 style={{
                   border: '0',
-                  borderTop: '4px solid #225f49',
-                  marginBottom: '20px',
+                  borderTop: '2px solid #225f49',
+                  margin: '1rem 0',
                 }}
               />
               <Card.Footer className="d-flex justify-content-center align-items-center">
                 Don&apos;t have an account?&nbsp;
-                <a href="/auth/signup">Sign up</a>
+                <a href="/auth/signup" style={{ color: '#225f49' }}>
+                  Sign up
+                </a>
               </Card.Footer>
             </Card>
           </Col>
