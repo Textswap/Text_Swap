@@ -6,9 +6,6 @@ import { Book, Condition, Subject } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
-
-/**
- * Handle condition conversion
  */
 function getConditionValue(condition: string): Condition {
   switch (condition) {
