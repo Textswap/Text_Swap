@@ -12,7 +12,6 @@ import {
   PersonPlusFill,
 } from 'react-bootstrap-icons';
 import { BookCheck } from 'lucide-react';
-import SearchBar from './SearchBar';
 
 const NavBar: React.FC = () => {
   const { data: session } = useSession();
