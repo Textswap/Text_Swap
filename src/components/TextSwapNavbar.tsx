@@ -11,6 +11,7 @@ import {
   PersonFill,
   PersonPlusFill,
 } from 'react-bootstrap-icons';
+import { BookCheck } from 'lucide-react';
 import SearchBar from './SearchBar';
 
 const NavBar: React.FC = () => {
@@ -29,6 +30,7 @@ const NavBar: React.FC = () => {
       <Container>
         <Navbar.Brand className="me-auto" href="/">
           TextSwap
+          <BookCheck />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
