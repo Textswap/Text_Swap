@@ -117,7 +117,9 @@ export async function POST(request: Request) {
     const book = await prisma.book.create({
       data: {
         ...bookData,
-        imageUrl,
+        imageURL: imageUrl ?? '',
+        subject: formData.get('subject') as 'math' | 'english' | 'science' | 'history' | 'other',
+        owner: '',
         approved: false,
       },
     });

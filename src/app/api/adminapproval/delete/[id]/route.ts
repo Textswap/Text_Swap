@@ -21,12 +21,14 @@ export async function DELETE(
     const { id } = params;
     console.log('Delete request received for ID:', id);
 
+    const numericId = parseInt(params.id, 10);
+
     if (!id) {
       console.error('No ID provided in the request.');
       return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
     }
 
-    const book = await prisma.book.findUnique({ where: { id } });
+    const book = await prisma.book.findUnique({ where: { id: numericId } });
     console.log('Book fetched from database:', book);
 
     if (!book) {
@@ -35,9 +37,9 @@ export async function DELETE(
     }
 
     let publicId = null;
-    if (book.imageUrl) {
+    if (book.imageURL) {
       // Extract everything after "/upload/" and before the file extension
-      const matches = book.imageUrl.match(/\/upload\/(?:v\d+\/)?(.+)\.[^/.]+$/);
+      const matches = book.imageURL.match(/\/upload\/(?:v\d+\/)?(.+)\.[^/.]+$/);
       publicId = matches ? matches[1] : null;
     }
     console.log('Extracted public ID:', publicId);
@@ -47,7 +49,7 @@ export async function DELETE(
       console.log('Cloudinary deletion result:', cloudinaryResult);
     }
 
-    const deletedBook = await prisma.book.delete({ where: { id } });
+    const deletedBook = await prisma.book.delete({ where: { id: numericId } });
     console.log('Deleted book from database:', deletedBook);
 
     return NextResponse.json({
