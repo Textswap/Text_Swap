@@ -6,7 +6,26 @@ import { Book, Condition, Subject } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
+
+/**
+ * Checks if a user exists in the database by email.
+ * @param email The email to check.
+ * @returns True if the user exists, otherwise false.
  */
+export async function checkUserExists(email: string): Promise<boolean> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    return user !== null;
+  } catch (error) {
+    console.error('Error checking user existence:', error);
+    throw new Error('Could not check user existence.');
+  }
+}
+
 function getConditionValue(condition: string): Condition {
   switch (condition) {
     case 'poor':
