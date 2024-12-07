@@ -62,9 +62,14 @@ const BookPageCard = ({ book }: { book: Book }) => {
           <Col className="d-flex flex-column" style={{ margin: '1rem' }}>
             <Row style={{ marginBottom: '1.5rem' }}>
               <Card.Title style={{ fontSize: '3rem', marginBottom: '1rem' }}>{book.title}</Card.Title>
-              <Card.Text style={{ fontSize: '1.5rem', marginBottom: '0rem' }}>${book.price.toFixed(2)}</Card.Text>
+              <Card.Text style={{ fontSize: '1.5rem', marginBottom: '0rem' }}>
+                $
+                {book.price.toFixed(2)}
+              </Card.Text>
               <Card.Text style={{ fontSize: '1.25rem' }}>
-                Condition: {book.condition.charAt(0).toUpperCase() + book.condition.slice(1)}
+                Condition:
+                {' '}
+                {book.condition.charAt(0).toUpperCase() + book.condition.slice(1)}
               </Card.Text>
             </Row>
             {/* Buttons */}
@@ -110,7 +115,9 @@ const BookPageCard = ({ book }: { book: Book }) => {
             {/* Description */}
             <Row>
               <Col style={{ maxWidth: '600px', wordWrap: 'break-word', overflowWrap: 'break-word', marginTop: '1rem' }}>
-                Description: <br />
+                Description:
+                {' '}
+                <br />
                 <Card.Text
                   style={{
                     fontSize: '1rem',
@@ -137,7 +144,10 @@ const BookPageCard = ({ book }: { book: Book }) => {
                   }}
                   alt="Seller"
                 />
-                <small className="ms-2 text-nowrap">Sold by {book.owner}</small>
+                <small className="ms-2 text-nowrap">
+                  Sold by
+                  {book.owner}
+                </small>
               </Col>
             </Row>
           </Col>
