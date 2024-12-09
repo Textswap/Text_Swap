@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+
 import React from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Formik, Field, ErrorMessage } from 'formik';
@@ -71,7 +73,7 @@ const AddBookForm = () => {
               <Col xs={12} md={4} className="d-flex align-items-center justify-content-center">
                 <div className={styles.imageUpload}>
                   <label htmlFor="imageURL" className={styles.uploadLabel}>
-                  <i className="bi bi-camera" style={{ fontSize: '3rem', color: '#6c757d' }}></i>
+                    <i className="bi bi-camera" style={{ fontSize: '3rem', color: '#6c757d' }} />
                     <p className={styles.uploadText}>Click or Drag Image Here</p>
                   </label>
                   <Field
@@ -98,6 +100,7 @@ const AddBookForm = () => {
                   <Field
                     type="text"
                     name="title"
+                    id="titile"
                     className={`form-control ${errors.title && touched.title ? 'is-invalid' : ''}`}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -110,14 +113,35 @@ const AddBookForm = () => {
                   <Field
                     as="select"
                     name="subject"
+                    id="subject" // Add id to associate with the label
                     className={`${styles.select} form-control`} // Add custom styles
                   >
+                    {/* Default option */}
                     <option value="">Select Subject</option>
-                    <option value="math">Math</option>
-                    <option value="english">English</option>
-                    <option value="science">Science</option>
-                    <option value="history">History</option>
-                    <option value="other">Other</option>
+
+                    {/* Dynamically rendered options sorted alphabetically */}
+                    {[
+                      'Architecture',
+                      'Art',
+                      'Business',
+                      'Engineering',
+                      'English',
+                      'History',
+                      'Language',
+                      'Law',
+                      'Math',
+                      'Medicine',
+                      'Music',
+                      'Other',
+                      'Religion',
+                      'Science',
+                    ]
+                      .sort((a, b) => a.localeCompare(b)) // Sort options alphabetically
+                      .map((subject) => (
+                        <option key={subject.toLowerCase()} value={subject.toLowerCase()}>
+                          {subject}
+                        </option>
+                      ))}
                   </Field>
                   <ErrorMessage name="subject" component="div" className="invalid-feedback" />
                 </div>
@@ -127,6 +151,7 @@ const AddBookForm = () => {
                   <Field
                     type="text"
                     name="courseName"
+                    id="courseName"
                     className="form-control"
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -138,6 +163,7 @@ const AddBookForm = () => {
                   <Field
                     type="text"
                     name="isbn"
+                    id="isbn"
                     className="form-control"
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -153,6 +179,7 @@ const AddBookForm = () => {
                   <Field
                     type="number"
                     name="price"
+                    id="price"
                     className={`form-control ${errors.price && touched.price ? 'is-invalid' : ''}`}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -165,6 +192,7 @@ const AddBookForm = () => {
                   <Field
                     as="select"
                     name="condition"
+                    id="condition"
                     className={`${styles.select} form-control`} // Add custom styles
                   >
                     <option value="new">New</option>
@@ -176,12 +204,12 @@ const AddBookForm = () => {
                   <ErrorMessage name="condition" component="div" className="invalid-feedback" />
                 </div>
 
-
                 <div className={styles.field}>
                   <label htmlFor="courseCrn">Course CRN (Optional)</label>
                   <Field
                     type="text"
                     name="courseCrn"
+                    id="courseCrn"
                     className="form-control"
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -191,6 +219,7 @@ const AddBookForm = () => {
                 <div className={styles.field}>
                   <label htmlFor="description">Description (Optional)</label>
                   <Field
+                    id="description"
                     as="textarea"
                     name="description"
                     className="form-control"

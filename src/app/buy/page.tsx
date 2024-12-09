@@ -96,12 +96,32 @@ const BuyPageClient: React.FC = () => {
                   value={filters.subject}
                   onChange={(e) => handleFilterChange('subject', e.target.value)}
                 >
+                  {/* Default option */}
                   <option value="">Subject</option>
-                  <option value="math">Math</option>
-                  <option value="english">English</option>
-                  <option value="science">Science</option>
-                  <option value="history">History</option>
-                  <option value="other">Other</option>
+
+                  {/* Dynamically render sorted options */}
+                  {[
+                    'Architecture',
+                    'Art',
+                    'Business',
+                    'Engineering',
+                    'English',
+                    'History',
+                    'Language',
+                    'Law',
+                    'Math',
+                    'Medicine',
+                    'Music',
+                    'Other',
+                    'Religion',
+                    'Science',
+                  ]
+                    .sort((a, b) => a.localeCompare(b)) // Sort options alphabetically
+                    .map((subject) => (
+                      <option key={subject.toLowerCase()} value={subject.toLowerCase()}>
+                        {subject}
+                      </option>
+                    ))}
                 </Form.Select>
               </Form.Group>
 
