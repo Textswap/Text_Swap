@@ -90,7 +90,7 @@ const BuyPageClient: React.FC = () => {
                 />
               </Form.Group>
 
-              <Form.Group>
+              <Form.Group className="mb-4">
                 <Form.Select
                   className={styles.selectField}
                   value={filters.subject}
@@ -169,7 +169,9 @@ const BuyPageClient: React.FC = () => {
               <Row className="g-4">
                 {filteredBooks.map((book) => (
                   <Col key={book.id} xs={12} sm={6} md={4}>
-                    <BookBuyCard book={book} />
+                    <div className="textbookCard">
+                      <BookBuyCard book={book} />
+                    </div>
                   </Col>
                 ))}
               </Row>
