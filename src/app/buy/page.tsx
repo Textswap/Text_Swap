@@ -125,7 +125,7 @@ const BuyPageClient: React.FC = () => {
                 />
               </Form.Group>
 
-              <Form.Group className="inputGroup">
+              <Form.Group className="inputGroup mb-4">
                 <Form.Control
                   className={styles.inputField}
                   type="text"
@@ -134,23 +134,36 @@ const BuyPageClient: React.FC = () => {
                   onChange={(e) => handleFilterChange('isbn', e.target.value)}
                 />
               </Form.Group>
-
-              <Form.Group as={Row} className="mt-4">
-                {['fair', 'good', 'excellent'].map((condition) => (
-                  <Col key={condition} xs="auto" style={{ display: 'flex', alignItems: 'center' }}>
-                    <Form.Check
-                      type="checkbox"
-                      label={condition.charAt(0).toUpperCase() + condition.slice(1)}
-                      onChange={() => handleConditionChange(condition)}
-                      style={{
-                        transform: 'scale(1.2)',
-                        marginRight: '6px',
-                        appearance: 'none',
-                      }}
-                    />
-                  </Col>
-                ))}
-              </Form.Group>
+              
+                  
+              <div style={{ textAlign: 'center', padding: '0', backgroundColor: '#c8e6c9', borderRadius: '0.5rem' }}>
+                <h5 style={{ color: '#225f49' }}>Select Condition</h5>
+                  <Form.Group as={Row}>
+                    {['new', 'excellent', 'good', 'fair', 'poor'].map((condition) => (
+                      <Col 
+                        key={condition} 
+                        xs="auto" 
+                        style={{ 
+                          display: 'flex', 
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          margin: '0.5rem',
+                          }}
+                          >
+                        <Form.Check
+                          type="checkbox"
+                          label={condition.charAt(0).toUpperCase() + condition.slice(1)}
+                          onChange={() => handleConditionChange(condition)}
+                          style={{
+                            transform: 'scale(1.2)',
+                            appearance: 'none',
+                            margin: '0',
+                          }}
+                        />
+                      </Col>
+                    ))}
+                  </Form.Group>
+              </div>
             </Form>
           </div>
         </Col>
