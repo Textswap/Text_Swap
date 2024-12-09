@@ -172,7 +172,13 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
               </Row>
               {/* Description */}
               <Row>
-                <Col style={{ maxWidth: '600px', wordWrap: 'break-word', overflowWrap: 'break-word', marginTop: '1rem' }}>
+                <Col style={{
+                  maxWidth: '600px',
+                  wordWrap: 'break-word',
+                  overflowWrap: 'break-word',
+                  marginTop: '1rem',
+                }}
+                >
                   Description:
                   {' '}
                   <br />
