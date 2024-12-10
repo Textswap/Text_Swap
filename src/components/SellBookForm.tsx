@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Formik, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -46,6 +48,8 @@ const AddBookSchema = Yup.object({
 const AddBookForm = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const onSubmit = async (values: any) => {
     console.log('Form submitted with values:', values); // Add this for debugging
@@ -63,6 +67,50 @@ const AddBookForm = () => {
     } catch (error) {
       console.error('Error during form submission:', error);
       alert('An error occurred while adding the book.');
+    }
+  };
+
+  const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: (field: string, value: any) => void,
+  ) => {
+    const file = event.target?.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setFieldValue('imageURL', reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (
+    event: React.DragEvent<HTMLDivElement>,
+    setFieldValue: (field: string, value: any) => void,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragOver(false);
+
+    const file = event.dataTransfer?.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setFieldValue('imageURL', reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -88,17 +136,45 @@ const AddBookForm = () => {
         validationSchema={AddBookSchema}
         onSubmit={onSubmit}
       >
-        {({ values, handleChange, handleBlur, handleSubmit, setFieldValue, errors, touched }) => (
+        {({
+          values,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          setFieldValue,
+          errors,
+          touched,
+        }) => (
           <Form noValidate onSubmit={handleSubmit}>
             <Row className="justify-content-center">
               {/* Section 1: Image Upload */}
-              <Col xs={12} md={4} className="d-flex flex-column align-items-center">
-                <div className={styles.imageUpload}>
-                  <label htmlFor="imageUpload" className={styles.uploadLabel}>
+              <Col
+                xs={12}
+                md={4}
+                className="d-flex flex-column align-items-center"
+              >
+                <div
+                  className={`${styles.imageUpload} ${isDragOver ? styles.dragOver : ''}`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, setFieldValue)}
+                >
+                  <label
+                    htmlFor="imageUpload"
+                    className={styles.uploadLabel}
+                    onClick={() => fileInputRef.current?.click()}
+                  >
                     {!values.imageURL && (
                       <>
-                        <i className="bi bi-camera" style={{ fontSize: '3rem', color: '#6c757d' }} />
-                        <p className={styles.uploadText}>Click or Drag Image Here</p>
+                        <i
+                          className="bi bi-camera"
+                          style={{ fontSize: '3rem', color: '#6c757d' }}
+                        />
+                        <p className={styles.uploadText}>
+                          {isDragOver
+                            ? 'Drop Image Here'
+                            : 'Click or Drag Image Here'}
+                        </p>
                       </>
                     )}
                   </label>
@@ -108,31 +184,29 @@ const AddBookForm = () => {
                     id="imageUpload"
                     accept="image/*"
                     className={styles.hiddenInput}
-                    onChange={(event) => {
-                      const file = event.target?.files?.[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                          setFieldValue('imageURL', reader.result);
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
+                    onChange={(event) => handleFileChange(event, setFieldValue)}
                   />
                   {values.imageURL && (
                     <div className={styles.imagePreviewContainer}>
-                      <img src={values.imageURL} alt="Preview" className={styles.imagePreviewFull} />
+                      <img
+                        src={values.imageURL}
+                        alt="Preview"
+                        className={styles.imagePreviewFull}
+                      />
                     </div>
                   )}
                 </div>
-                <div className={`${styles.field} mt-3`} style={{ width: '100%' }}>
+                <div
+                  className={`${styles.field} mt-3`}
+                  style={{ width: '100%' }}
+                >
                   <label htmlFor="imageURL">Or Enter Image URL</label>
                   <Field
                     type="text"
                     name="imageURL"
                     id="imageURL"
                     className="form-control"
-                    onChange={(e: { target: { value: any; }; }) => {
+                    onChange={(e: { target: { value: any } }) => {
                       handleChange(e);
                       if (e.target.value) {
                         setFieldValue('imageURL', e.target.value);
@@ -153,7 +227,11 @@ const AddBookForm = () => {
                     id="title"
                     className={`form-control ${errors.title && touched.title ? 'is-invalid' : ''}`}
                   />
-                  <ErrorMessage name="title" component="div" className="invalid-feedback" />
+                  <ErrorMessage
+                    name="title"
+                    component="div"
+                    className="invalid-feedback"
+                  />
                 </div>
 
                 <div className={styles.field}>
@@ -178,17 +256,28 @@ const AddBookForm = () => {
                     ]
                       .sort((a, b) => a.localeCompare(b))
                       .map((subject) => (
-                        <option key={subject.toLowerCase()} value={subject.toLowerCase()}>
+                        <option
+                          key={subject.toLowerCase()}
+                          value={subject.toLowerCase()}
+                        >
                           {subject}
                         </option>
                       ))}
                   </Field>
-                  <ErrorMessage name="subject" component="div" className="invalid-feedback" />
+                  <ErrorMessage
+                    name="subject"
+                    component="div"
+                    className="invalid-feedback"
+                  />
                 </div>
 
                 <div className={styles.field}>
                   <label htmlFor="courseName">Course Name (Optional)</label>
-                  <Field type="text" name="courseName" className="form-control" />
+                  <Field
+                    type="text"
+                    name="courseName"
+                    className="form-control"
+                  />
                 </div>
 
                 <div className={styles.field}>
@@ -206,7 +295,11 @@ const AddBookForm = () => {
                     name="price"
                     className={`form-control ${errors.price && touched.price ? 'is-invalid' : ''}`}
                   />
-                  <ErrorMessage name="price" component="div" className="invalid-feedback" />
+                  <ErrorMessage
+                    name="price"
+                    component="div"
+                    className="invalid-feedback"
+                  />
                 </div>
 
                 <div className={styles.field}>
@@ -218,17 +311,29 @@ const AddBookForm = () => {
                     <option value="fair">Fair</option>
                     <option value="poor">Poor</option>
                   </Field>
-                  <ErrorMessage name="condition" component="div" className="invalid-feedback" />
+                  <ErrorMessage
+                    name="condition"
+                    component="div"
+                    className="invalid-feedback"
+                  />
                 </div>
 
                 <div className={styles.field}>
                   <label htmlFor="courseCrn">Course CRN (Optional)</label>
-                  <Field type="text" name="courseCrn" className="form-control" />
+                  <Field
+                    type="text"
+                    name="courseCrn"
+                    className="form-control"
+                  />
                 </div>
 
                 <div className={styles.field}>
                   <label htmlFor="description">Description (Optional)</label>
-                  <Field as="textarea" name="description" className="form-control" />
+                  <Field
+                    as="textarea"
+                    name="description"
+                    className="form-control"
+                  />
                 </div>
               </Col>
             </Row>
