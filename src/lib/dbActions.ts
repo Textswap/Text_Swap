@@ -1,66 +1,102 @@
+/* eslint-disable max-len */
+
 'use server';
 
-import { Stuff, Condition } from '@prisma/client';
+import { Condition, Subject } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
 
 /**
- * Adds a new stuff to the database.
- * @param stuff, an object with the following properties: name, quantity, owner, condition.
+ * Checks if a user exists in the database by email.
+ * @param email The email to check.
+ * @returns True if the user exists, otherwise false.
  */
-export async function addStuff(stuff: { name: string; quantity: number; owner: string; condition: string }) {
-  // console.log(`addStuff data: ${JSON.stringify(stuff, null, 2)}`);
-  let condition: Condition = 'good';
-  if (stuff.condition === 'poor') {
-    condition = 'poor';
-  } else if (stuff.condition === 'excellent') {
-    condition = 'excellent';
-  } else {
-    condition = 'fair';
+export async function checkUserExists(email: string): Promise<boolean> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    return user !== null;
+  } catch (error) {
+    console.error('Error checking user existence:', error);
+    throw new Error('Could not check user existence.');
   }
-  await prisma.stuff.create({
+}
+
+function getConditionValue(condition: string): Condition {
+  switch (condition) {
+    case 'poor':
+      return 'poor';
+    case 'excellent':
+      return 'excellent';
+    case 'good':
+      return 'good';
+    case 'fair':
+      return 'fair';
+    default:
+      return 'new';
+  }
+}
+
+/**
+ * Handle subject conversion
+ */
+function getSubjectValue(subject: string): Subject {
+  switch (subject) {
+    case 'math':
+      return 'math';
+    case 'english':
+      return 'english';
+    case 'science':
+      return 'science';
+    case 'history':
+      return 'history';
+    default:
+      return 'other';
+  }
+}
+
+/**
+ * Adds a new book to the database.
+ * @param book, an object with the following properties: title, isbn, subject, courseName, courseCrn, description, price, condition, imageURL, owner.
+ */
+export async function addBook(book: {
+  title: string;
+  isbn?: string;
+  subject: string;
+  courseName?: string;
+  courseCrn?: string;
+  description?: string;
+  price: number;
+  owner: string;
+  condition: string;
+  image?: string;
+}) {
+  const condition = getConditionValue(book.condition);
+  const subject = getSubjectValue(book.subject);
+
+  const imageURL = '';
+
+  // Create the book in the database
+  await prisma.book.create({
     data: {
-      name: stuff.name,
-      quantity: stuff.quantity,
-      owner: stuff.owner,
+      title: book.title,
+      isbn: book.isbn,
+      subject,
+      courseName: book.courseName,
+      courseCrn: book.courseCrn,
+      description: book.description,
+      price: book.price,
       condition,
+      owner: book.owner,
+      imageURL: imageURL || '',
     },
   });
-  // After adding, redirect to the list page
-  redirect('/list');
-}
-
-/**
- * Edits an existing stuff in the database.
- * @param stuff, an object with the following properties: id, name, quantity, owner, condition.
- */
-export async function editStuff(stuff: Stuff) {
-  // console.log(`editStuff data: ${JSON.stringify(stuff, null, 2)}`);
-  await prisma.stuff.update({
-    where: { id: stuff.id },
-    data: {
-      name: stuff.name,
-      quantity: stuff.quantity,
-      owner: stuff.owner,
-      condition: stuff.condition,
-    },
-  });
-  // After updating, redirect to the list page
-  redirect('/list');
-}
-
-/**
- * Deletes an existing stuff from the database.
- * @param id, the id of the stuff to delete.
- */
-export async function deleteStuff(id: number) {
-  // console.log(`deleteStuff id: ${id}`);
-  await prisma.stuff.delete({
-    where: { id },
-  });
-  // After deleting, redirect to the list page
-  redirect('/list');
+  // Redirect to the buy page after adding the book
+  redirect('/buy');
 }
 
 /**

@@ -1,61 +1,77 @@
-/* Container styling */
+/* General Container Styling */
 .py-4 {
-    padding: 1rem 0;
+  padding: 1rem 0;
 }
-  
+
 /* Filters Section */
 .filtersSection {
-    padding: 20px;
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+  padding: 20px;
+  background-color: #c8e6c9; /* Matches card background color */
+  border-radius: 1rem; /* Rounded corners */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
-  
+
 .filtersTitle {
-    color: #1b4a3d;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+  background: linear-gradient(to right, #39af3f, #318768); /* Gradient text */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-  
+
 .rangeSlider {
-    width: 100%;
-    appearance: none;
-    height: 9px;
-    background-color: #225f49;
-    border-radius: 5px;
-    outline: none;
+  width: 100%;
+  appearance: none;
+  height: 8px;
+  border-radius: 5px;
+  outline: none;
+  margin-bottom: 35px;
 }
-  
+
 .inputField {
-    margin-bottom: 15px;
-    font-size: 16px;
-    text-align: center;
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    background-color: #fff;
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.5rem;
+  margin-bottom: 15px;
+  border-radius: 20px; /* Matches other rounded elements */
+  border: 1px solid #d3cfcf;
+  background-color: #fff;
+  text-align: center;
 }
-  
+
 .selectField {
-    width: 100%;
-    margin-bottom: 15px;
-    font-size: 16px;
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    background-color: #f8f9fa;
+  width: 100%;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 20px; /* Consistent with inputs */
+  background-color: #f8f9fa;
+  text-align: center;
 }
-  
+
+/* Condition Checkboxes */
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+}
+
+.checkboxLabel {
+  transform: scale(1.2);
+  margin-right: 6px;
+  color: #225f49;
+}
+
 /* Textbook List Section */
 .textbookList {
-    margin-top: 20px;
+  margin-top: 20px;
 }
-  
+
 .textbookCard {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    text-align: center;
-    padding: 15px;
-    background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+  padding: 15px;
+  background-color: #c8e6c9;
 }

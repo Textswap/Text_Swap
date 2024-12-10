@@ -1,33 +1,44 @@
 import { getServerSession } from 'next-auth';
-import { Container } from 'react-bootstrap';
-// import { prisma } from '@/lib/prisma';
-import { loggedInProtectedPage } from '@/lib/page-protection';
-import authOptions from '@/lib/authOptions';
+import { Col, Container, Row } from 'react-bootstrap';
+import { Book } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
+import BookCartCard from '@/components/BookCartCard';
 
-/** Render a list of stuff for the logged in user. */
-const ListPage = async () => {
-  // Protect the page, only logged in users can access it.
-  const session = await getServerSession(authOptions);
-  loggedInProtectedPage(
-    session as {
-      user: { email: string; id: string; randomKey: string };
-      // eslint-disable-next-line @typescript-eslint/comma-dangle
-    } | null,
-  );
-  { /* const owner = (session && session.user && session.user.email) || ' ';
-  const stuff = await prisma.stuff.findMany({
+const CartPage = async () => {
+  const session = await getServerSession();
+  const userEmail = session?.user?.email || '';
+  const savedBooks = await prisma.savedBook.findMany({
     where: {
-      owner,
+      user: {
+        email: userEmail,
+      },
+    },
+    include: {
+      book: true,
     },
   });
-// console.log(stuff); */ }
+  const books: Book[] = savedBooks.map((savedBook) => savedBook.book);
   return (
     <main>
-      <Container id="list" fluid className="py-3">
-        This is the cart page
+      <Container id="book-cart-list">
+        <Row className="mt-5 mb-2">
+          <Col>
+            <h1>
+              {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
+              Your Cart: {books.length > 0 ? `${books.length} item${books.length > 1 ? 's' : ''}` : 'Empty'}
+            </h1>
+          </Col>
+        </Row>
+        {books.map((book) => (
+          <Row key={book.id}>
+            <Col>
+              <BookCartCard book={book} />
+            </Col>
+          </Row>
+        ))}
       </Container>
     </main>
   );
 };
 
-export default ListPage;
+export default CartPage;

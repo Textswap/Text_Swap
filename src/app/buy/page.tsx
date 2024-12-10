@@ -1,21 +1,60 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable max-len */
+
 'use client';
 
-import React, { useState } from 'react';
-import { Container, Row, Col, Card, Form } from 'react-bootstrap';
-import defaultTextbooks from '@/components/defaultTextbooks';
+import React, { useState, useEffect } from 'react';
+import useSWR from 'swr';
+import { Container, Row, Col, Form } from 'react-bootstrap';
+import { Book } from '@prisma/client';
+import BookBuyCard from '@/components/BookCard';
 import styles from './BuyPageClient.module.css';
+
+const fetcher = async (url: string) => {
+  const response = await fetch(url, {
+    cache: 'no-store', // Disable browser caching
+    headers: {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch books');
+  }
+  return response.json();
+};
 
 const BuyPageClient: React.FC = () => {
   const [maxPrice, setMaxPrice] = useState(1000);
   const [filters, setFilters] = useState({
-    department: '',
-    course: '',
-    format: '',
+    subject: '',
+    courseName: '',
     keywords: '',
     isbn: '',
     conditions: new Set<string>(),
   });
 
+  // Aggressive SWR configuration
+  const {
+    data: books = [],
+    mutate,
+  } = useSWR<Book[]>('/api/book/buy-page', fetcher, {
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    refreshInterval: 1000, // Poll every second
+  });
+
+  // Manually trigger revalidation periodically
+  useEffect(() => {
+    const interval = setInterval(() => {
+      mutate();
+    }, 2000); // Every 2 seconds
+
+    return () => clearInterval(interval);
+  }, [mutate]);
+
+  // Rest of the component remains the same as in the previous implementation
   const handleFilterChange = (field: string, value: string) => {
     setFilters({ ...filters, [field]: value });
   };
@@ -30,39 +69,27 @@ const BuyPageClient: React.FC = () => {
     setFilters({ ...filters, conditions: updatedConditions });
   };
 
-  const filteredTextbooks = defaultTextbooks.filter((book) => {
+  const filteredBooks = books.filter((book) => {
     const matchesPrice = book.price <= maxPrice;
-    const matchesDepartment = !filters.department || book.department === filters.department;
-    const matchesCourse = !filters.course || book.course === filters.course;
-    const matchesFormat = !filters.format || book.format === filters.format;
+    const matchesSubject = !filters.subject || book.subject.toLowerCase() === filters.subject.toLowerCase();
+    const matchesCourse =
+      !filters.courseName || book.courseName?.toLowerCase().includes(filters.courseName.toLowerCase());
     const matchesKeywords = !filters.keywords || book.title.toLowerCase().includes(filters.keywords.toLowerCase());
-    const matchesISBN = !filters.isbn || book.isbn.includes(filters.isbn);
+    const matchesISBN = !filters.isbn || book.isbn?.includes(filters.isbn);
     const matchesCondition = filters.conditions.size === 0 || filters.conditions.has(book.condition);
 
-    return (
-      matchesPrice
-      && matchesDepartment
-      && matchesCourse
-      && matchesFormat
-      && matchesKeywords
-      && matchesISBN
-      && matchesCondition
-    );
+    return matchesPrice && matchesSubject && matchesCourse && matchesKeywords && matchesISBN && matchesCondition;
   });
-
   return (
     <Container fluid className="py-4">
       <Row>
         {/* Filters Section */}
-        <Col xs={12} md={3}>
+        <Col xs={12} md={3} className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
           <div className={styles.filtersSection}>
             <h3 className={styles.filtersTitle}>Filters</h3>
             <Form>
-              <Form.Group className="mb-3">
-                <Form.Label>
-                  Maximum Price: $
-                  {maxPrice}
-                </Form.Label>
+              <Form.Group>
+                <Form.Label>Maximum Price: ${maxPrice}</Form.Label>
                 <input
                   type="range"
                   min="0"
@@ -78,45 +105,38 @@ const BuyPageClient: React.FC = () => {
                 />
               </Form.Group>
 
-              <Form.Group>
+              <Form.Group className="mb-4">
                 <Form.Select
                   className={styles.selectField}
-                  value={filters.department}
-                  onChange={(e) => handleFilterChange('department', e.target.value)}
+                  value={filters.subject}
+                  onChange={(e) => handleFilterChange('subject', e.target.value)}
                 >
-                  <option value="">Select Department</option>
-                  <option value="Mathematics">Mathematics</option>
-                  <option value="Arts">Arts</option>
-                  <option value="Science">Science</option>
-                  <option value="Computer Science">Computer Science</option>
-                </Form.Select>
-              </Form.Group>
+                  {/* Default option */}
+                  <option value="">Subject</option>
 
-              <Form.Group>
-                <Form.Select
-                  className={styles.selectField}
-                  value={filters.course}
-                  onChange={(e) => handleFilterChange('course', e.target.value)}
-                >
-                  <option value="">Select Course</option>
-                  <option value="Algebra">Algebra</option>
-                  <option value="History">History</option>
-                  <option value="Physics">Physics</option>
-                  <option value="Literature">Literature</option>
-                  <option value="Algorithms">Algorithms</option>
-                </Form.Select>
-              </Form.Group>
-
-              <Form.Group>
-                <Form.Select
-                  className={styles.selectField}
-                  value={filters.format}
-                  onChange={(e) => handleFilterChange('format', e.target.value)}
-                >
-                  <option value="">Select Format</option>
-                  <option value="Hardcover">Hardcover</option>
-                  <option value="Paperback">Paperback</option>
-                  <option value="eBook">eBook</option>
+                  {/* Dynamically render sorted options */}
+                  {[
+                    'Architecture',
+                    'Art',
+                    'Business',
+                    'Engineering',
+                    'English',
+                    'History',
+                    'Language',
+                    'Law',
+                    'Math',
+                    'Medicine',
+                    'Music',
+                    'Other',
+                    'Religion',
+                    'Science',
+                  ]
+                    .sort((a, b) => a.localeCompare(b)) // Sort options alphabetically
+                    .map((subject) => (
+                      <option key={subject.toLowerCase()} value={subject.toLowerCase()}>
+                        {subject}
+                      </option>
+                    ))}
                 </Form.Select>
               </Form.Group>
 
@@ -124,33 +144,60 @@ const BuyPageClient: React.FC = () => {
                 <Form.Control
                   className={styles.inputField}
                   type="text"
-                  placeholder="Search by Keywords"
+                  placeholder="Course Name"
+                  value={filters.courseName}
+                  onChange={(e) => handleFilterChange('courseName', e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="inputGroup mb-2">
+                <Form.Control
+                  className={styles.inputField}
+                  type="text"
+                  placeholder="Keywords"
                   value={filters.keywords}
                   onChange={(e) => handleFilterChange('keywords', e.target.value)}
                 />
               </Form.Group>
 
-              <Form.Group>
+              <Form.Group className="inputGroup mb-4">
                 <Form.Control
                   className={styles.inputField}
                   type="text"
-                  placeholder="Search by ISBN"
+                  placeholder="ISBN"
                   value={filters.isbn}
                   onChange={(e) => handleFilterChange('isbn', e.target.value)}
                 />
               </Form.Group>
 
-              <Form.Group>
-                {['Fair', 'Good', 'Excellent'].map((condition) => (
-                  <Form.Check
-                    key={condition}
-                    type="checkbox"
-                    label={condition}
-                    checked={filters.conditions.has(condition)}
-                    onChange={() => handleConditionChange(condition)}
-                  />
-                ))}
-              </Form.Group>
+              <div style={{ textAlign: 'center', padding: '0', backgroundColor: '#c8e6c9', borderRadius: '0.5rem' }}>
+                <h5 style={{ color: '#225f49' }}>Select Condition</h5>
+                <Form.Group as={Row}>
+                  {['new', 'excellent', 'good', 'fair', 'poor'].map((condition) => (
+                    <Col
+                      key={condition}
+                      xs="auto"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: '0.5rem',
+                      }}
+                    >
+                      <Form.Check
+                        type="checkbox"
+                        label={condition.charAt(0).toUpperCase() + condition.slice(1)}
+                        onChange={() => handleConditionChange(condition)}
+                        style={{
+                          transform: 'scale(1.2)',
+                          appearance: 'none',
+                          margin: '0',
+                        }}
+                      />
+                    </Col>
+                  ))}
+                </Form.Group>
+              </div>
             </Form>
           </div>
         </Col>
@@ -158,47 +205,27 @@ const BuyPageClient: React.FC = () => {
         {/* Textbook List Section */}
         <Col xs={12} md={9} className={styles.textbookList}>
           <h3 className="text-center text-success">Available Textbooks</h3>
-          {filteredTextbooks.length > 0 ? (
-            <Row className="g-4">
-              {filteredTextbooks.map((book) => (
-                <Col key={book.id} xs={12} sm={6} md={4}>
-                  <Card className={styles.textbookCard}>
-                    <Card.Body>
-                      <Card.Title>{book.title}</Card.Title>
-                      <Card.Text>
-                        <strong>Price:</strong>
-                        {' '}
-                        $
-                        {book.price}
-                      </Card.Text>
-                      <Card.Text>
-                        <strong>Department:</strong>
-                        {' '}
-                        {book.department}
-                      </Card.Text>
-                      <Card.Text>
-                        <strong>Condition:</strong>
-                        {' '}
-                        {book.condition}
-                      </Card.Text>
-                      <Card.Text>
-                        <strong>Format:</strong>
-                        {' '}
-                        {book.format}
-                      </Card.Text>
-                      <Card.Text>
-                        <strong>ISBN:</strong>
-                        {' '}
-                        {book.isbn}
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          ) : (
-            <p className="text-center">No textbooks match your filters.</p>
-          )}
+          <div
+            style={{
+              maxHeight: '80vh',
+              overflowY: 'auto',
+              paddingRight: '15px',
+            }}
+          >
+            {filteredBooks.length > 0 ? (
+              <Row className="g-4">
+                {filteredBooks.map((book) => (
+                  <Col key={book.id} xs={12} sm={6} md={4}>
+                    <div className="textbookCard">
+                      <BookBuyCard book={book} />
+                    </div>
+                  </Col>
+                ))}
+              </Row>
+            ) : (
+              <p className="text-center">No textbooks match your filters.</p>
+            )}
+          </div>
         </Col>
       </Row>
     </Container>
