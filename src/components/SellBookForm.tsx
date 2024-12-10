@@ -53,8 +53,7 @@ const AddBookForm = () => {
       const bookData = { ...values, approved: false };
       const response = await axios.post('/api/sell', bookData); // Corrected
       console.log('API Response:', response.data); // Corrected
-      alert(`Your book has been added successfully! Please note that it will appear
-       in the marketplace once it has been reviewed and approved by an admin.`);
+      alert('Your book has been added! It will appear in the marketplace after review and admin approval.');
       try {
         router.push('/buy');
       } catch (navigationError) {
