@@ -1,110 +1,92 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
-import styles from './AccountPageClient.module.css';
-
-// Define a type for the form data to use TypeScript benefits
-interface AccountFormData {
-  name: string;
-  email: string;
-  password: string;
-}
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
+import { useSession } from 'next-auth/react';
+import BookPageCard from '@/components/BookPageCard'; // Import the Book card component
 
 const AccountPage: React.FC = () => {
-  const [formData, setFormData] = useState<AccountFormData>({
-    name: '',
-    email: '',
-    password: '',
-  });
+  const { data: session } = useSession();
+  const [userBooks, setUserBooks] = useState<any[]>([]); // Store books listed by the user
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const [status, setStatus] = useState<string>('');
+  useEffect(() => {
+    // We assert that session.user will definitely exist, since this page is only accessible when logged in
+    const userEmail = session?.user?.email;
+    if (userEmail) {
+      const fetchUserBooks = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          const response = await fetch(`/api/books?owner=${userEmail}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch books');
+          }
+          const data = await response.json();
+          setUserBooks(data); // Set the books fetched for the current user
+        } catch (err) {
+          setError('Error fetching books');
+        } finally {
+          setLoading(false);
+        }
+      };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('Submitting...');
-
-    try {
-      const response = await fetch('/api/createAccount', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setStatus('Account created successfully!');
-        setFormData({ name: '', email: '', password: '' });
-      } else {
-        setStatus(data.message || 'There was an error creating the account.');
-      }
-    } catch (error) {
-      setStatus('There was an error connecting to the server.');
+      fetchUserBooks();
     }
-  };
+  }, [session]);
+
+  // Loading spinner
+  if (loading) {
+    return (
+      <div className="text-center" style={{ marginTop: '20vh' }}>
+        <Spinner animation="border" variant="primary" />
+        <p>Loading your books...</p>
+      </div>
+    );
+  }
+
+  // Error message
+  if (error) {
+    return (
+      <div className="text-center">
+        <Alert variant="danger">{error}</Alert>
+      </div>
+    );
+  }
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Create Account</h1>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formName">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter your name"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-          />
-        </Form.Group>
+    <Container fluid className="py-3">
+      <Row>
+        {/* Left side content */}
+        <Col xs={12} md={5}>
+          <div className="profile-section">
+            {/* Your profile info here */}
+          </div>
+        </Col>
 
-        <Form.Group className="mb-3" controlId="formEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter your email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
-        </Form.Group>
+        {/* Black vertical line */}
+        <Col xs="auto">
+          <div style={{ width: '1px', backgroundColor: 'black', height: '100%' }} />
+        </Col>
 
-        <Form.Group className="mb-3" controlId="formPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter your password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            required
-          />
-        </Form.Group>
-
-        {status && (
-          <Alert variant={status === 'Account created successfully!' ? 'success' : 'danger'}>
-            {status}
-          </Alert>
-        )}
-
-        <Button variant="primary" type="submit">
-          Create Account
-        </Button>
-      </Form>
-    </div>
+        {/* Right side content - User's Listed Books */}
+        <Col xs={12} md={7}>
+          <h2>Your Listed Books</h2>
+          <Row>
+            {userBooks.length === 0 ? (
+              <p>No books listed yet.</p>
+            ) : (
+              userBooks.map((book) => (
+                <Col xs={12} sm={6} md={4} key={book.id} className="mb-4">
+                  <BookPageCard book={book} />
+                </Col>
+              ))
+            )}
+          </Row>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
