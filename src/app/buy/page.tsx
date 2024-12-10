@@ -105,18 +105,38 @@ const BuyPageClient: React.FC = () => {
                 />
               </Form.Group>
 
-              <Form.Group>
+              <Form.Group className="mb-4">
                 <Form.Select
                   className={styles.selectField}
                   value={filters.subject}
                   onChange={(e) => handleFilterChange('subject', e.target.value)}
                 >
+                  {/* Default option */}
                   <option value="">Subject</option>
-                  <option value="math">Math</option>
-                  <option value="english">English</option>
-                  <option value="science">Science</option>
-                  <option value="history">History</option>
-                  <option value="other">Other</option>
+
+                  {/* Dynamically render sorted options */}
+                  {[
+                    'Architecture',
+                    'Art',
+                    'Business',
+                    'Engineering',
+                    'English',
+                    'History',
+                    'Language',
+                    'Law',
+                    'Math',
+                    'Medicine',
+                    'Music',
+                    'Other',
+                    'Religion',
+                    'Science',
+                  ]
+                    .sort((a, b) => a.localeCompare(b)) // Sort options alphabetically
+                    .map((subject) => (
+                      <option key={subject.toLowerCase()} value={subject.toLowerCase()}>
+                        {subject}
+                      </option>
+                    ))}
                 </Form.Select>
               </Form.Group>
 
@@ -140,7 +160,7 @@ const BuyPageClient: React.FC = () => {
                 />
               </Form.Group>
 
-              <Form.Group className="inputGroup">
+              <Form.Group className="inputGroup mb-4">
                 <Form.Control
                   className={styles.inputField}
                   type="text"
@@ -150,22 +170,34 @@ const BuyPageClient: React.FC = () => {
                 />
               </Form.Group>
 
-              <Form.Group as={Row} className="mt-4">
-                {['fair', 'good', 'excellent'].map((condition) => (
-                  <Col key={condition} xs="auto" style={{ display: 'flex', alignItems: 'center' }}>
-                    <Form.Check
-                      type="checkbox"
-                      label={condition.charAt(0).toUpperCase() + condition.slice(1)}
-                      onChange={() => handleConditionChange(condition)}
+              <div style={{ textAlign: 'center', padding: '0', backgroundColor: '#c8e6c9', borderRadius: '0.5rem' }}>
+                <h5 style={{ color: '#225f49' }}>Select Condition</h5>
+                <Form.Group as={Row}>
+                  {['new', 'excellent', 'good', 'fair', 'poor'].map((condition) => (
+                    <Col
+                      key={condition}
+                      xs="auto"
                       style={{
-                        transform: 'scale(1.2)',
-                        marginRight: '6px',
-                        appearance: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: '0.5rem',
                       }}
-                    />
-                  </Col>
-                ))}
-              </Form.Group>
+                    >
+                      <Form.Check
+                        type="checkbox"
+                        label={condition.charAt(0).toUpperCase() + condition.slice(1)}
+                        onChange={() => handleConditionChange(condition)}
+                        style={{
+                          transform: 'scale(1.2)',
+                          appearance: 'none',
+                          margin: '0',
+                        }}
+                      />
+                    </Col>
+                  ))}
+                </Form.Group>
+              </div>
             </Form>
           </div>
         </Col>
@@ -184,7 +216,9 @@ const BuyPageClient: React.FC = () => {
               <Row className="g-4">
                 {filteredBooks.map((book) => (
                   <Col key={book.id} xs={12} sm={6} md={4}>
-                    <BookBuyCard book={book} />
+                    <div className="textbookCard">
+                      <BookBuyCard book={book} />
+                    </div>
                   </Col>
                 ))}
               </Row>
