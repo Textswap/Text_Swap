@@ -5,13 +5,27 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import useSWR from 'swr';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import { Book } from '@prisma/client';
 import BookBuyCard from '@/components/BookCard';
 import styles from './BuyPageClient.module.css';
 
+const fetcher = async (url: string) => {
+  const response = await fetch(url, {
+    cache: 'no-store', // Disable browser caching
+    headers: {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch books');
+  }
+  return response.json();
+};
+
 const BuyPageClient: React.FC = () => {
-  const [books, setBooks] = useState<Book[]>([]);
   const [maxPrice, setMaxPrice] = useState(1000);
   const [filters, setFilters] = useState({
     subject: '',
@@ -21,24 +35,26 @@ const BuyPageClient: React.FC = () => {
     conditions: new Set<string>(),
   });
 
-  // Fetch books from the API
+  // Aggressive SWR configuration
+  const {
+    data: books = [],
+    mutate,
+  } = useSWR<Book[]>('/api/book/buy-page', fetcher, {
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    refreshInterval: 1000, // Poll every second
+  });
+
+  // Manually trigger revalidation periodically
   useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await fetch('/api/book/buy-page');
-        if (!response.ok) {
-          throw new Error('Failed to fetch books');
-        }
-        const data = await response.json();
-        setBooks(data);
-      } catch (error) {
-        console.error('Error fetching books:', error);
-      }
-    };
+    const interval = setInterval(() => {
+      mutate();
+    }, 2000); // Every 2 seconds
 
-    fetchBooks();
-  }, []);
+    return () => clearInterval(interval);
+  }, [mutate]);
 
+  // Rest of the component remains the same as in the previous implementation
   const handleFilterChange = (field: string, value: string) => {
     setFilters({ ...filters, [field]: value });
   };
@@ -64,7 +80,6 @@ const BuyPageClient: React.FC = () => {
 
     return matchesPrice && matchesSubject && matchesCourse && matchesKeywords && matchesISBN && matchesCondition;
   });
-
   return (
     <Container fluid className="py-4">
       <Row>
