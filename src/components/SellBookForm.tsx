@@ -15,7 +15,22 @@ const AddBookSchema = Yup.object({
   title: Yup.string().required('Title is required'),
   isbn: Yup.string().optional(),
   subject: Yup.string()
-    .oneOf(['math', 'english', 'science', 'history', 'other'])
+    .oneOf([
+      'math',
+      'english',
+      'science',
+      'history',
+      'other',
+      'architecture',
+      'art',
+      'business',
+      'engineering',
+      'law',
+      'medicine',
+      'music',
+      'religion',
+      'language',
+    ])
     .required('Subject is required'),
   courseName: Yup.string().optional(),
   courseCrn: Yup.string().optional(),
@@ -33,11 +48,18 @@ const AddBookForm = () => {
   const router = useRouter();
 
   const onSubmit = async (values: any) => {
+    console.log('Form submitted with values:', values); // Add this for debugging
     try {
       const bookData = { ...values, approved: false };
-      await axios.post('/api/sell', bookData);
-      alert('Book added successfully!');
-      router.push('/');
+      const response = await axios.post('/api/sell', bookData); // Corrected
+      console.log('API Response:', response.data); // Corrected
+      alert(`Your book has been added successfully! Please note that it will appear
+       in the marketplace once it has been reviewed and approved by an admin.`);
+      try {
+        router.push('/buy');
+      } catch (navigationError) {
+        console.error('Error during navigation:', navigationError);
+      }
     } catch (error) {
       console.error('Error during form submission:', error);
       alert('An error occurred while adding the book.');
@@ -66,30 +88,58 @@ const AddBookForm = () => {
         validationSchema={AddBookSchema}
         onSubmit={onSubmit}
       >
-        {({ values, handleChange, handleBlur, handleSubmit, errors, touched }) => (
+        {({ values, handleChange, handleBlur, handleSubmit, setFieldValue, errors, touched }) => (
           <Form noValidate onSubmit={handleSubmit}>
             <Row className="justify-content-center">
               {/* Section 1: Image Upload */}
-              <Col xs={12} md={4} className="d-flex align-items-center justify-content-center">
+              <Col xs={12} md={4} className="d-flex flex-column align-items-center">
                 <div className={styles.imageUpload}>
-                  <label htmlFor="imageURL" className={styles.uploadLabel}>
-                    <i className="bi bi-camera" style={{ fontSize: '3rem', color: '#6c757d' }} />
-                    <p className={styles.uploadText}>Click or Drag Image Here</p>
+                  <label htmlFor="imageUpload" className={styles.uploadLabel}>
+                    {!values.imageURL && (
+                      <>
+                        <i className="bi bi-camera" style={{ fontSize: '3rem', color: '#6c757d' }} />
+                        <p className={styles.uploadText}>Click or Drag Image Here</p>
+                      </>
+                    )}
                   </label>
+                  <input
+                    type="file"
+                    name="imageUpload"
+                    id="imageUpload"
+                    accept="image/*"
+                    className={styles.hiddenInput}
+                    onChange={(event) => {
+                      const file = event.target?.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setFieldValue('imageURL', reader.result);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                  {values.imageURL && (
+                    <div className={styles.imagePreviewContainer}>
+                      <img src={values.imageURL} alt="Preview" className={styles.imagePreviewFull} />
+                    </div>
+                  )}
+                </div>
+                <div className={`${styles.field} mt-3`} style={{ width: '100%' }}>
+                  <label htmlFor="imageURL">Or Enter Image URL</label>
                   <Field
                     type="text"
                     name="imageURL"
                     id="imageURL"
-                    className={styles.hiddenInput}
-                    value={values.imageURL}
-                    onChange={handleChange}
+                    className="form-control"
+                    onChange={(e: { target: { value: any; }; }) => {
+                      handleChange(e);
+                      if (e.target.value) {
+                        setFieldValue('imageURL', e.target.value);
+                      }
+                    }}
                     onBlur={handleBlur}
                   />
-                  {values.imageURL && (
-                    <div className={styles.imagePreviewContainer}>
-                      <img src={values.imageURL} alt="Preview" className={styles.imagePreview} />
-                    </div>
-                  )}
                 </div>
               </Col>
 
@@ -100,26 +150,16 @@ const AddBookForm = () => {
                   <Field
                     type="text"
                     name="title"
-                    id="titile"
+                    id="title"
                     className={`form-control ${errors.title && touched.title ? 'is-invalid' : ''}`}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
                   />
                   <ErrorMessage name="title" component="div" className="invalid-feedback" />
                 </div>
 
                 <div className={styles.field}>
                   <label htmlFor="subject">Subject</label>
-                  <Field
-                    as="select"
-                    name="subject"
-                    id="subject" // Add id to associate with the label
-                    className={`${styles.select} form-control`} // Add custom styles
-                  >
-                    {/* Default option */}
+                  <Field as="select" name="subject" className="form-control">
                     <option value="">Select Subject</option>
-
-                    {/* Dynamically rendered options sorted alphabetically */}
                     {[
                       'Architecture',
                       'Art',
@@ -136,7 +176,7 @@ const AddBookForm = () => {
                       'Religion',
                       'Science',
                     ]
-                      .sort((a, b) => a.localeCompare(b)) // Sort options alphabetically
+                      .sort((a, b) => a.localeCompare(b))
                       .map((subject) => (
                         <option key={subject.toLowerCase()} value={subject.toLowerCase()}>
                           {subject}
@@ -148,53 +188,30 @@ const AddBookForm = () => {
 
                 <div className={styles.field}>
                   <label htmlFor="courseName">Course Name (Optional)</label>
-                  <Field
-                    type="text"
-                    name="courseName"
-                    id="courseName"
-                    className="form-control"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
+                  <Field type="text" name="courseName" className="form-control" />
                 </div>
 
                 <div className={styles.field}>
                   <label htmlFor="isbn">ISBN (Optional)</label>
-                  <Field
-                    type="text"
-                    name="isbn"
-                    id="isbn"
-                    className="form-control"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
+                  <Field type="text" name="isbn" className="form-control" />
                 </div>
               </Col>
 
               {/* Section 3: Next 4 Fields */}
               <Col xs={12} md={4}>
-
                 <div className={styles.field}>
                   <label htmlFor="price">Price</label>
                   <Field
                     type="number"
                     name="price"
-                    id="price"
                     className={`form-control ${errors.price && touched.price ? 'is-invalid' : ''}`}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
                   />
                   <ErrorMessage name="price" component="div" className="invalid-feedback" />
                 </div>
 
                 <div className={styles.field}>
                   <label htmlFor="condition">Condition</label>
-                  <Field
-                    as="select"
-                    name="condition"
-                    id="condition"
-                    className={`${styles.select} form-control`} // Add custom styles
-                  >
+                  <Field as="select" name="condition" className="form-control">
                     <option value="new">New</option>
                     <option value="excellent">Excellent</option>
                     <option value="good">Good</option>
@@ -206,26 +223,12 @@ const AddBookForm = () => {
 
                 <div className={styles.field}>
                   <label htmlFor="courseCrn">Course CRN (Optional)</label>
-                  <Field
-                    type="text"
-                    name="courseCrn"
-                    id="courseCrn"
-                    className="form-control"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
+                  <Field type="text" name="courseCrn" className="form-control" />
                 </div>
 
                 <div className={styles.field}>
                   <label htmlFor="description">Description (Optional)</label>
-                  <Field
-                    id="description"
-                    as="textarea"
-                    name="description"
-                    className="form-control"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
+                  <Field as="textarea" name="description" className="form-control" />
                 </div>
               </Col>
             </Row>

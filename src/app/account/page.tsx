@@ -56,7 +56,7 @@ const AccountPage: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <h1>Create Account</h1>
+      <h1 className={styles.title}>Create Account</h1>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formName">
           <Form.Label>Name</Form.Label>

@@ -35,6 +35,15 @@ enum Subject {
   science
   history
   other
+  architecture
+  art
+  business
+  engineering
+  law
+  medicine
+  music
+  religion
+  language
 }
 
 model Book {
