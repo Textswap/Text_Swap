@@ -1,57 +1,58 @@
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px #1b4a3d;
-    text-align: center;
-  }
-  
-  h1 {
-    margin-bottom: 20px;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .inputGroup {
-    margin-bottom: 15px;
-    text-align: left;
-  }
-  
-  .inputGroup label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .inputGroup input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
-  .submitButton {
-    padding: 12px;
-    background-color: #225f49;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .submitButton:hover {
-    background-color: #1b4a3d;
-  }
-  
-  .status {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #1b4a3d;
-  }
+.sellerListingsContainer {
+  padding: 1rem;
+}
+
+.profileSection {
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.profileWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.profileImage {
+  width: 320px;
+  height: 380px; /* Rectangular profile image */
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.profileDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.listingsSection {
+  padding: 1rem;
+}
+
+.scrollableSection {
+  max-height: 80vh; /* Adjust as needed */
+  overflow-y: auto;
+  padding-right: 0.5rem; /* Add padding for scrollbar space */
+}
+
+.bookCard {
+  border-radius: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Ensures spacing between the content and buttons */
+  text-align: center; /* Centers text horizontally */
+  background-color: #c8e6c9;
+}
+
+.bookCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.fixedImage {
+  height: 300px;
+  object-fit: cover;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}

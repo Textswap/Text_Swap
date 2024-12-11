@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { Book, Condition, Subject } from '@prisma/client';
+import { Condition, Subject } from '@prisma/client';
 import { Container, Spinner, Alert } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import BookPageCard from '@/components/BookPageCard';
@@ -28,7 +28,7 @@ const BookPage = () => {
   const [book, setBook] = useState<BookDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {

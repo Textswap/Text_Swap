@@ -1,6 +1,12 @@
+.mt-3 {
+  margin-top: 1rem !important;
+}
+
 .container {
   max-width: 1200px;
   padding: 2rem;
+  background-color: #c8e6c9;
+  border-radius: 20px;
 }
 
 .title {
@@ -20,11 +26,15 @@
 }
 
 .imageUpload {
-  border: 2px dashed #ccc;
-  padding: 2rem;
-  text-align: center;
-  border-radius: 8px;
   position: relative;
+  width: 100%;
+  height: 300px;
+  border: 2px dashed #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
 }
 
 .imageUpload.dragging {
@@ -33,9 +43,18 @@
 }
 
 .imagePreviewContainer {
-  position: relative;
   width: 100%;
-  height: 16rem;
+  height: 100%;
+}
+
+.imagePreviewFull {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hiddenInput {
+  display: none;
 }
 
 .imagePreview {
@@ -52,6 +71,10 @@
   display: flex;
   gap: 0.5rem;
   z-index: 10;
+}
+
+.uploadLabel {
+  cursor: pointer;
 }
 
 .uploadLabelOverlay {
@@ -118,10 +141,9 @@
 }
 
 .uploadText {
-  margin-top: 1rem;
-  color: #555;
-  font-size: 0.9rem;
-  transition: color 0.3s ease; /* Smooth color transition */
+  margin: 0;
+  color: #6c757d;
+  font-size: 1rem;
 }
 
 .uploadLabel:hover .uploadText:hover {
@@ -150,6 +172,7 @@
   padding: 0.5rem;
   border: 1px solid #cccccc;
   border-radius: 4px;
+  color: #535050;
 }
 
 .description {
@@ -160,7 +183,7 @@
 .description label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: 500;
+  font-weight: bold;
 }
 
 .description textarea {
@@ -214,4 +237,26 @@
 .deleteButton:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+/* Custom dropdown with arrow */
+.select {
+  appearance: none; /* Remove default browser styling for dropdown */
+  background-color: #fff;
+  border: 1px solid #393838;
+  padding: 0.5rem;
+  border-radius: 4px;
+  color: #555252;
+  width: 100%;
+
+  /* Add a custom arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='gray' d='M1.5 5h13L8 10.5 1.5 5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+}
+
+.select:focus {
+  border-color: #28a745; /* Green border on focus */
+  outline: none;
 }

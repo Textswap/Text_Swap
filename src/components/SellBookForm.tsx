@@ -1,24 +1,46 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable no-alert */
-/* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
-import { Form, Button, Container } from 'react-bootstrap';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+
+import React, { useRef, useState } from 'react';
+import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Formik, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import styles from '../styles/ListPage.module.css';
 
 // Validation schema
 const AddBookSchema = Yup.object({
   title: Yup.string().required('Title is required'),
   isbn: Yup.string().optional(),
-  subject: Yup.string().oneOf(['math', 'english', 'science', 'history', 'other']).required('Subject is required'),
+  subject: Yup.string()
+    .oneOf([
+      'math',
+      'english',
+      'science',
+      'history',
+      'other',
+      'architecture',
+      'art',
+      'business',
+      'engineering',
+      'law',
+      'medicine',
+      'music',
+      'religion',
+      'language',
+    ])
+    .required('Subject is required'),
   courseName: Yup.string().optional(),
   courseCrn: Yup.string().optional(),
   description: Yup.string().optional(),
   price: Yup.number().positive().required('Price is required'),
-  condition: Yup.string().oneOf(['new', 'excellent', 'good', 'fair', 'poor']).required('Condition is required'),
+  condition: Yup.string()
+    .oneOf(['new', 'excellent', 'good', 'fair', 'poor'])
+    .required('Condition is required'),
   imageURL: Yup.string().optional(),
   owner: Yup.string().required('Owner is required'),
 });
@@ -26,25 +48,68 @@ const AddBookSchema = Yup.object({
 const AddBookForm = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const onSubmit = async (values: any) => {
+    console.log('Form submitted with values:', values); // Add this for debugging
     try {
-      console.log('Submitting book data:', values);
-
-      const bookData = {
-        ...values,
-        approved: false,
-      };
-
-      const response = await axios.post('/api/sell', bookData);
-
-      console.log('Response from server:', response.data);
-
-      alert('Book added successfully!');
-      router.push('/');
+      const bookData = { ...values, approved: false };
+      const response = await axios.post('/api/sell', bookData); // Corrected
+      console.log('API Response:', response.data); // Corrected
+      alert('Your book has been added! It will appear in the marketplace after review and admin approval.');
+      try {
+        router.push('/buy');
+      } catch (navigationError) {
+        console.error('Error during navigation:', navigationError);
+      }
     } catch (error) {
       console.error('Error during form submission:', error);
       alert('An error occurred while adding the book.');
+    }
+  };
+
+  const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: (field: string, value: any) => void,
+  ) => {
+    const file = event.target?.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setFieldValue('imageURL', reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (
+    event: React.DragEvent<HTMLDivElement>,
+    setFieldValue: (field: string, value: any) => void,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragOver(false);
+
+    const file = event.dataTransfer?.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setFieldValue('imageURL', reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -53,7 +118,7 @@ const AddBookForm = () => {
   }
 
   return (
-    <Container>
+    <Container fluid className={styles.container}>
       <Formik
         initialValues={{
           title: '',
@@ -70,145 +135,215 @@ const AddBookForm = () => {
         validationSchema={AddBookSchema}
         onSubmit={onSubmit}
       >
-        {({ values, handleChange, handleBlur, handleSubmit, errors, touched }) => (
+        {({
+          values,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          setFieldValue,
+          errors,
+          touched,
+        }) => (
           <Form noValidate onSubmit={handleSubmit}>
-            {/* Title */}
-            <Form.Group controlId="title">
-              <Form.Label>Title</Form.Label>
-              <Field
-                type="text"
-                name="title"
-                className={`form-control ${errors.title && touched.title ? 'is-invalid' : ''}`}
-                value={values.title}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <ErrorMessage name="title" component="div" className="invalid-feedback" />
-            </Form.Group>
-
-            {/* ISBN (Optional) */}
-            <Form.Group controlId="isbn">
-              <Form.Label>ISBN (Optional)</Form.Label>
-              <Field
-                type="text"
-                name="isbn"
-                className="form-control"
-                value={values.isbn}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-            </Form.Group>
-
-            {/* Subject */}
-            <Form.Group controlId="subject">
-              <Form.Label>Subject</Form.Label>
-              <Field
-                as="select"
-                name="subject"
-                className={`form-control ${errors.subject && touched.subject ? 'is-invalid' : ''}`}
-                value={values.subject}
-                onChange={handleChange}
-                onBlur={handleBlur}
+            <Row className="justify-content-center">
+              {/* Section 1: Image Upload */}
+              <Col
+                xs={12}
+                md={4}
+                className="d-flex flex-column align-items-center"
               >
-                <option value="">Select Subject</option>
-                <option value="math">Math</option>
-                <option value="english">English</option>
-                <option value="science">Science</option>
-                <option value="history">History</option>
-                <option value="other">Other</option>
-              </Field>
-              <ErrorMessage name="subject" component="div" className="invalid-feedback" />
-            </Form.Group>
+                <div
+                  className={`${styles.imageUpload} ${isDragOver ? styles.dragOver : ''}`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, setFieldValue)}
+                >
+                  <label
+                    htmlFor="imageUpload"
+                    className={styles.uploadLabel}
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    {!values.imageURL && (
+                      <>
+                        <i
+                          className="bi bi-camera"
+                          style={{ fontSize: '3rem', color: '#6c757d' }}
+                        />
+                        <p className={styles.uploadText}>
+                          {isDragOver
+                            ? 'Drop Image Here'
+                            : 'Click or Drag Image Here'}
+                        </p>
+                      </>
+                    )}
+                  </label>
+                  <input
+                    type="file"
+                    name="imageUpload"
+                    id="imageUpload"
+                    accept="image/*"
+                    className={styles.hiddenInput}
+                    onChange={(event) => handleFileChange(event, setFieldValue)}
+                  />
+                  {values.imageURL && (
+                    <div className={styles.imagePreviewContainer}>
+                      <img
+                        src={values.imageURL}
+                        alt="Preview"
+                        className={styles.imagePreviewFull}
+                      />
+                    </div>
+                  )}
+                </div>
+                <div
+                  className={`${styles.field} mt-3`}
+                  style={{ width: '100%' }}
+                >
+                  <label htmlFor="imageURL">Or Enter Image URL</label>
+                  <Field
+                    type="text"
+                    name="imageURL"
+                    id="imageURL"
+                    className="form-control"
+                    onChange={(e: { target: { value: any } }) => {
+                      handleChange(e);
+                      if (e.target.value) {
+                        setFieldValue('imageURL', e.target.value);
+                      }
+                    }}
+                    onBlur={handleBlur}
+                  />
+                </div>
+              </Col>
 
-            {/* Course Name (Optional) */}
-            <Form.Group controlId="courseName">
-              <Form.Label>Course Name (Optional)</Form.Label>
-              <Field
-                type="text"
-                name="courseName"
-                className="form-control"
-                value={values.courseName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-            </Form.Group>
+              {/* Section 2: First 4 Fields */}
+              <Col xs={12} md={4}>
+                <div className={styles.field}>
+                  <label htmlFor="title">Title</label>
+                  <Field
+                    type="text"
+                    name="title"
+                    id="title"
+                    className={`form-control ${errors.title && touched.title ? 'is-invalid' : ''}`}
+                  />
+                  <ErrorMessage
+                    name="title"
+                    component="div"
+                    className="invalid-feedback"
+                  />
+                </div>
 
-            {/* Course CRN (Optional) */}
-            <Form.Group controlId="courseCrn">
-              <Form.Label>Course CRN (Optional)</Form.Label>
-              <Field
-                type="text"
-                name="courseCrn"
-                className="form-control"
-                value={values.courseCrn}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-            </Form.Group>
+                <div className={styles.field}>
+                  <label htmlFor="subject">Subject</label>
+                  <Field as="select" name="subject" className="form-control">
+                    <option value="">Select Subject</option>
+                    {[
+                      'Architecture',
+                      'Art',
+                      'Business',
+                      'Engineering',
+                      'English',
+                      'History',
+                      'Language',
+                      'Law',
+                      'Math',
+                      'Medicine',
+                      'Music',
+                      'Other',
+                      'Religion',
+                      'Science',
+                    ]
+                      .sort((a, b) => a.localeCompare(b))
+                      .map((subject) => (
+                        <option
+                          key={subject.toLowerCase()}
+                          value={subject.toLowerCase()}
+                        >
+                          {subject}
+                        </option>
+                      ))}
+                  </Field>
+                  <ErrorMessage
+                    name="subject"
+                    component="div"
+                    className="invalid-feedback"
+                  />
+                </div>
 
-            {/* Description (Optional) */}
-            <Form.Group controlId="description">
-              <Form.Label>Description (Optional)</Form.Label>
-              <Field
-                type="text"
-                name="description"
-                className="form-control"
-                value={values.description}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-            </Form.Group>
+                <div className={styles.field}>
+                  <label htmlFor="courseName">Course Name (Optional)</label>
+                  <Field
+                    type="text"
+                    name="courseName"
+                    className="form-control"
+                  />
+                </div>
 
-            {/* Price */}
-            <Form.Group controlId="price">
-              <Form.Label>Price</Form.Label>
-              <Field
-                type="number"
-                name="price"
-                className={`form-control ${errors.price && touched.price ? 'is-invalid' : ''}`}
-                value={values.price}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <ErrorMessage name="price" component="div" className="invalid-feedback" />
-            </Form.Group>
+                <div className={styles.field}>
+                  <label htmlFor="isbn">ISBN (Optional)</label>
+                  <Field type="text" name="isbn" className="form-control" />
+                </div>
+              </Col>
 
-            {/* Condition */}
-            <Form.Group controlId="condition">
-              <Form.Label>Condition</Form.Label>
-              <Field
-                as="select"
-                name="condition"
-                className={`form-control ${errors.condition && touched.condition ? 'is-invalid' : ''}`}
-                value={values.condition}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              >
-                <option value="new">New</option>
-                <option value="excellent">Excellent</option>
-                <option value="good">Good</option>
-                <option value="fair">Fair</option>
-                <option value="poor">Poor</option>
-              </Field>
-              <ErrorMessage name="condition" component="div" className="invalid-feedback" />
-            </Form.Group>
+              {/* Section 3: Next 4 Fields */}
+              <Col xs={12} md={4}>
+                <div className={styles.field}>
+                  <label htmlFor="price">Price</label>
+                  <Field
+                    type="number"
+                    name="price"
+                    className={`form-control ${errors.price && touched.price ? 'is-invalid' : ''}`}
+                  />
+                  <ErrorMessage
+                    name="price"
+                    component="div"
+                    className="invalid-feedback"
+                  />
+                </div>
 
-            {/* Image URL */}
-            <Form.Group controlId="imageURL">
-              <Form.Label>Image URL (Optional)</Form.Label>
-              <Field
-                type="text"
-                name="imageURL"
-                className="form-control"
-                value={values.imageURL}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-            </Form.Group>
+                <div className={styles.field}>
+                  <label htmlFor="condition">Condition</label>
+                  <Field as="select" name="condition" className="form-control">
+                    <option value="new">New</option>
+                    <option value="excellent">Excellent</option>
+                    <option value="good">Good</option>
+                    <option value="fair">Fair</option>
+                    <option value="poor">Poor</option>
+                  </Field>
+                  <ErrorMessage
+                    name="condition"
+                    component="div"
+                    className="invalid-feedback"
+                  />
+                </div>
 
-            <Button type="submit" variant="primary" className="mt-4">
-              Add Book
-            </Button>
+                <div className={styles.field}>
+                  <label htmlFor="courseCrn">Course CRN (Optional)</label>
+                  <Field
+                    type="text"
+                    name="courseCrn"
+                    className="form-control"
+                  />
+                </div>
+
+                <div className={styles.field}>
+                  <label htmlFor="description">Description (Optional)</label>
+                  <Field
+                    as="textarea"
+                    name="description"
+                    className="form-control"
+                  />
+                </div>
+              </Col>
+            </Row>
+
+            <Row className="mt-4">
+              <Col className="text-center">
+                <Button type="submit" className={styles.confirmButton}>
+                  Add Book
+                </Button>
+              </Col>
+            </Row>
           </Form>
         )}
       </Formik>

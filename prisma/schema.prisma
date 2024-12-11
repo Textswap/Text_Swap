@@ -7,13 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-num Role {
+enum Role {
   USER
   ADMIN
 }
 
 model User {
   id         Int         @id @default(autoincrement())
+  name       String?
   email      String      @unique
   password   String
   role       Role        @default(USER)
@@ -34,6 +35,15 @@ enum Subject {
   science
   history
   other
+  architecture
+  art
+  business
+  engineering
+  law
+  medicine
+  music
+  religion
+  language
 }
 
 model Book {
@@ -46,7 +56,7 @@ model Book {
   description String?
   price       Float
   condition   Condition
-  imageURL    String
+  imageURL    String?
   owner       String
   approved    Boolean     @default(false)
   savedBy     SavedBook[]

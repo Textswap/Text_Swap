@@ -5,13 +5,27 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import useSWR from 'swr';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import { Book } from '@prisma/client';
 import BookBuyCard from '@/components/BookCard';
 import styles from './BuyPageClient.module.css';
 
+const fetcher = async (url: string) => {
+  const response = await fetch(url, {
+    cache: 'no-store', // Disable browser caching
+    headers: {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch books');
+  }
+  return response.json();
+};
+
 const BuyPageClient: React.FC = () => {
-  const [books, setBooks] = useState<Book[]>([]);
   const [maxPrice, setMaxPrice] = useState(1000);
   const [filters, setFilters] = useState({
     subject: '',
@@ -21,24 +35,26 @@ const BuyPageClient: React.FC = () => {
     conditions: new Set<string>(),
   });
 
-  // Fetch books from the API
+  // Aggressive SWR configuration
+  const {
+    data: books = [],
+    mutate,
+  } = useSWR<Book[]>('/api/book/buy-page', fetcher, {
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    refreshInterval: 1000, // Poll every second
+  });
+
+  // Manually trigger revalidation periodically
   useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await fetch('/api/book/buy-page');
-        if (!response.ok) {
-          throw new Error('Failed to fetch books');
-        }
-        const data = await response.json();
-        setBooks(data);
-      } catch (error) {
-        console.error('Error fetching books:', error);
-      }
-    };
+    const interval = setInterval(() => {
+      mutate();
+    }, 2000); // Every 2 seconds
 
-    fetchBooks();
-  }, []);
+    return () => clearInterval(interval);
+  }, [mutate]);
 
+  // Rest of the component remains the same as in the previous implementation
   const handleFilterChange = (field: string, value: string) => {
     setFilters({ ...filters, [field]: value });
   };
@@ -64,7 +80,6 @@ const BuyPageClient: React.FC = () => {
 
     return matchesPrice && matchesSubject && matchesCourse && matchesKeywords && matchesISBN && matchesCondition;
   });
-
   return (
     <Container fluid className="py-4">
       <Row>
@@ -90,18 +105,38 @@ const BuyPageClient: React.FC = () => {
                 />
               </Form.Group>
 
-              <Form.Group>
+              <Form.Group className="mb-4">
                 <Form.Select
                   className={styles.selectField}
                   value={filters.subject}
                   onChange={(e) => handleFilterChange('subject', e.target.value)}
                 >
+                  {/* Default option */}
                   <option value="">Subject</option>
-                  <option value="math">Math</option>
-                  <option value="english">English</option>
-                  <option value="science">Science</option>
-                  <option value="history">History</option>
-                  <option value="other">Other</option>
+
+                  {/* Dynamically render sorted options */}
+                  {[
+                    'Architecture',
+                    'Art',
+                    'Business',
+                    'Engineering',
+                    'English',
+                    'History',
+                    'Language',
+                    'Law',
+                    'Math',
+                    'Medicine',
+                    'Music',
+                    'Other',
+                    'Religion',
+                    'Science',
+                  ]
+                    .sort((a, b) => a.localeCompare(b)) // Sort options alphabetically
+                    .map((subject) => (
+                      <option key={subject.toLowerCase()} value={subject.toLowerCase()}>
+                        {subject}
+                      </option>
+                    ))}
                 </Form.Select>
               </Form.Group>
 
@@ -125,7 +160,7 @@ const BuyPageClient: React.FC = () => {
                 />
               </Form.Group>
 
-              <Form.Group className="inputGroup">
+              <Form.Group className="inputGroup mb-4">
                 <Form.Control
                   className={styles.inputField}
                   type="text"
@@ -135,22 +170,34 @@ const BuyPageClient: React.FC = () => {
                 />
               </Form.Group>
 
-              <Form.Group as={Row} className="mt-4">
-                {['fair', 'good', 'excellent'].map((condition) => (
-                  <Col key={condition} xs="auto" style={{ display: 'flex', alignItems: 'center' }}>
-                    <Form.Check
-                      type="checkbox"
-                      label={condition.charAt(0).toUpperCase() + condition.slice(1)}
-                      onChange={() => handleConditionChange(condition)}
+              <div style={{ textAlign: 'center', padding: '0', backgroundColor: '#c8e6c9', borderRadius: '0.5rem' }}>
+                <h5 style={{ color: '#225f49' }}>Select Condition</h5>
+                <Form.Group as={Row}>
+                  {['new', 'excellent', 'good', 'fair', 'poor'].map((condition) => (
+                    <Col
+                      key={condition}
+                      xs="auto"
                       style={{
-                        transform: 'scale(1.2)',
-                        marginRight: '6px',
-                        appearance: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: '0.5rem',
                       }}
-                    />
-                  </Col>
-                ))}
-              </Form.Group>
+                    >
+                      <Form.Check
+                        type="checkbox"
+                        label={condition.charAt(0).toUpperCase() + condition.slice(1)}
+                        onChange={() => handleConditionChange(condition)}
+                        style={{
+                          transform: 'scale(1.2)',
+                          appearance: 'none',
+                          margin: '0',
+                        }}
+                      />
+                    </Col>
+                  ))}
+                </Form.Group>
+              </div>
             </Form>
           </div>
         </Col>
@@ -169,7 +216,9 @@ const BuyPageClient: React.FC = () => {
               <Row className="g-4">
                 {filteredBooks.map((book) => (
                   <Col key={book.id} xs={12} sm={6} md={4}>
-                    <BookBuyCard book={book} />
+                    <div className="textbookCard">
+                      <BookBuyCard book={book} />
+                    </div>
                   </Col>
                 ))}
               </Row>

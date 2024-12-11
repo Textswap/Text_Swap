@@ -38,21 +38,28 @@ const SignUp = () => {
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
   const onSubmit = async (data: SignUpForm) => {
+    // Clear any previous error messages
     setErrorMessage(null);
     try {
+      // Check if a user with the given email already exists
       const userExists = await checkUserExists(data.email);
       if (userExists) {
         setErrorMessage('Account already exists with this email address.');
-        return;
+        return; // Stop execution if user exists
       }
-
+      // Create a new user with the provided data
       await createUser(data);
-      await signIn('credentials', { callbackUrl: '/add', ...data });
+      // Sign in the newly created user
+      await signIn('credentials', {
+        callbackUrl: '/buy', // Redirect after successful login
+        ...data, // Pass the form data to the sign-in function
+      });
     } catch (error) {
-      setErrorMessage('An error occurred while creating the account. Please try again.');
+      // Generic error handling for unexpected issues
+      console.error('Error during sign-up process:', error);
+      setErrorMessage('An error occurred while creating your account. Please try again.');
     }
   };
-
   return (
     <main
       style={{
@@ -89,7 +96,8 @@ const SignUp = () => {
                     textAlign: 'center',
                   }}
                 >
-                  TextSwap{' '}
+                  TextSwap
+                  {' '}
                   <BookCheck
                     style={{
                       width: '50px',
@@ -120,10 +128,10 @@ const SignUp = () => {
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <Form.Group className="form-group">
                     <Form.Label
-                      style={{ 
+                      style={{
                         marginBottom: '0.5rem',
                         color: '#225f49',
-                        fontWeight: 'bold', 
+                        fontWeight: 'bold',
                       }}
                     >
                       Email
@@ -140,10 +148,10 @@ const SignUp = () => {
 
                   <Form.Group className="form-group mt-3">
                     <Form.Label
-                      style={{ 
+                      style={{
                         marginBottom: '0.5rem',
                         color: '#225f49',
-                        fontWeight: 'bold', 
+                        fontWeight: 'bold',
                       }}
                     >
                       Password
@@ -160,10 +168,10 @@ const SignUp = () => {
 
                   <Form.Group className="form-group mt-3">
                     <Form.Label
-                      style={{ 
+                      style={{
                         marginBottom: '0.5rem',
                         color: '#225f49',
-                        fontWeight: 'bold', 
+                        fontWeight: 'bold',
                       }}
                     >
                       Confirm Password
