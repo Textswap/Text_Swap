@@ -13,10 +13,10 @@
 }
 
 .profileImage {
-  width: 320px;
-  height: 380px; /* Rectangular profile image */
+  width: 350px;
+  height: 400px; /* Rectangular profile image */
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 200px;
 }
 
 .profileDetails {
@@ -43,6 +43,7 @@
   justify-content: space-between; /* Ensures spacing between the content and buttons */
   text-align: center; /* Centers text horizontally */
   background-color: #c8e6c9;
+  border: 3px solid #7dbaa3;
 }
 
 .bookCard:hover {

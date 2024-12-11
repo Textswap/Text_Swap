@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Row, Col, Button, Alert, Spinner, Image, Container } from 'react-bootstrap';
 import styles from './AccountPageClient.module.css'; // Import the CSS module
 
@@ -87,7 +87,14 @@ const SellerListings = () => {
     <Container fluid className={`${styles.sellerListingsContainer} mt-4`}>
       <Row className="justify-content-between">
         {/* Profile Section */}
-        <Col md={4} className={styles.profileSection}>
+        <Col
+          md={4}
+          className={styles.profileSection}
+          style={{
+            borderRight: '4px solid #4b8e72', // Vertical line
+            paddingRight: '10px', // Add space between the line and content
+          }}
+        >
           <div className={`${styles.profileWrapper} d-flex flex-column align-items-center`}>
             {/* Profile Picture */}
             <Image
@@ -151,7 +158,7 @@ const SellerListings = () => {
                           (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200';
                         }}
                       />
-                      <Card.Body>
+                      <Card.Body style={{ color: '#1a4a3a' }}>
                         <Card.Title>{book.title}</Card.Title>
                         <Card.Text>
                           <strong>Condition:</strong>
