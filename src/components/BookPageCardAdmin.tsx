@@ -64,7 +64,7 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
 
       if (response.status === 200) {
         console.log('Book removed successfully!');
-        router.push('/');
+        router.push('/buy');
       } else {
         setError('Failed to remove book');
         console.log('Failed to remove book:', response);
