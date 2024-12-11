@@ -16,6 +16,16 @@ type ChangePasswordForm = {
   // acceptTerms: boolean;
 };
 
+const styles = {
+  main: {
+    backgroundColor: '#c8e6c9',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+};
+
 /** The change password page. */
 const ChangePassword = () => {
   const { data: session, status } = useSession();
@@ -52,7 +62,7 @@ const ChangePassword = () => {
   }
 
   return (
-    <main>
+    <main style={styles.main}>
       <Container>
         <Row className="justify-content-center">
           <Col xs={5}>

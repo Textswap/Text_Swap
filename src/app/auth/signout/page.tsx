@@ -7,18 +7,18 @@ import { CSSProperties } from 'react';
 
 const styles: { [key: string]: CSSProperties } = {
   main: {
-    backgroundColor: '#f8f9fa', // Light gray background for the whole page
+    backgroundColor: '#c8e6c9',
     height: '100vh',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },
   card: {
-    backgroundColor: '#ffffff', // White background for the card
+    backgroundColor: '#ffffff',
     padding: '30px',
     borderRadius: '8px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Subtle shadow for the card
-    textAlign: 'center' as 'center', // Explicitly cast to the expected value
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    textAlign: 'center' as 'center',
     width: '400px',
   },
   header: {
