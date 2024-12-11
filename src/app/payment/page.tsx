@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Container, Card, Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useSearchParams } from 'next/navigation';
@@ -28,16 +28,14 @@ const PaymentPage: React.FC = () => {
   useEffect(() => {
     if (id) {
       fetch(`/api/book/${id}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Failed to fetch data for ID: ${id}`);
-          }
-          return response.json();
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to fetch book details');
+          return res.json();
         })
         .then((data) => setBook(data))
-        .catch((error) => {
-          console.error('Error fetching book:', error);
-          setBook(null); // Handle the error state gracefully
+        .catch((err) => {
+          console.error(err);
+          setBook(null); // Gracefully handle errors
         });
     }
   }, [id]);
@@ -378,4 +376,10 @@ const PaymentPage: React.FC = () => {
   );
 };
 
-export default PaymentPage;
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PaymentPage />
+    </Suspense>
+  );
+}
