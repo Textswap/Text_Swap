@@ -5,6 +5,8 @@ import { Container, Card, Form, Button, Row, Col, Alert } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useSearchParams } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 const PaymentPage: React.FC = () => {
   const searchParams = useSearchParams(); // Use searchParams to get query parameters
   const id = searchParams.get('id');
