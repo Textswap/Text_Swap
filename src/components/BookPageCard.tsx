@@ -88,7 +88,15 @@ const BookPageCard = ({ book }: { book: Book }) => {
             {/* Book Details */}
             <Col className="d-flex flex-column" style={{ margin: '1rem', color: 'black' }}>
               <Row style={{ marginBottom: '1.5rem' }}>
-                <Card.Title style={{ fontSize: '3rem', marginBottom: '1rem', color: '#225f49' }}>{book.title}</Card.Title>
+                <Card.Title
+                  style={{
+                    fontSize: '3rem',
+                    marginBottom: '1rem',
+                    color: '#225f49',
+                  }}
+                >
+                  {book.title}
+                </Card.Title>
                 <Card.Text style={{ fontSize: '1.5rem', marginBottom: '0rem', color: 'black' }}>
                   $
                   {book.price.toFixed(2)}
