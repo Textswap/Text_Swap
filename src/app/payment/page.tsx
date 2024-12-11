@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Container, Card, Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useSearchParams } from 'next/navigation';
+
+export const dynamic = 'force-dynamic';
 
 const PaymentPage: React.FC = () => {
   const searchParams = useSearchParams(); // Use searchParams to get query parameters
@@ -25,11 +27,16 @@ const PaymentPage: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      // Fetch the book details from the API using the 'id'
       fetch(`/api/book/${id}`)
-        .then((response) => response.json())
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to fetch book details');
+          return res.json();
+        })
         .then((data) => setBook(data))
-        .catch((error) => console.error('Error fetching book:', error));
+        .catch((err) => {
+          console.error(err);
+          setBook(null); // Gracefully handle errors
+        });
     }
   }, [id]);
 
@@ -46,19 +53,27 @@ const PaymentPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Payment submitted', formData);
-    alert('Payment processing (simulated)');
+    console.log('Payment submitted:', formData);
+    setShowTips(true);
   };
 
   const cardNetworks = [
     { value: 'visa', label: 'Visa' },
     { value: 'mastercard', label: 'Mastercard' },
-    { value: 'amex', label: 'American Express' },
+    { value: 'amex', label: 'American Expressa' },
     { value: 'discover', label: 'Discover' },
   ];
 
   if (!book) {
     return <div>Loading...</div>;
+  }
+
+  if (!id) {
+    return (
+      <div>
+        <h2>Error: Missing required `id` parameter.</h2>
+      </div>
+    );
   }
 
   return (
@@ -361,4 +376,10 @@ const PaymentPage: React.FC = () => {
   );
 };
 
-export default PaymentPage;
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PaymentPage />
+    </Suspense>
+  );
+}

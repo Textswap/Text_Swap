@@ -112,6 +112,7 @@ const BookPageCard = ({ book }: { book: Book }) => {
                 </Card.Text>
               </Row>
               {/* Buttons */}
+              {source !== 'account' && (
               <Row style={{ marginBottom: '1.5rem' }}>
                 <Col>
                   <Button variant="primary" className="buy-now" onClick={handleBuyNow}>
@@ -129,6 +130,7 @@ const BookPageCard = ({ book }: { book: Book }) => {
                   </Button>
                 </Col>
               </Row>
+              )}
               {/* More Info */}
               <Row style={{ marginTop: '0rem' }}>
                 <Col>

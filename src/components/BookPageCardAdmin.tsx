@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Book } from '@prisma/client';
 import { Image, Card, Button, Col, Row } from 'react-bootstrap';
 import axios from 'axios';
@@ -11,6 +11,8 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
   const [isLoadingRemoveBook, setIsLoadingRemoveBook] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams(); // Correct usage
+  const source = searchParams.get('source');
 
   /* prints for debugging images
   console.log('Image URL:', book.imageURL);
@@ -75,8 +77,16 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
     }
   };
 
+  const handleBuyNow = () => {
+    router.push(`/payment?id=${book.id}`);
+  };
+
   const handleGoBack = () => {
-    router.push('/buy'); // Navigate back to the buy page
+    if (source === 'account') {
+      router.push('/account'); // Navigate to Account Page if source is 'account'
+    } else {
+      router.push('/buy'); // Default to Buy Page
+    }
   };
 
   return (
@@ -139,10 +149,10 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
                 </Card.Text>
               </Row>
               {/* Buttons */}
+              {source !== 'account' && (
               <Row style={{ marginBottom: '1.5rem' }}>
                 <Col>
-                  {/* NEED TO CHANGE ONCLICK */}
-                  <Button variant="primary" className="buy-now" onClick={() => console.log('Buy Now')}>
+                  <Button variant="primary" className="buy-now" onClick={handleBuyNow}>
                     Buy Now
                   </Button>
                 </Col>
@@ -157,6 +167,7 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
                   </Button>
                 </Col>
               </Row>
+              )}
               {/* More Info */}
               <Row style={{ marginTop: '0rem' }}>
                 <Col>

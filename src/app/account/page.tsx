@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Row, Col, Button, Alert, Spinner, Image, Container } from 'react-bootstrap';
 import styles from './AccountPageClient.module.css'; // Import the CSS module
 
@@ -15,7 +15,6 @@ type Book = {
 
 type User = {
   username: string;
-  bio: string;
 };
 
 const SellerListings = () => {
@@ -52,11 +51,9 @@ const SellerListings = () => {
         const data = await response.json();
         setUser({
           username: data.email.split('@')[0], // Use part of the email as a username
-          bio: `Role: ${data.role}`, // Display role in the bio
         });
       } catch (err) {
         console.error('Error fetching user data:', err);
-        setUser({ username: 'Guest', bio: 'No bio available' }); // Fallback for errors
       }
     };
 
@@ -90,7 +87,14 @@ const SellerListings = () => {
     <Container fluid className={`${styles.sellerListingsContainer} mt-4`}>
       <Row className="justify-content-between">
         {/* Profile Section */}
-        <Col md={4} className={styles.profileSection}>
+        <Col
+          md={4}
+          className={styles.profileSection}
+          style={{
+            borderRight: '4px solid #4b8e72', // Vertical line
+            paddingRight: '10px', // Add space between the line and content
+          }}
+        >
           <div className={`${styles.profileWrapper} d-flex flex-column align-items-center`}>
             {/* Profile Picture */}
             <Image
@@ -101,7 +105,6 @@ const SellerListings = () => {
             {/* Username and Bio */}
             <div className="text-center mt-3">
               <h3>{user?.username || 'Guest'}</h3>
-              <p className="text-muted">{user?.bio || 'No bio available'}</p>
             </div>
             {/* Buttons */}
             <div className={`${styles.profileButtons} d-flex mt-3`}>
@@ -155,7 +158,7 @@ const SellerListings = () => {
                           (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200';
                         }}
                       />
-                      <Card.Body>
+                      <Card.Body style={{ color: '#1a4a3a' }}>
                         <Card.Title>{book.title}</Card.Title>
                         <Card.Text>
                           <strong>Condition:</strong>
