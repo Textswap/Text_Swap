@@ -1,5 +1,4 @@
 // eslint-disable-next-line import/prefer-default-export
-// src/app/api/book/buy-page/route.ts
 
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
