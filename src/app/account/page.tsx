@@ -15,7 +15,6 @@ type Book = {
 
 type User = {
   username: string;
-  bio: string;
 };
 
 const SellerListings = () => {
@@ -52,11 +51,9 @@ const SellerListings = () => {
         const data = await response.json();
         setUser({
           username: data.email.split('@')[0], // Use part of the email as a username
-          bio: `Role: ${data.role}`, // Display role in the bio
         });
       } catch (err) {
         console.error('Error fetching user data:', err);
-        setUser({ username: 'Guest', bio: 'No bio available' }); // Fallback for errors
       }
     };
 
@@ -101,7 +98,6 @@ const SellerListings = () => {
             {/* Username and Bio */}
             <div className="text-center mt-3">
               <h3>{user?.username || 'Guest'}</h3>
-              <p className="text-muted">{user?.bio || 'No bio available'}</p>
             </div>
             {/* Buttons */}
             <div className={`${styles.profileButtons} d-flex mt-3`}>
