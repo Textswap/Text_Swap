@@ -27,11 +27,18 @@ const PaymentPage: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      // Fetch the book details from the API using the 'id'
       fetch(`/api/book/${id}`)
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch data for ID: ${id}`);
+          }
+          return response.json();
+        })
         .then((data) => setBook(data))
-        .catch((error) => console.error('Error fetching book:', error));
+        .catch((error) => {
+          console.error('Error fetching book:', error);
+          setBook(null); // Handle the error state gracefully
+        });
     }
   }, [id]);
 
@@ -48,19 +55,27 @@ const PaymentPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Payment submitted', formData);
-    alert('Payment processing (simulated)');
+    console.log('Payment submitted:', formData);
+    setShowTips(true);
   };
 
   const cardNetworks = [
     { value: 'visa', label: 'Visa' },
     { value: 'mastercard', label: 'Mastercard' },
-    { value: 'amex', label: 'American Express' },
+    { value: 'amex', label: 'American Expressa' },
     { value: 'discover', label: 'Discover' },
   ];
 
   if (!book) {
     return <div>Loading...</div>;
+  }
+
+  if (!id) {
+    return (
+      <div>
+        <h2>Error: Missing required `id` parameter.</h2>
+      </div>
+    );
   }
 
   return (
