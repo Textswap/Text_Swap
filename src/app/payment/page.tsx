@@ -1,15 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-  Container,
-  Card,
-  Form,
-  Button,
-  Row,
-  Col,
-  Alert,
-} from 'react-bootstrap';
+import { Container, Card, Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const PaymentPage: React.FC = () => {
@@ -57,6 +49,9 @@ const PaymentPage: React.FC = () => {
       className="d-flex flex-column justify-content-center align-items-center min-vh-100 p-4"
       style={{
         backgroundColor: 'var(--secondary-color)',
+        overflowY: 'auto',
+        maxHeight: '100vh',
+        padding: '2rem',
       }}
     >
       {/* Page Header Section */}
@@ -101,7 +96,8 @@ const PaymentPage: React.FC = () => {
           borderColor: 'var(--main-color)',
           borderWidth: '2px',
           borderRadius: '12px',
-          overflow: 'hidden',
+          overflowY: 'auto', // Ensures scrolling within the card
+          maxHeight: '80vh', //
         }}
       >
         <Card.Header
@@ -198,7 +194,7 @@ const PaymentPage: React.FC = () => {
                 name="cardNumber"
                 value={formData.cardNumber}
                 onChange={handleInputChange}
-                placeholder="1234 5678 90"
+                placeholder="1234 5678 9012 3456"
                 required
                 style={{
                   borderColor: 'var(--main-color)',
@@ -259,7 +255,7 @@ const PaymentPage: React.FC = () => {
                     name="billingEmail"
                     value={formData.billingEmail}
                     onChange={handleInputChange}
-                    placeholder="uhm@example.com"
+                    placeholder="uhm@foo.com"
                     required
                     style={{
                       borderColor: 'var(--main-color)',
@@ -321,12 +317,8 @@ const PaymentPage: React.FC = () => {
                 onClick={() => setShowTips(!showTips)}
                 style={{
                   color: 'var(--main-color-darker)',
-                  background: 'none',
-                  border: 'none',
                   cursor: 'pointer',
                   textDecoration: 'underline',
-                  padding: 0,
-                  fontSize: 'inherit',
                 }}
               >
                 {showTips ? 'Hide' : 'Show'}
