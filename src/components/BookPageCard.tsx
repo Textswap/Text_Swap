@@ -41,6 +41,10 @@ const BookPageCard = ({ book }: { book: Book }) => {
     }
   };
 
+  const handleBuyNow = () => {
+    router.push(`/payment?id=${book.id}`);
+  };
+
   const handleGoBack = () => {
     router.push('/buy'); // Navigate back to the buy page
   };
@@ -96,7 +100,7 @@ const BookPageCard = ({ book }: { book: Book }) => {
               {/* Buttons */}
               <Row style={{ marginBottom: '1.5rem' }}>
                 <Col>
-                  <Button variant="primary" className="buy-now" onClick={() => console.log('Buy Now')}>
+                  <Button variant="primary" className="buy-now" onClick={handleBuyNow}>
                     Buy Now
                   </Button>
                 </Col>

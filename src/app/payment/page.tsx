@@ -1,10 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Card, Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useSearchParams } from 'next/navigation';
 
 const PaymentPage: React.FC = () => {
+  const searchParams = useSearchParams(); // Use searchParams to get query parameters
+  const id = searchParams.get('id');
+  const [book, setBook] = useState<any>(null);
   const [formData, setFormData] = useState({
     cardType: 'credit',
     cardNetwork: '',
@@ -18,6 +22,16 @@ const PaymentPage: React.FC = () => {
   });
 
   const [showTips, setShowTips] = useState(false);
+
+  useEffect(() => {
+    if (id) {
+      // Fetch the book details from the API using the 'id'
+      fetch(`/api/book/${id}`)
+        .then((response) => response.json())
+        .then((data) => setBook(data))
+        .catch((error) => console.error('Error fetching book:', error));
+    }
+  }, [id]);
 
   const handleInputChange = (e: React.ChangeEvent<any>) => {
     const { target } = e;
@@ -42,6 +56,10 @@ const PaymentPage: React.FC = () => {
     { value: 'amex', label: 'American Express' },
     { value: 'discover', label: 'Discover' },
   ];
+
+  if (!book) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container
@@ -96,8 +114,8 @@ const PaymentPage: React.FC = () => {
           borderColor: 'var(--main-color)',
           borderWidth: '2px',
           borderRadius: '12px',
-          overflowY: 'auto', // Ensures scrolling within the card
-          maxHeight: '80vh', //
+          overflowY: 'auto',
+          maxHeight: '80vh',
         }}
       >
         <Card.Header
