@@ -117,14 +117,14 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
               <Card.Img src={imageSrc} className="book-page-img" alt="Book Image" onError={handleImageError} />
             </Col>
             {/* Book Details */}
-            <Col className="d-flex flex-column" style={{ margin: '1rem' }}>
+            <Col className="d-flex flex-column" style={{ margin: '1rem', color: 'black' }}>
               <Row style={{ marginBottom: '1.5rem' }}>
-                <Card.Title style={{ fontSize: '3rem', marginBottom: '1rem' }}>{book.title}</Card.Title>
-                <Card.Text style={{ fontSize: '1.5rem', marginBottom: '0rem' }}>
+                <Card.Title style={{ fontSize: '3rem', marginBottom: '1rem', color: '#225f49' }}>{book.title}</Card.Title>
+                <Card.Text style={{ fontSize: '1.5rem', marginBottom: '0rem', color: 'black' }}>
                   $
                   {book.price.toFixed(2)}
                 </Card.Text>
-                <Card.Text style={{ fontSize: '1.25rem' }}>
+                <Card.Text style={{ fontSize: '1.25rem', color: '#225f49' }}>
                   Condition:
                   {' '}
                   {book.condition.charAt(0).toUpperCase() + book.condition.slice(1)}
@@ -154,30 +154,31 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
                 <Col>
                   <Card.Text>
                     <span className="book-info-label">ISBN: </span>
-                    <span className="book-info-value">{book.isbn}</span>
+                    <span className="book-info-value" style={{ color: '#225f49' }}>{book.isbn || 'N/A'}</span>
                   </Card.Text>
                   <Card.Text>
                     <span className="book-info-label">Subject: </span>
-                    <span className="book-info-value">{book.subject}</span>
+                    <span className="book-info-value" style={{ color: '#225f49' }}>{book.subject || 'N/A'}</span>
                   </Card.Text>
                   <Card.Text>
                     <span className="book-info-label">Course Name: </span>
-                    <span className="book-info-value">{book.courseName}</span>
+                    <span className="book-info-value" style={{ color: '#225f49' }}>{book.courseName || 'N/A'}</span>
                   </Card.Text>
                   <Card.Text>
                     <span className="book-info-label">Course CRN: </span>
-                    <span className="book-info-value">{book.courseCrn}</span>
+                    <span className="book-info-value" style={{ color: '#225f49' }}>{book.courseCrn || 'N/A'}</span>
                   </Card.Text>
                 </Col>
               </Row>
               {/* Description */}
               <Row>
-                <Col style={{
-                  maxWidth: '600px',
-                  wordWrap: 'break-word',
-                  overflowWrap: 'break-word',
-                  marginTop: '1rem',
-                }}
+                <Col
+                  style={{
+                    maxWidth: '600px',
+                    wordWrap: 'break-word',
+                    overflowWrap: 'break-word',
+                    marginTop: '1rem',
+                  }}
                 >
                   Description:
                   {' '}
@@ -190,10 +191,12 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
                       display: '-webkit-box',
                       WebkitBoxOrient: 'vertical',
                       WebkitLineClamp: 4,
+                      color: '#225f49',
+                      textAlign: 'center',
                     }}
                     className="text-muted"
                   >
-                    {book.description}
+                    {book.description || 'N/A'}
                   </Card.Text>
                 </Col>
               </Row>
