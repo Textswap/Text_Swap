@@ -1,93 +1,135 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
-import { useSession } from 'next-auth/react';
-import BookPageCard from '@/components/BookPageCard'; // Import the Book card component
+import { useEffect, useState } from 'react';
+import { Card, Row, Col, Button, Alert, Spinner, Image, Container } from 'react-bootstrap';
 
-const AccountPage: React.FC = () => {
-  const { data: session } = useSession();
-  const [userBooks, setUserBooks] = useState<any[]>([]); // Store books listed by the user
-  const [loading, setLoading] = useState<boolean>(true);
+type Book = {
+  id: number;
+  title: string;
+  condition: string;
+  price: number;
+  imageURL?: string;
+  description?: string;
+};
+
+const SellerListings = () => {
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // We assert that session.user will definitely exist, since this page is only accessible when logged in
-    const userEmail = session?.user?.email;
-    if (userEmail) {
-      const fetchUserBooks = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-          const response = await fetch(`/api/books?owner=${userEmail}`);
-          if (!response.ok) {
-            throw new Error('Failed to fetch books');
-          }
-          const data = await response.json();
-          setUserBooks(data); // Set the books fetched for the current user
-        } catch (err) {
-          setError('Error fetching books');
-        } finally {
-          setLoading(false);
+    const fetchSellerListings = async () => {
+      try {
+        const response = await fetch('/api/book/seller-listings');
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch seller listings');
         }
-      };
 
-      fetchUserBooks();
-    }
-  }, [session]);
+        const data: Book[] = await response.json();
+        setBooks(data);
+      } catch (err) {
+        console.error('Error fetching seller listings:', err);
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Loading spinner
+    fetchSellerListings();
+  }, []);
+
   if (loading) {
     return (
-      <div className="text-center" style={{ marginTop: '20vh' }}>
-        <Spinner animation="border" variant="primary" />
-        <p>Loading your books...</p>
+      <div className="text-center mt-5">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+        <p>Loading your listings...</p>
       </div>
     );
   }
 
-  // Error message
   if (error) {
     return (
-      <div className="text-center">
-        <Alert variant="danger">{error}</Alert>
+      <div className="mt-4">
+        <Alert variant="danger">
+          <Alert.Heading>Error</Alert.Heading>
+          <p>{error}</p>
+        </Alert>
       </div>
     );
   }
 
   return (
-    <Container fluid className="py-3">
+    <Container className="seller-listings-container mt-4">
       <Row>
-        {/* Left side content */}
-        <Col xs={12} md={5}>
-          <div className="profile-section">
-            {/* Your profile info here */}
-          </div>
+        {/* Profile Section */}
+        <Col md={4} className="profile-section text-center">
+          <Image
+            src="https://via.placeholder.com/150"
+            alt="Profile Picture"
+            roundedCircle
+            className="mb-3 profile-image"
+          />
+          <h3>Username</h3>
+          <p className="text-muted">Bio</p>
+          <Button variant="success" className="me-2">
+            Follow
+          </Button>
+          <Button variant="secondary">Message</Button>
+          <p className="mt-4">
+            <strong>Reviews:</strong>
+            {' '}
+            10
+          </p>
         </Col>
 
-        {/* Black vertical line */}
-        <Col xs="auto">
-          <div style={{ width: '1px', backgroundColor: 'black', height: '100%' }} />
-        </Col>
-
-        {/* Right side content - User's Listed Books */}
-        <Col xs={12} md={7}>
-          <h2>Your Listed Books</h2>
-          <Row>
-            {userBooks.length === 0 ? (
-              <p>No books listed yet.</p>
-            ) : (
-              userBooks.map((book) => (
-                <Col xs={12} sm={6} md={4} key={book.id} className="mb-4">
-                  <BookPageCard book={book} />
+        {/* Listings Section */}
+        <Col md={8} className="listings-section">
+          <h2>Listings</h2>
+          {books.length === 0 ? (
+            <p>You have no listings at the moment.</p>
+          ) : (
+            <Row>
+              {books.map((book) => (
+                <Col key={book.id} sm={12} md={6} lg={6} className="mb-4">
+                  <Card className="h-100">
+                    <Card.Img
+                      variant="top"
+                      src={book.imageURL || 'https://via.placeholder.com/300x200'}
+                      alt={`${book.title} Image`}
+                      className="fixed-image"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200';
+                      }}
+                    />
+                    <Card.Body>
+                      <Card.Title>{book.title}</Card.Title>
+                      <Card.Text>
+                        <strong>Condition:</strong>
+                        {' '}
+                        {book.condition}
+                      </Card.Text>
+                      <Card.Text>
+                        <strong>Price:</strong>
+                        {' '}
+                        $
+                        {book.price.toFixed(2)}
+                      </Card.Text>
+                      <Button href={`/book/${book.id}`} variant="primary">
+                        View Details
+                      </Button>
+                    </Card.Body>
+                  </Card>
                 </Col>
-              ))
-            )}
-          </Row>
+              ))}
+            </Row>
+          )}
         </Col>
       </Row>
     </Container>
   );
 };
 
-export default AccountPage;
+export default SellerListings;
