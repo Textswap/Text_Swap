@@ -2,24 +2,31 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Book } from '@prisma/client';
 import { Image, Card, Button, Row, Col } from 'react-bootstrap';
 import { Trash } from 'react-bootstrap-icons';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const BookCartCard = ({ book }: { book: Book }) => {
   const [imageSrc, setImageSrc] = useState<string>(book.imageURL || 'https://via.placeholder.com/150');
+  const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
 
-  /* prints for debugging images
-  console.log('Image URL:', book.imageURL);
-  console.log('Image URL type:', typeof book.imageURL);
-  console.log('Image URL exists:', book.imageURL !== undefined && book.imageURL !== null);
-  */
+  useEffect(() => {
+    setIsClient(true); // Only set the state after the component mounts on the client
+  }, []);
+
+  if (!isClient) return null; // Render nothing until mounted on the client
 
   const handleImageError = () => {
     console.log('Failed to load image');
     setImageSrc('https://via.placeholder.com/150');
+  };
+
+  const handleBuyNow = () => {
+    router.push(`/payment?id=${book.id}`);
   };
 
   const handleRemoveBook = async () => {
@@ -101,7 +108,7 @@ const BookCartCard = ({ book }: { book: Book }) => {
               variant="primary"
               className="cart-buy-now"
               // add functionality
-              onClick={() => console.log('Buy Now')}
+              onClick={handleBuyNow}
             >
               Buy Now
             </Button>
