@@ -77,6 +77,10 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
     }
   };
 
+  const handleBuyNow = () => {
+    router.push(`/payment?id=${book.id}`);
+  };
+
   const handleGoBack = () => {
     if (source === 'account') {
       router.push('/account'); // Navigate to Account Page if source is 'account'
@@ -148,8 +152,7 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
               {source !== 'account' && (
               <Row style={{ marginBottom: '1.5rem' }}>
                 <Col>
-                  {/* NEED TO CHANGE ONCLICK */}
-                  <Button variant="primary" className="buy-now" onClick={() => console.log('Buy Now')}>
+                  <Button variant="primary" className="buy-now" onClick={handleBuyNow}>
                     Buy Now
                   </Button>
                 </Col>
