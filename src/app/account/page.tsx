@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Card, Row, Col, Button, Alert, Spinner, Image, Container } from 'react-bootstrap';
+import styles from './AccountPageClient.module.css'; // Import the CSS module
 
 type Book = {
   id: number;
@@ -12,10 +13,16 @@ type Book = {
   description?: string;
 };
 
+type User = {
+  username: string;
+  bio: string;
+};
+
 const SellerListings = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchSellerListings = async () => {
@@ -36,7 +43,25 @@ const SellerListings = () => {
       }
     };
 
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('/api/user/details');
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+        const data = await response.json();
+        setUser({
+          username: data.email.split('@')[0], // Use part of the email as a username
+          bio: `Role: ${data.role}`, // Display role in the bio
+        });
+      } catch (err) {
+        console.error('Error fetching user data:', err);
+        setUser({ username: 'Guest', bio: 'No bio available' }); // Fallback for errors
+      }
+    };
+
     fetchSellerListings();
+    fetchUserData();
   }, []);
 
   if (loading) {
@@ -62,70 +87,112 @@ const SellerListings = () => {
   }
 
   return (
-    <Container className="seller-listings-container mt-4">
-      <Row>
+    <Container fluid className={`${styles.sellerListingsContainer} mt-4`}>
+      <Row className="justify-content-between">
         {/* Profile Section */}
-        <Col md={4} className="profile-section text-center">
-          <Image
-            src="https://via.placeholder.com/150"
-            alt="Profile Picture"
-            roundedCircle
-            className="mb-3 profile-image"
-          />
-          <h3>Username</h3>
-          <p className="text-muted">Bio</p>
-          <Button variant="success" className="me-2">
-            Follow
-          </Button>
-          <Button variant="secondary">Message</Button>
-          <p className="mt-4">
-            <strong>Reviews:</strong>
-            {' '}
-            10
-          </p>
+        <Col md={4} className={styles.profileSection}>
+          <div className={`${styles.profileWrapper} d-flex flex-column align-items-center`}>
+            {/* Profile Picture */}
+            <Image
+              src="https://via.placeholder.com/150"
+              alt="Profile Picture"
+              className={styles.profileImage}
+            />
+            {/* Username and Bio */}
+            <div className="text-center mt-3">
+              <h3>{user?.username || 'Guest'}</h3>
+              <p className="text-muted">{user?.bio || 'No bio available'}</p>
+            </div>
+            {/* Buttons */}
+            <div className={`${styles.profileButtons} d-flex mt-3`}>
+              <Button
+                variant="success"
+                className="me-2"
+                style={{
+                  borderRadius: '10px',
+                  border: 'none',
+                  backgroundColor: '#225f49', // Green button
+                  color: 'white',
+                  width: '100%',
+                  maxWidth: '200px',
+                  padding: '10px',
+                  fontWeight: 'bold',
+                  fontSize: '1rem',
+                  textAlign: 'center',
+                }}
+              >
+                Follow
+              </Button>
+              <Button variant="secondary">
+                Message
+              </Button>
+            </div>
+            <p className="mt-3">
+              <strong>Reviews:</strong>
+              {' '}
+              N/A
+            </p>
+          </div>
         </Col>
 
         {/* Listings Section */}
-        <Col md={8} className="listings-section">
-          <h2>Listings</h2>
-          {books.length === 0 ? (
-            <p>You have no listings at the moment.</p>
-          ) : (
-            <Row>
-              {books.map((book) => (
-                <Col key={book.id} sm={12} md={6} lg={6} className="mb-4">
-                  <Card className="h-100">
-                    <Card.Img
-                      variant="top"
-                      src={book.imageURL || 'https://via.placeholder.com/300x200'}
-                      alt={`${book.title} Image`}
-                      className="fixed-image"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200';
-                      }}
-                    />
-                    <Card.Body>
-                      <Card.Title>{book.title}</Card.Title>
-                      <Card.Text>
-                        <strong>Condition:</strong>
-                        {' '}
-                        {book.condition}
-                      </Card.Text>
-                      <Card.Text>
-                        <strong>Price:</strong>
-                        {' '}
-                        $
-                        {book.price.toFixed(2)}
-                      </Card.Text>
-                      <Button href={`/book/${book.id}`} variant="primary">
-                        View Details
-                      </Button>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          )}
+        <Col md={8} className={styles.listingsSection}>
+          <h2 className="mb-4">Listings</h2>
+          <div className={styles.scrollableSection}>
+            {books.length === 0 ? (
+              <p>You have no listings at the moment.</p>
+            ) : (
+              <Row>
+                {books.map((book) => (
+                  <Col key={book.id} sm={12} md={6} lg={6} className="mb-4">
+                    <Card className={`h-100 ${styles.bookCard} shadow-sm`}>
+                      <Card.Img
+                        variant="top"
+                        src={book.imageURL || 'https://via.placeholder.com/300x200'}
+                        alt={`${book.title} Image`}
+                        className={styles.fixedImage}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200';
+                        }}
+                      />
+                      <Card.Body>
+                        <Card.Title>{book.title}</Card.Title>
+                        <Card.Text>
+                          <strong>Condition:</strong>
+                          {' '}
+                          {book.condition.charAt(0).toUpperCase() + book.condition.slice(1)}
+                        </Card.Text>
+                        <Card.Text>
+                          <strong>Price:</strong>
+                          {' '}
+                          $
+                          {book.price.toFixed(2)}
+                        </Card.Text>
+                        <Button
+                          href={`/book/${book.id}?source=account`}
+                          variant="primary"
+                          style={{
+                            borderRadius: '20px',
+                            border: 'none',
+                            backgroundColor: '#225f49', // Green button
+                            color: 'white',
+                            width: '100%',
+                            maxWidth: '200px',
+                            padding: '10px',
+                            fontWeight: 'bold',
+                            fontSize: '1rem',
+                            textAlign: 'center',
+                          }}
+                        >
+                          View Details
+                        </Button>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            )}
+          </div>
         </Col>
       </Row>
     </Container>

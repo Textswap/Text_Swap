@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Book } from '@prisma/client';
 import { Image, Card, Button, Col, Row } from 'react-bootstrap';
 
@@ -9,6 +9,8 @@ const BookPageCard = ({ book }: { book: Book }) => {
   const [isLoadingAddToCart, setIsLoadingAddToCart] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams(); // Correct usage
+  const source = searchParams.get('source');
 
   const handleImageError = () => {
     setImageSrc('https://via.placeholder.com/750');
@@ -42,7 +44,11 @@ const BookPageCard = ({ book }: { book: Book }) => {
   };
 
   const handleGoBack = () => {
-    router.push('/buy'); // Navigate back to the buy page
+    if (source === 'account') {
+      router.push('/account'); // Navigate to Account Page if source is 'account'
+    } else {
+      router.push('/buy'); // Default to Buy Page
+    }
   };
 
   return (
