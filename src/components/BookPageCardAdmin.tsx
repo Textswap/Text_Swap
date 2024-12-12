@@ -7,10 +7,6 @@ import { Book } from '@prisma/client';
 import { Image, Card, Button, Col, Row } from 'react-bootstrap';
 import axios from 'axios';
 
-type User = {
-  email: string;
-};
-
 const getProfilePicture = (email: string | undefined) => {
   if (email === 'admin@foo.com') {
     return 'https://www.sogefiproperties.com/wp-content/uploads/2020/07/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075259.jpg';
@@ -28,14 +24,8 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
   const [isLoadingRemoveBook, setIsLoadingRemoveBook] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const searchParams = useSearchParams(); // Correct usage
+  const searchParams = useSearchParams();
   const source = searchParams.get('source');
-
-  /* prints for debugging images
-  console.log('Image URL:', book.imageURL);
-  console.log('Image URL type:', typeof book.imageURL);
-  console.log('Image URL exists:', book.imageURL !== undefined && book.imageURL !== null);
-  */
 
   const handleImageError = () => {
     console.log('Failed to load image');

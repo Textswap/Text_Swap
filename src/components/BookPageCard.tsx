@@ -6,10 +6,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Book } from '@prisma/client';
 import { Image, Card, Button, Col, Row } from 'react-bootstrap';
 
-type User = {
-  email: string;
-};
-
 const getProfilePicture = (email: string | undefined) => {
   if (email === 'admin@foo.com') {
     return 'https://www.sogefiproperties.com/wp-content/uploads/2020/07/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075259.jpg';

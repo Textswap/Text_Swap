@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable max-len */
 
 'use client';
 
@@ -8,6 +9,17 @@ import { Image, Card, Button, Row, Col } from 'react-bootstrap';
 import { Trash } from 'react-bootstrap-icons';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+
+const getProfilePicture = (email: string | undefined) => {
+  if (email === 'admin@foo.com') {
+    return 'https://www.sogefiproperties.com/wp-content/uploads/2020/07/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075259.jpg';
+  } if (email === 'john@foo.com') {
+    return 'https://thumbs.dreamstime.com/b/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075253.jpg';
+  } if (email === 'jane@foo.com') {
+    return 'https://st2.depositphotos.com/1006318/5909/v/450/depositphotos_59094837-stock-illustration-businesswoman-profile-icon.jpg';
+  }
+  return 'https://icons.veryicon.com/png/o/system/crm-android-app-icon/app-icon-person.png';
+};
 
 const BookCartCard = ({ book }: { book: Book }) => {
   const [imageSrc, setImageSrc] = useState<string>(book.imageURL || 'https://via.placeholder.com/150');
@@ -82,7 +94,7 @@ const BookCartCard = ({ book }: { book: Book }) => {
               }}
             >
               <Image
-                src="https://via.placeholder.com/75"
+                src={getProfilePicture(book.owner)}
                 className="seller-image rounded-circle w-100 h-100"
                 style={{
                   objectFit: 'cover',
