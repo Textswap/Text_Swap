@@ -1,8 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable max-len */
+
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Book } from '@prisma/client';
 import { Image, Card, Button, Col, Row } from 'react-bootstrap';
+
+const getProfilePicture = (email: string | undefined) => {
+  if (email === 'admin@foo.com') {
+    return 'https://www.sogefiproperties.com/wp-content/uploads/2020/07/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075259.jpg';
+  } if (email === 'john@foo.com') {
+    return 'https://thumbs.dreamstime.com/b/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075253.jpg';
+  } if (email === 'jane@foo.com') {
+    return 'https://st2.depositphotos.com/1006318/5909/v/450/depositphotos_59094837-stock-illustration-businesswoman-profile-icon.jpg';
+  }
+  return 'https://icons.veryicon.com/png/o/system/crm-android-app-icon/app-icon-person.png';
+};
 
 const BookPageCard = ({ book }: { book: Book }) => {
   const [imageSrc, setImageSrc] = useState<string>(book.imageURL || 'https://via.placeholder.com/750');
@@ -152,6 +165,7 @@ const BookPageCard = ({ book }: { book: Book }) => {
                   </Card.Text>
                 </Col>
               </Row>
+
               {/* Description */}
               <Row>
                 <Col
@@ -174,6 +188,7 @@ const BookPageCard = ({ book }: { book: Book }) => {
                       WebkitLineClamp: 4,
                       color: '#225f49',
                       textAlign: 'center',
+                      marginBottom: '4rem',
                     }}
                     className="text-muted"
                   >
@@ -181,14 +196,17 @@ const BookPageCard = ({ book }: { book: Book }) => {
                   </Card.Text>
                 </Col>
               </Row>
+
               {/* Seller Details */}
               <Row className="mt-auto">
                 <Col xs={2} className="d-flex align-items-end">
                   <Image
-                    src="https://via.placeholder.com/75"
+                    src={getProfilePicture(book.owner)}
                     className="seller-image rounded-circle"
                     style={{
                       objectFit: 'cover',
+                      width: '70px',
+                      height: '70px',
                     }}
                     alt="Seller"
                   />
@@ -196,7 +214,7 @@ const BookPageCard = ({ book }: { book: Book }) => {
                     Sold by
                     {' '}
                     <span style={{ color: '#225f49' }}>
-                      {book.owner}
+                      {book.owner || 'Unknown'}
                     </span>
                   </small>
                 </Col>

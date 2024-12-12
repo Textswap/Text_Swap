@@ -6,8 +6,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
-  padding-top: 70px;
+  padding: 1.5rem 0 0 0;
+  padding-top: 70px; /* Dynamic padding to account for navbar height */
   box-sizing: border-box;
 }
 
@@ -72,7 +72,7 @@
   }
 }
 
-/* CTA button */
+/* Get tarted button */
 .home-cta-button {
   margin-top: 2rem;
   margin-bottom: 5rem;

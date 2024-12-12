@@ -69,7 +69,7 @@ const Home = () => {
       icon: <Book />,
       preview:
         'Discover the best deals on textbooks and save big on your academic journey!',
-      image: '/TextSwap.png',
+      image: '/Buy.png',
       title: 'Find Affordable Textbooks',
     },
     {
@@ -83,7 +83,7 @@ const Home = () => {
       ),
       icon: <CurrencyDollar />,
       preview: 'Turn your old textbooks into cash in just a few clicks!',
-      image: '/TextSwap.png',
+      image: '/Sell.png',
       title: 'Sell Your Textbooks Easily',
     },
     {
@@ -97,8 +97,9 @@ const Home = () => {
       ),
       icon: <Search />,
       preview: 'Find the perfect book with filters that match your needs!',
-      image: '/TextSwap.png',
+      image: '/Filter.png',
       title: 'Filter Books Your Way',
+      imageStyle: { width: '30px', height: 'auto' },
     },
     {
       id: 4,
@@ -106,7 +107,7 @@ const Home = () => {
       icon: <Cart />,
       preview:
         'Keep your favorite books in one place—just a step away from checkout!',
-      image: '/TextSwap.png',
+      image: '/Cart.png',
       title: 'Add to Your Cart',
     },
     {
@@ -121,7 +122,7 @@ const Home = () => {
       icon: <PersonPlus />,
       preview:
         'Join us today for affordable access to all your textbook needs!',
-      image: '/TextSwap.png',
+      image: '/All.png',
       title: 'Sign Up For Full Access',
     },
   ];
@@ -137,13 +138,14 @@ const Home = () => {
   };
 
   return (
-    <div className={styles['home-container']}>
-      <div className={styles['home-content']}>
-        {/* Animated Logo */}
-        <div className={styles['logo-container']}>
-          <h1 className={styles['home-logo']}>
-            {typedText}
-            {isTypingComplete && (
+    <div className="content-wrapper">
+      <div className={styles['home-container']}>
+        <div className={styles['home-content']}>
+          {/* Animated Logo */}
+          <div className={styles['logo-container']} style={{ marginTop: '3rem' }}>
+            <h1 className={styles['home-logo']}>
+              {typedText}
+              {isTypingComplete && (
               <BookCheck
                 style={{
                   marginLeft: '10px',
@@ -153,60 +155,60 @@ const Home = () => {
                   verticalAlign: 'middle',
                 }}
               />
-            )}
-          </h1>
-        </div>
+              )}
+            </h1>
+          </div>
 
-        {/* Dynamic Tagline */}
-        <div className={styles['home-tagline']}>
-          <p>
-            Find Your Next Textbook,
-            <br />
-            the
-            {' '}
-            <span key={currentWordIndex} className={styles['home-flip-word']}>
-              {` ${words[currentWordIndex]} `}
-            </span>
-            {' '}
-            way
-          </p>
-        </div>
+          {/* Dynamic Tagline */}
+          <div className={styles['home-tagline']}>
+            <p>
+              Find Your Next Textbook,
+              <br />
+              the
+              {' '}
+              <span key={currentWordIndex} className={styles['home-flip-word']}>
+                {` ${words[currentWordIndex]} `}
+              </span>
+              {' '}
+              way
+            </p>
+          </div>
 
-        {/* CTA Button */}
-        <Link href="/auth/signup">
-          <button className={styles['home-cta-button']} type="button">
-            Get Started
-          </button>
-        </Link>
-      </div>
-      <div className={styles['boxes-section']}>
-        <div className={styles['boxes-container']}>
-          {boxes.map((box) => (
-            <div
-              key={box.id}
-              className={styles.box}
-              onClick={() => openModal(box.preview, box.image || '', box.title)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  openModal(box.preview, box.image || '', box.title);
-                }
-              }}
-              role="button"
-              tabIndex={0}
-              aria-label={`Open modal for ${box.title}`}
-              style={{ cursor: 'pointer' }}
-            >
-              <div className={styles['box-content']}>
-                <div className={styles['box-icon']}>{box.icon}</div>
-                <div className={styles['box-text']}>{box.text}</div>
+          {/* Get Started Button */}
+          <Link href="/auth/signup">
+            <button className={styles['home-cta-button']} type="button">
+              Get Started
+            </button>
+          </Link>
+        </div>
+        <div className={styles['boxes-section']}>
+          <div className={styles['boxes-container']}>
+            {boxes.map((box) => (
+              <div
+                key={box.id}
+                className={styles.box}
+                onClick={() => openModal(box.preview, box.image || '', box.title)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    openModal(box.preview, box.image || '', box.title);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Open modal for ${box.title}`}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className={styles['box-content']}>
+                  <div className={styles['box-icon']}>{box.icon}</div>
+                  <div className={styles['box-text']}>{box.text}</div>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Modal */}
-      {isModalOpen && (
+        {/* Modal */}
+        {isModalOpen && (
         <div
           className={styles['modal-overlay']}
           onClick={closeModal}
@@ -241,7 +243,8 @@ const Home = () => {
             </button>
           </div>
         </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

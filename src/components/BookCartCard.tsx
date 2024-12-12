@@ -1,25 +1,44 @@
 /* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable max-len */
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Book } from '@prisma/client';
 import { Image, Card, Button, Row, Col } from 'react-bootstrap';
 import { Trash } from 'react-bootstrap-icons';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+const getProfilePicture = (email: string | undefined) => {
+  if (email === 'admin@foo.com') {
+    return 'https://www.sogefiproperties.com/wp-content/uploads/2020/07/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075259.jpg';
+  } if (email === 'john@foo.com') {
+    return 'https://thumbs.dreamstime.com/b/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075253.jpg';
+  } if (email === 'jane@foo.com') {
+    return 'https://st2.depositphotos.com/1006318/5909/v/450/depositphotos_59094837-stock-illustration-businesswoman-profile-icon.jpg';
+  }
+  return 'https://icons.veryicon.com/png/o/system/crm-android-app-icon/app-icon-person.png';
+};
 
 const BookCartCard = ({ book }: { book: Book }) => {
   const [imageSrc, setImageSrc] = useState<string>(book.imageURL || 'https://via.placeholder.com/150');
+  const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
 
-  /* prints for debugging images
-  console.log('Image URL:', book.imageURL);
-  console.log('Image URL type:', typeof book.imageURL);
-  console.log('Image URL exists:', book.imageURL !== undefined && book.imageURL !== null);
-  */
+  useEffect(() => {
+    setIsClient(true); // Only set the state after the component mounts on the client
+  }, []);
+
+  if (!isClient) return null; // Render nothing until mounted on the client
 
   const handleImageError = () => {
     console.log('Failed to load image');
     setImageSrc('https://via.placeholder.com/150');
+  };
+
+  const handleBuyNow = () => {
+    router.push(`/payment?id=${book.id}`);
   };
 
   const handleRemoveBook = async () => {
@@ -75,7 +94,7 @@ const BookCartCard = ({ book }: { book: Book }) => {
               }}
             >
               <Image
-                src="https://via.placeholder.com/75"
+                src={getProfilePicture(book.owner)}
                 className="seller-image rounded-circle w-100 h-100"
                 style={{
                   objectFit: 'cover',
@@ -101,7 +120,7 @@ const BookCartCard = ({ book }: { book: Book }) => {
               variant="primary"
               className="cart-buy-now"
               // add functionality
-              onClick={() => console.log('Buy Now')}
+              onClick={handleBuyNow}
             >
               Buy Now
             </Button>

@@ -1,6 +1,8 @@
+/* eslint-disable max-len */
+
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Row, Col, Button, Alert, Spinner, Image, Container } from 'react-bootstrap';
 import styles from './AccountPageClient.module.css'; // Import the CSS module
 
@@ -15,6 +17,18 @@ type Book = {
 
 type User = {
   username: string;
+  email: string;
+};
+
+const getProfilePicture = (email: string | undefined) => {
+  if (email === 'admin@foo.com') {
+    return 'https://www.sogefiproperties.com/wp-content/uploads/2020/07/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075259.jpg';
+  } if (email === 'john@foo.com') {
+    return 'https://thumbs.dreamstime.com/b/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075253.jpg';
+  } if (email === 'jane@foo.com') {
+    return 'https://st2.depositphotos.com/1006318/5909/v/450/depositphotos_59094837-stock-illustration-businesswoman-profile-icon.jpg';
+  }
+  return 'https://icons.veryicon.com/png/o/system/crm-android-app-icon/app-icon-person.png';
 };
 
 const SellerListings = () => {
@@ -32,11 +46,13 @@ const SellerListings = () => {
           throw new Error(errorData.message || 'Failed to fetch seller listings');
         }
 
-        const data: Book[] = await response.json();
-        setBooks(data);
+        const data = await response.json();
+        // Ensure data is an array
+        setBooks(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error('Error fetching seller listings:', err);
         setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        setBooks([]); // Set books to an empty array in case of error
       } finally {
         setLoading(false);
       }
@@ -51,6 +67,7 @@ const SellerListings = () => {
         const data = await response.json();
         setUser({
           username: data.email.split('@')[0], // Use part of the email as a username
+          email: data.email, // Add the email property
         });
       } catch (err) {
         console.error('Error fetching user data:', err);
@@ -87,11 +104,18 @@ const SellerListings = () => {
     <Container fluid className={`${styles.sellerListingsContainer} mt-4`}>
       <Row className="justify-content-between">
         {/* Profile Section */}
-        <Col md={4} className={styles.profileSection}>
+        <Col
+          md={4}
+          className={styles.profileSection}
+          style={{
+            borderRight: '4px solid #4b8e72', // Vertical line
+            paddingRight: '10px', // Add space between the line and content
+          }}
+        >
           <div className={`${styles.profileWrapper} d-flex flex-column align-items-center`}>
             {/* Profile Picture */}
             <Image
-              src="https://via.placeholder.com/150"
+              src={getProfilePicture(user?.email)}
               alt="Profile Picture"
               className={styles.profileImage}
             />
@@ -101,7 +125,7 @@ const SellerListings = () => {
             </div>
             {/* Buttons */}
             <div className={`${styles.profileButtons} d-flex mt-3`}>
-              <Button
+              {/* <Button
                 variant="success"
                 className="me-2"
                 style={{
@@ -119,9 +143,9 @@ const SellerListings = () => {
               >
                 Follow
               </Button>
-              <Button variant="secondary">
+               <Button variant="secondary">
                 Message
-              </Button>
+              </Button> */}
             </div>
             <p className="mt-3">
               <strong>Reviews:</strong>
@@ -135,7 +159,7 @@ const SellerListings = () => {
         <Col md={8} className={styles.listingsSection}>
           <h2 className="mb-4">Listings</h2>
           <div className={styles.scrollableSection}>
-            {books.length === 0 ? (
+            {Array.isArray(books) && books.length === 0 ? (
               <p>You have no listings at the moment.</p>
             ) : (
               <Row>
@@ -151,7 +175,7 @@ const SellerListings = () => {
                           (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200';
                         }}
                       />
-                      <Card.Body>
+                      <Card.Body style={{ color: '#1a4a3a' }}>
                         <Card.Title>{book.title}</Card.Title>
                         <Card.Text>
                           <strong>Condition:</strong>

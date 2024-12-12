@@ -1,9 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable max-len */
+
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Book } from '@prisma/client';
 import { Image, Card, Button, Col, Row } from 'react-bootstrap';
 import axios from 'axios';
+
+const getProfilePicture = (email: string | undefined) => {
+  if (email === 'admin@foo.com') {
+    return 'https://www.sogefiproperties.com/wp-content/uploads/2020/07/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075259.jpg';
+  } if (email === 'john@foo.com') {
+    return 'https://thumbs.dreamstime.com/b/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075253.jpg';
+  } if (email === 'jane@foo.com') {
+    return 'https://st2.depositphotos.com/1006318/5909/v/450/depositphotos_59094837-stock-illustration-businesswoman-profile-icon.jpg';
+  }
+  return 'https://icons.veryicon.com/png/o/system/crm-android-app-icon/app-icon-person.png';
+};
 
 const BookPageCardAdmin = ({ book }: { book: Book }) => {
   const [imageSrc, setImageSrc] = useState<string>(book.imageURL || 'https://via.placeholder.com/750');
@@ -11,14 +24,8 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
   const [isLoadingRemoveBook, setIsLoadingRemoveBook] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const searchParams = useSearchParams(); // Correct usage
+  const searchParams = useSearchParams();
   const source = searchParams.get('source');
-
-  /* prints for debugging images
-  console.log('Image URL:', book.imageURL);
-  console.log('Image URL type:', typeof book.imageURL);
-  console.log('Image URL exists:', book.imageURL !== undefined && book.imageURL !== null);
-  */
 
   const handleImageError = () => {
     console.log('Failed to load image');
@@ -64,7 +71,7 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
 
       if (response.status === 200) {
         console.log('Book removed successfully!');
-        router.push('/');
+        router.push('/buy');
       } else {
         setError('Failed to remove book');
         console.log('Failed to remove book:', response);
@@ -75,6 +82,10 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
     } finally {
       setIsLoadingRemoveBook(false);
     }
+  };
+
+  const handleBuyNow = () => {
+    router.push(`/payment?id=${book.id}`);
   };
 
   const handleGoBack = () => {
@@ -148,8 +159,7 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
               {source !== 'account' && (
               <Row style={{ marginBottom: '1.5rem' }}>
                 <Col>
-                  {/* NEED TO CHANGE ONCLICK */}
-                  <Button variant="primary" className="buy-now" onClick={() => console.log('Buy Now')}>
+                  <Button variant="primary" className="buy-now" onClick={handleBuyNow}>
                     Buy Now
                   </Button>
                 </Col>
@@ -184,6 +194,10 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
                     <span className="book-info-label">Course CRN: </span>
                     <span className="book-info-value" style={{ color: '#225f49' }}>{book.courseCrn || 'N/A'}</span>
                   </Card.Text>
+                  <Card.Text>
+                    <span className="book-info-label">Sold By: </span>
+                    <span className="book-info-value" style={{ color: '#225f49' }}>{book.owner || 'N/A'}</span>
+                  </Card.Text>
                 </Col>
               </Row>
               {/* Description */}
@@ -209,6 +223,7 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
                       WebkitLineClamp: 4,
                       color: '#225f49',
                       textAlign: 'center',
+                      marginBottom: '4rem',
                     }}
                     className="text-muted"
                   >
@@ -216,14 +231,17 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
                   </Card.Text>
                 </Col>
               </Row>
+
               {/* Seller Details */}
               <Row className="mt-auto">
                 <Col xs={2} className="d-flex align-items-end">
                   <Image
-                    src="https://via.placeholder.com/75"
+                    src={getProfilePicture(book.owner)}
                     className="seller-image rounded-circle"
                     style={{
                       objectFit: 'cover',
+                      width: '70px',
+                      height: '70px',
                     }}
                     alt="Seller"
                   />
@@ -231,7 +249,7 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
                     Sold by
                     {' '}
                     <span style={{ color: '#225f49' }}>
-                      {book.owner}
+                      {book.owner || 'Unknown'}
                     </span>
                   </small>
                 </Col>

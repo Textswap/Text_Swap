@@ -1,10 +1,16 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { BookCheck } from 'lucide-react';
 
 const SignIn = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [formValues, setFormValues] = useState({ email: '', password: '' });
+  const router = useRouter();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const target = e.target as typeof e.target & {
@@ -14,14 +20,19 @@ const SignIn = () => {
     const email = target.email.value;
     const password = target.password.value;
 
+    setFormValues({ email, password }); // Preserve values on error
+
     const result = await signIn('credentials', {
-      callbackUrl: '/buy',
+      redirect: false, // Prevent automatic redirect
       email,
       password,
     });
 
-    if (result?.error) {
-      console.error('Sign in failed: ', result.error);
+    if (!result || result.error) {
+      setErrorMessage('Failed to log in. Please check your email and password.');
+    } else {
+      setErrorMessage(''); // Clear error message on success
+      router.push('/buy'); // Redirect to buy page
     }
   };
 
@@ -34,7 +45,7 @@ const SignIn = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '2rem 1rem', // Adjust padding for smaller screens
+        padding: '2rem 1rem',
       }}
     >
       <Container>
@@ -52,7 +63,7 @@ const SignIn = () => {
                 <h1
                   className="mb-4"
                   style={{
-                    fontSize: '3rem', // Adjust font size for smaller screens
+                    fontSize: '3rem',
                     fontWeight: '900',
                     background: 'linear-gradient(to right, #39af3f, #318768)',
                     WebkitBackgroundClip: 'text',
@@ -74,7 +85,7 @@ const SignIn = () => {
                 <p
                   className="mb-4"
                   style={{
-                    fontSize: '1.2rem', // Smaller font size for descriptions
+                    fontSize: '1.2rem',
                     color: '#225f49',
                     textAlign: 'center',
                     fontWeight: 'bold',
@@ -82,6 +93,17 @@ const SignIn = () => {
                 >
                   Log In
                 </p>
+                {errorMessage && (
+                  <div
+                    style={{
+                      color: 'red',
+                      marginBottom: '1rem',
+                      textAlign: 'center',
+                    }}
+                  >
+                    {errorMessage}
+                  </div>
+                )}
                 <Form method="post" onSubmit={handleSubmit}>
                   <Form.Group controlId="formBasicEmail" className="form-group">
                     <Form.Label
@@ -98,6 +120,7 @@ const SignIn = () => {
                       type="text"
                       className="form-control"
                       required
+                      defaultValue={formValues.email}
                     />
                   </Form.Group>
                   <Form.Group
@@ -118,6 +141,7 @@ const SignIn = () => {
                       type="password"
                       className="form-control"
                       required
+                      defaultValue={formValues.password}
                     />
                   </Form.Group>
                   <Form.Group className="form-group py-3">
