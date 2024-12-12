@@ -150,8 +150,13 @@ const BookPageCard = ({ book }: { book: Book }) => {
                     <span className="book-info-label">Course CRN: </span>
                     <span className="book-info-value" style={{ color: '#225f49' }}>{book.courseCrn || 'N/A'}</span>
                   </Card.Text>
+                  <Card.Text>
+                    <span className="book-info-label">Sold By: </span>
+                    <span className="book-info-value" style={{ color: '#225f49' }}>{book.owner || 'N/A'}</span>
+                  </Card.Text>
                 </Col>
               </Row>
+
               {/* Description */}
               <Row>
                 <Col
@@ -174,31 +179,12 @@ const BookPageCard = ({ book }: { book: Book }) => {
                       WebkitLineClamp: 4,
                       color: '#225f49',
                       textAlign: 'center',
+                      marginBottom: '4rem',
                     }}
                     className="text-muted"
                   >
                     {book.description || 'N/A'}
                   </Card.Text>
-                </Col>
-              </Row>
-              {/* Seller Details */}
-              <Row className="mt-auto">
-                <Col xs={2} className="d-flex align-items-end">
-                  <Image
-                    src="https://via.placeholder.com/75"
-                    className="seller-image rounded-circle"
-                    style={{
-                      objectFit: 'cover',
-                    }}
-                    alt="Seller"
-                  />
-                  <small className="ms-2 text-nowrap">
-                    Sold by
-                    {' '}
-                    <span style={{ color: '#225f49' }}>
-                      {book.owner}
-                    </span>
-                  </small>
                 </Col>
               </Row>
             </Col>
