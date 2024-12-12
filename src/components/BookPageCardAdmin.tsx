@@ -194,10 +194,6 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
                     <span className="book-info-label">Course CRN: </span>
                     <span className="book-info-value" style={{ color: '#225f49' }}>{book.courseCrn || 'N/A'}</span>
                   </Card.Text>
-                  <Card.Text>
-                    <span className="book-info-label">Sold By: </span>
-                    <span className="book-info-value" style={{ color: '#225f49' }}>{book.owner || 'N/A'}</span>
-                  </Card.Text>
                 </Col>
               </Row>
               {/* Description */}
