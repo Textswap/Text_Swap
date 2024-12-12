@@ -15,6 +15,16 @@ type Book = {
 
 type User = {
   username: string;
+  email: string;
+};
+
+const getProfilePicture = (email: string | undefined) => {
+  if (email === 'admin@foo.com') {
+    return 'https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-male-user-profile-vector-illustration-isolated-background-man-profile-sign-business-concept_157943-38764.jpg';
+  } if (email === 'john@foo.com') {
+    return 'https://static.vecteezy.com/system/resources/previews/000/439/863/non_2x/vector-users-icon.jpg';
+  }
+  return 'https://icons.veryicon.com/png/o/system/crm-android-app-icon/app-icon-person.png';
 };
 
 const SellerListings = () => {
@@ -51,6 +61,7 @@ const SellerListings = () => {
         const data = await response.json();
         setUser({
           username: data.email.split('@')[0], // Use part of the email as a username
+          email: data.email, // Add the email property
         });
       } catch (err) {
         console.error('Error fetching user data:', err);
@@ -98,7 +109,7 @@ const SellerListings = () => {
           <div className={`${styles.profileWrapper} d-flex flex-column align-items-center`}>
             {/* Profile Picture */}
             <Image
-              src="https://via.placeholder.com/150"
+              src={getProfilePicture(user?.email)}
               alt="Profile Picture"
               className={styles.profileImage}
             />
