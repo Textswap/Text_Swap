@@ -20,7 +20,8 @@ type User = {
 
 const getProfilePicture = (email: string | undefined) => {
   if (email === 'admin@foo.com') {
-    return 'https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-male-user-profile-vector-illustration-isolated-background-man-profile-sign-business-concept_157943-38764.jpg';
+    return 'https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-male-user-'
+    + 'profile-vector-illustration-isolated-background-man-profile-sign-business-concept_157943-38764.jpg';
   } if (email === 'john@foo.com') {
     return 'https://static.vecteezy.com/system/resources/previews/000/439/863/non_2x/vector-users-icon.jpg';
   }
@@ -42,11 +43,13 @@ const SellerListings = () => {
           throw new Error(errorData.message || 'Failed to fetch seller listings');
         }
 
-        const data: Book[] = await response.json();
-        setBooks(data);
+        const data = await response.json();
+        // Ensure data is an array
+        setBooks(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error('Error fetching seller listings:', err);
         setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        setBooks([]); // Set books to an empty array in case of error
       } finally {
         setLoading(false);
       }
@@ -119,7 +122,7 @@ const SellerListings = () => {
             </div>
             {/* Buttons */}
             <div className={`${styles.profileButtons} d-flex mt-3`}>
-              <Button
+              {/* <Button
                 variant="success"
                 className="me-2"
                 style={{
@@ -137,9 +140,9 @@ const SellerListings = () => {
               >
                 Follow
               </Button>
-              <Button variant="secondary">
+               <Button variant="secondary">
                 Message
-              </Button>
+              </Button> */}
             </div>
             <p className="mt-3">
               <strong>Reviews:</strong>
@@ -153,7 +156,7 @@ const SellerListings = () => {
         <Col md={8} className={styles.listingsSection}>
           <h2 className="mb-4">Listings</h2>
           <div className={styles.scrollableSection}>
-            {books.length === 0 ? (
+            {Array.isArray(books) && books.length === 0 ? (
               <p>You have no listings at the moment.</p>
             ) : (
               <Row>
