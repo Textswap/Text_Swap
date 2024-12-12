@@ -4,6 +4,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { Container, Card, Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useSearchParams } from 'next/navigation';
+import { ShieldCheck, LockFill } from 'react-bootstrap-icons';
 
 export const dynamic = 'force-dynamic';
 
@@ -79,26 +80,26 @@ const PaymentPage: React.FC = () => {
   return (
     <Container
       fluid
-      className="d-flex flex-column justify-content-center align-items-center min-vh-100 p-4"
+      className="d-flex flex-wrap justify-content-center align-items-center"
       style={{
         backgroundColor: 'var(--secondary-color)',
         overflowY: 'auto',
         maxHeight: '100vh',
-        padding: '2rem',
+        padding: 'calc(4rem + 56px) 2rem 2rem',
+        gap: '2rem',
       }}
     >
-      {/* Page Header Section */}
       <div
-        className="text-center mb-4 p-4"
+        className="text-center mb-3 p-4"
         style={{
-          maxWidth: '700px',
-          backgroundColor: 'var(--main-color)',
+          maxWidth: '500px',
+          backgroundColor: '#2E8B57',
           color: 'white',
           borderRadius: '12px',
           boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
         }}
       >
-        <h1 className="display-5 mb-3">Complete Your Payment</h1>
+        <h3 className="display-5 mb-3">Complete Your Payment</h3>
         <p className="lead">
           You&apos;re just one step away from finalizing your transaction. Please
           complete your payment to confirm your order.
@@ -106,18 +107,16 @@ const PaymentPage: React.FC = () => {
         <div
           className="mt-3 p-3 rounded"
           style={{
-            backgroundColor: 'var(--main-color-darker)',
+            background: '#2F855A',
+            border: '2px solid rgba(255,255,255,0.3)',
             color: 'white',
           }}
         >
           <strong>Need Assistance?</strong>
           <p className="mb-0 mt-1">
-            For payment-related concerns or inquiries, you can email us directly
-            at
-            {' '}
-            <strong>textswap@foo.com</strong>
+            For payment-related concerns or inquiries, you can email us directly at
+            <strong> textswap@foo.com</strong>
             . Our team is here to help!
-            {' '}
           </p>
         </div>
       </div>
@@ -126,31 +125,30 @@ const PaymentPage: React.FC = () => {
         className="w-100 shadow-lg"
         style={{
           maxWidth: '600px',
-          borderColor: 'var(--main-color)',
           borderWidth: '2px',
           borderRadius: '12px',
-          overflowY: 'auto',
-          maxHeight: '80vh',
         }}
       >
         <Card.Header
           className="text-center py-4"
           style={{
-            backgroundColor: 'var(--main-color)',
+            backgroundColor: '#2E8B57',
             color: 'white',
           }}
         >
           <h2 className="mb-0">Secure Payment</h2>
-          <small className="text-light">Complete your transaction safely</small>
+          <small className="text-light">
+            <ShieldCheck />
+            {' '}
+            Complete your transaction safely
+          </small>
         </Card.Header>
         <Card.Body className="p-4">
           <Form onSubmit={handleSubmit}>
             <Row>
-              <Col md={6}>
+              <Col xs={12} md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label style={{ color: 'var(--main-color-darker)' }}>
-                    Card Type
-                  </Form.Label>
+                  <Form.Label style={{ color: '#2E8B57' }}>Card Type</Form.Label>
                   <div>
                     <Form.Check
                       inline
@@ -175,17 +173,15 @@ const PaymentPage: React.FC = () => {
                   </div>
                 </Form.Group>
               </Col>
-              <Col md={6}>
+              <Col xs={12} md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label style={{ color: 'var(--main-color-darker)' }}>
-                    Card Network
-                  </Form.Label>
+                  <Form.Label style={{ color: '#2E8B57' }}>Card Network</Form.Label>
                   <Form.Select
                     name="cardNetwork"
                     value={formData.cardNetwork}
                     onChange={handleInputChange}
                     style={{
-                      borderColor: 'var(--main-color)',
+                      borderColor: '#2E8B57',
                       backgroundColor: 'white',
                     }}
                   >
@@ -199,9 +195,8 @@ const PaymentPage: React.FC = () => {
                 </Form.Group>
               </Col>
             </Row>
-
             <Form.Group className="mb-3">
-              <Form.Label style={{ color: 'var(--main-color-darker)' }}>
+              <Form.Label style={{ color: '#2E8B57' }}>
                 Cardholder Name
               </Form.Label>
               <Form.Control
@@ -212,14 +207,14 @@ const PaymentPage: React.FC = () => {
                 placeholder="Full Name as on Card"
                 required
                 style={{
-                  borderColor: 'var(--main-color)',
+                  borderColor: '#2E8B57',
                   backgroundColor: 'white',
                 }}
               />
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label style={{ color: 'var(--main-color-darker)' }}>
+              <Form.Label style={{ color: '#2E8B57' }}>
                 Card Number
               </Form.Label>
               <Form.Control
@@ -230,7 +225,7 @@ const PaymentPage: React.FC = () => {
                 placeholder="1234 5678 9012 3456"
                 required
                 style={{
-                  borderColor: 'var(--main-color)',
+                  borderColor: '#2E8B57',
                   backgroundColor: 'white',
                 }}
               />
@@ -239,7 +234,7 @@ const PaymentPage: React.FC = () => {
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label style={{ color: 'var(--main-color-darker)' }}>
+                  <Form.Label style={{ color: '#2E8B57' }}>
                     Expiry Date
                   </Form.Label>
                   <Form.Control
@@ -250,7 +245,7 @@ const PaymentPage: React.FC = () => {
                     placeholder="MM/YY"
                     required
                     style={{
-                      borderColor: 'var(--main-color)',
+                      borderColor: '#2E8B57',
                       backgroundColor: 'white',
                     }}
                   />
@@ -258,7 +253,7 @@ const PaymentPage: React.FC = () => {
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label style={{ color: 'var(--main-color-darker)' }}>
+                  <Form.Label style={{ color: '#2E8B57' }}>
                     CVV
                   </Form.Label>
                   <Form.Control
@@ -269,7 +264,7 @@ const PaymentPage: React.FC = () => {
                     placeholder="123"
                     required
                     style={{
-                      borderColor: 'var(--main-color)',
+                      borderColor: '#2E8B57',
                       backgroundColor: 'white',
                     }}
                   />
@@ -280,7 +275,7 @@ const PaymentPage: React.FC = () => {
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label style={{ color: 'var(--main-color-darker)' }}>
+                  <Form.Label style={{ color: '#2E8B57' }}>
                     Billing Email
                   </Form.Label>
                   <Form.Control
@@ -291,7 +286,7 @@ const PaymentPage: React.FC = () => {
                     placeholder="uhm@foo.com"
                     required
                     style={{
-                      borderColor: 'var(--main-color)',
+                      borderColor: '#2E8B57',
                       backgroundColor: 'white',
                     }}
                   />
@@ -299,7 +294,7 @@ const PaymentPage: React.FC = () => {
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label style={{ color: 'var(--main-color-darker)' }}>
+                  <Form.Label style={{ color: '#2E8B57' }}>
                     Billing Phone
                   </Form.Label>
                   <Form.Control
@@ -310,7 +305,7 @@ const PaymentPage: React.FC = () => {
                     placeholder="(123) 456-7890"
                     required
                     style={{
-                      borderColor: 'var(--main-color)',
+                      borderColor: '#2E8B57',
                       backgroundColor: 'white',
                     }}
                   />
@@ -325,17 +320,16 @@ const PaymentPage: React.FC = () => {
                 label="Save card for future purchases"
                 checked={formData.saveCard}
                 onChange={handleInputChange}
-                style={{ color: 'var(--main-color-darker)' }}
+                style={{ color: '#2E8B57' }}
               />
             </Form.Group>
-
             <div className="d-grid">
               <Button
                 type="submit"
                 className="mt-3"
                 style={{
-                  backgroundColor: 'var(--main-color)',
-                  borderColor: 'var(--main-color-darker)',
+                  backgroundColor: '#2E8B57',
+                  borderColor: '#2E8B57',
                   padding: '12px',
                   fontSize: '1.1rem',
                 }}
@@ -343,17 +337,20 @@ const PaymentPage: React.FC = () => {
                 Complete Payment
               </Button>
             </div>
-
             <div className="mt-3 text-center">
               <button
                 type="button"
                 onClick={() => setShowTips(!showTips)}
                 style={{
-                  color: 'var(--main-color-darker)',
+                  color: '#2E8B57',
                   cursor: 'pointer',
+                  border: 'none',
+                  backgroundColor: 'transparent',
                   textDecoration: 'underline',
                 }}
               >
+                <LockFill />
+                {' '}
                 {showTips ? 'Hide' : 'Show'}
                 {' '}
                 Payment Security Tips
@@ -361,7 +358,14 @@ const PaymentPage: React.FC = () => {
             </div>
 
             {showTips && (
-              <Alert variant="info" className="mt-3">
+              <Alert
+                className="mt-3"
+                style={{
+                  backgroundColor: 'rgba(46, 139, 87, 0.8)',
+                  color: 'white',
+                  borderColor: '#2F855A',
+                }}
+              >
                 <ul className="mb-0">
                   <li>Your payment is encrypted and secure</li>
                   <li>We never store your full card details</li>
