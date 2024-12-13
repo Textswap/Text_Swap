@@ -65,8 +65,7 @@ The Available Textbooks section dynamically displays textbooks based on the filt
 
 <p align="center"> <img src="images/txsBkDetails.png" width=700px> </p>
 
-#### Account Pictures 
-Admin has the remove button 
+#### Remove Book Button on Admin
 For our admin account, the View Details page includes an additional feature: a "Remove Book" button. This functionality allows the admin to delete a textbook listing if necessary. This feature is designed to ensure the accuracy and quality of the listings by enabling the team to manage and maintain the database effectively.
 <p align="center"> <img src="images/txsRemoveBk.png" width=700px> </p>
 
@@ -87,9 +86,11 @@ If a user is the owner of a textbook, the "Add to Cart" button is disabled to pr
 <p align="center"> <img src="images/txsCart.png" width=700px> </p>
 
 ### Account Page 
-Profile picture is presetup for 
 <p align="center"> <img src="images/txsAcc1.png" width=450px> <img src="images/txsAcc2.png" width=450px> </p>
 <p align="center"> <img src="images/txsAcc3.png" width=450px> <img src="images/txsAcc4.png" width=450px> </p>
+
+The account page provides users with a personalized view of their profile and listings. Each account is pre-configured with a profile picture for specific users like Admin (admin@foo.com),  John (john@foo.com), and Jane (jane@foo.com), while new users are assigned a default profile picture. Users can view a list of books they have uploaded, making it easy to track their listings. Each listing includes a “View Details” button, allowing users to access detailed information about their own books.
+
 
 #### Listing of Books Owned
 <p align="center"> <img src="images/txsOwnList.png" width=700px> </p>
@@ -107,13 +108,13 @@ The admin page serves as a central hub for monitoring and managing books uploade
 ## Milestones
 
 ### Milestone 1
-Our first milestone was to get the basic skeleton up and running, with functionality of the landing page and the ability to swap between tabs, but not to have any actually working pages yet. In this goal it was specifically to have a mock-up of the page in order to slowly add functionality over the course of the next two milestones. View our project page [here]().
+Our first milestone was to get the basic skeleton up and running, with the functionality of the landing page and the ability to swap between tabs, but not to have any actually working pages yet. In this goal, it was specifically to have a mock-up of the page in order to slowly add functionality over the course of the next two milestones. View our project page [here]().
 
 ### Milestone 2
-Our second milestone was to start adding minor functionality to the whole site, but not worrying too much about everything working smoothly. This milestone is more of a progress check in to ensure that we can complete the website on time in alignment with our current schedule. In addition, we intended to no longer need mock-ups for this milestone. View our project page [here]().
+Our second milestone was to start adding minor functionality to the whole site, but not worrying too much about everything working smoothly. This milestone is more of a progress check-in to ensure that we can complete the website on time in alignment with our current schedule. In addition, we intended to no longer need mock-ups for this milestone. View our project page [here]().
 
 ### Milestone 3
-Our third and final milestone was to have the project completely finished and polished. In addition, in this milestone we started to collect community feedback from students in our college who are not part of our class. The feedback from the individuals we got reviews from are listed in the "Community Feedback" section. View our project page [here]().
+Our third and final milestone was to have the project completely finished and polished. In addition, during this milestone, we started to collect community feedback from students in our college who are not part of our class. The feedback from the individuals we got reviews from are listed in the "Community Feedback" section. View our project page [here]().
 
 ## Community Feedback: 
 
@@ -141,8 +142,8 @@ Manoa Textswap is an intuitive site that simplifies a common issue for UH studen
 ### Running/Modifying
 * Set up a .env file in the root of the project. Configure PostgreSQL database. Sign up with a GitHub on Cloudinary account and then include in .env file the following fields. 
 * DATABASE_URL="postgresql:/username:password@localhost:5432/mydb?schema=public"
-* CLOUDINARY_CLOUD_NAME= 
-* CLOUDINARY_API_KEY= 
+* CLOUDINARY_CLOUD_NAME=
+* CLOUDINARY_API_KEY=
 * CLOUDINARY_API_SECRET=
 * npm run dev
 
