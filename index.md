@@ -133,9 +133,11 @@ Manoa Textswap is an intuitive site that simplifies a common issue for UH studen
 ### Downloading
 * Clone to GitHub Desktop
 * Open in Visual Studio Code
+
 ### Installing
 * npm install 
 * Other dependencies as necessary (bootstrap react, formik, axios, yup,etc)
+
 ### Running/Modifying
 * Set up a .env file in the root of the project. Configure PostgreSQL database. Sign up with a GitHub on Cloudinary account and then include in .env file the following fields. 
 * DATABASE_URL="postgresql:/username:password@localhost:5432/mydb?schema=public"
@@ -144,4 +146,4 @@ Manoa Textswap is an intuitive site that simplifies a common issue for UH studen
 * CLOUDINARY_API_SECRET=
 * npm run dev
 
-#### This page is ran and maintained by Ellie Ishii, Xingyao He, Dhaniel Bolosan, and Logan Teachout
+#### This page is run and maintained by Ellie Ishii, Xingyao He, Dhaniel Bolosan, and Logan Teachout
