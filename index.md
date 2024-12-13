@@ -1,24 +1,24 @@
 ## Table of Contents: 
-- [Overview](@Overview)
-- [User Guide](@User-Guide)
-  - [Landing Page](@Landing-Page)
-  - [Buy Page](@Buy-Page)
-  - [Sell Page](@Sell-Page)
-  - [Cart Page](@Cart-Page)
-  - [Account Page](@Account-Page)
-  - [Payment Page](@Payment-Page)
-  - [Admin Page](@Admin-Page)
-- [Milestones](@Milestones)
-- [Community Feedback](@Community-Feedback)
-- [Developer Guide](@Developer-Guide)
+* [Overview](@Overview)
+* [User Guide](@User-Guide)
+* [Landing Page](@Landing-Page)
+* [Buy Page](@Buy-Page)
+* [Sell Page](@Sell-Page)
+* [Cart Page](@Cart-Page)
+* [Account Page](@Account-Page)
+* [Payment Page](@Payment-Page)
+* [Admin Page](@Admin-Page)
+* [Milestones](@Milestones)
+* [Community Feedback](@Community-Feedback)
+* [Developer Guide](@Developer-Guide)
 
-# Overview: 
+## Overview: 
 Manoa TextSwap is a student-driven platform designed to simplify the process of buying and selling secondhand textbooks for the UH Manoa community. The platform enables users to upload used books for sale. Our admin review system ensures that only approved listings appear on the “Buy” page. Users can easily search and filter listings to find textbooks for their specific classes, making the process of acquiring course materials more efficient and affordable. Built with modern web development tools like Next.js and hosted on Vercel, Manoa TextSwap combines a user-friendly interface with tools to streamline textbook exchanges and promote sustainability through reuse.
 
 ### [Deployment](https://manoa-textswap.vercel.app/)
 
-# User Guide: 
-## Landing Page
+## User Guide: 
+### Landing Page
 <p align="center"> <img src="images/txsLanding.png" width=700px> </p>
 
 The sign-up process is accessible by clicking the ‘Get Started’ button or through the link at the top right of the page. The form requires only an email address and a password, ensuring a straightforward registration process. For users with existing accounts, the login page is also located at the top right of the navigation bar. This structure provides clear access to account management features for all users.
@@ -47,7 +47,7 @@ Changing your password and logging out are straightforward processes. By clickin
 ### Sign out page
 <p align="center"> <img src="images/txsSignOut.png" width=700px> </p>
 
-## Buy
+### Buy
 
 #### Filters
 <p align="center"> <img src="images/txsBuy.png" width=700px> </p>
