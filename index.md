@@ -1,386 +1,133 @@
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/landing-page.png)
-
-nextjs-application-template is a sample Next.js 14 application that illustrates:
-
-- A standard directory layout using 'src/' as recommended in the [Next.js Project Structure](https://nextjs.org/docs/getting-started/project-structure) guide.
-- [Bootstrap 5 React](https://react-bootstrap.github.io/) for user interface.
-- [React Hook Form](https://www.react-hook-form.com/) for form development.
-- Authorization, authentication, and registration using [NextAuth.js](https://next-auth.js.org/).
-- Initialization of users and data from a settings file.
-- Alerts regarding success or failure of DB updates using [Sweet Alert](https://sweetalert.js.org/).
-- Quality assurance using [ESLint](http://eslint.org) with packages to partially enforce the [Next.js ESLint rules](https://nextjs.org/docs/app/building-your-application/configuring/eslint) and the [AirBnB Javascript Style Guide](https://github.com/airbnb/javascript).
-
-The goal of this template is to help you get quickly started doing Next.js development by providing a reasonable directory structure for development and deployment, a set of common extensions to the core framework, and boilerplate code to implement basic page display, navigation, forms, roles, and database manipulation.
-
-To keep this codebase simple and small, some important capabilities are intentionally excluded from this template:
-
-- Unit Testing
-- Security
-- Deployment
-
-Examples of the these capabilities will be provided elsewhere.
-
-## Installation
-
-First, [install PostgreSQL](https://www.postgresql.org/download/). Then create a database for your application.
-
-```
-
-$ createdb nextjs-application-template
-Password:
-$
-
-```
-
-Second, go to [https://github.com/ics-software-engineering/nextjs-application-template](https://github.com/ics-software-engineering/nextjs-application-template), and click the "Use this template" button. Complete the dialog box to create a new repository that you own that is initialized with this template's files.
-
-Third, go to your newly created repository, and click the "Clone or download" button to download your new GitHub repo to your local file system. Using [GitHub Desktop](https://desktop.github.com/) is a great choice if you use MacOS or Windows.
-
-Fourth, cd into the directory of your local copy of the repo, and install third party libraries with:
-
-```
-
-$ npm install
-
-```
-
-Fifth, create a `.env` file from the `sample.env`. Set the `DATABASE_URL` variable to match your PostgreSQL database that you created in the first step. See the Prisma docs [Connect your database](https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/relational-databases/connect-your-database-typescript-postgresql). Then run the Prisma migration `npx prisma migrate dev` to set up the PostgreSQL tables.
-
-```
-
-$ npx prisma migrate dev
-Environment variables loaded from .env
-Prisma schema loaded from prisma/schema.prisma
-Datasource "db": PostgreSQL database "<your database name>", schema "public" at "localhost:5432"
-
-Applying migration `20240708195109_init`
-
-The following migration(s) have been applied:
-
-migrations/
-└─ 20240708195109_init/
-└─ migration.sql
-
-Your database is now in sync with your schema.
-
-✔ Generated Prisma Client (v5.16.1) to ./node_modules/@prisma/client in 51ms
-
-$
-
-```
-
-Then seed the database with the `/config/settings.development.json` data using `npx prisma db seed`.
-
-```
-
-$ npx prisma db seed
-Environment variables loaded from .env
-Running seed command `ts-node --compiler-options {"module":"CommonJS"} prisma/seed.ts` ...
-Seeding the database
-Creating user: admin@foo.com with role: ADMIN
-Creating user: john@foo.com with role: USER
-Adding stuff: Basket (john@foo.com)
-Adding stuff: Bicycle (john@foo.com)
-Adding stuff: Banana (admin@foo.com)
-Adding stuff: Boogie Board (admin@foo.com)
-
-🌱 The seed command has been executed.
-$
-
-```
-
-## Running the system
-
-Once the libraries are installed and the database seeded, you can run the application by invoking the "dev" script in the [package.json file](https://github.com/ics-software-engineering/nextjs-application-template/blob/master/app/package.json):
-
-```
-
-$ npm run dev
-
-> nextjs-application-template-1@0.1.0 dev
-> next dev
-
-▲ Next.js 14.2.4
-
-- Local: http://localhost:3000
-- Environments: .env
-
-✓ Starting...
-✓ Ready in 1619ms
-
-```
-
-### Viewing the running app
-
-If all goes well, the template application will appear at [http://localhost:3000](http://localhost:3000). You can login using the credentials in [settings.development.json](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/config/settings.development.json), or else register a new account.
-
-### ESLint
-
-You can verify that the code obeys our coding standards by running ESLint over the code in the src/ directory with:
-
-```
-$ npm run lint
-
-> nextjs-application-template-1@0.1.0 lint
-> next lint
-
-✔ No ESLint warnings or errors
-$
-```
-
-## Walkthrough
-
-The following sections describe the major features of this template.
-
-### Directory structure
-
-The top-level directory structure is:
-
-```
-
-.github # holds the GitHub Continuous Integration action and Issue template.
-
-config/ # holds configuration files, such as settings.development.json
-
-doc/ # holds developer documentation, user guides, etc.
-
-prisma/ # holds the Prisma ORM schema and seed.ts files.
-
-public/ # holds the public images.
-
-src/ # holds the application files.
-
-tests/ # holds the Playwright acceptance tests.
-
-.eslintrc.json # The ESLint configuration.
-
-.gitignore # don't commit VSCode settings files, node_modules, and settings.production.json
-
-```
-
-This structure separates documentation files (such as screenshots) and configuration files (such as the settings files) from the actual Next.js application.
-
-The src/ directory has this structure:
-
-```
-
-app/
-
-  add/ # The add route
-    page.tsx # The Add Stuff Page
-
-  admin/
-    page.tsx # The Admin Page
-
-  api/auth/[...nextauth]/
-    route.ts # The NextAuth configuration
-
-  auth/
-    change-password/
-      page.tsx # The Change Password Page
-
-    signin/
-      page.tsx # The Sign In Page
-
-    signout/
-      page.tsx # The Sign Out Page
-
-    signup/
-      page.tsx # The Sign Up / Register Page
-
-  edit/
-    page.tsx # The Edit Stuff Page
-
-  list/
-    page.tsx # The List Stuff Page
-
-  not-authorized/
-    page.tsx # The Not Authorized Page
-
-  layout.tsx # The layout of the application
-
-  page.tsx # The Landing Page
-
-  providers.tsx # Session providers.
-
-  components/
-    AddStuffForm.tsx # The React Hook Form for adding stuff.
-
-    EditStuffForm.tsx # The Edit Stuff Form.
-
-    Footer.tsx # The application footer.
-
-    LoadingSpinner.tsx # Indicates working.
-
-    Navbar.tsx # The application navbar.
-
-    StuffItem.tsx # Row in the list stuff page.
-
-    StuffItemAdmin.tsx # Row in the admin list stuff page.
-
-  lib/
-
-    dbActions.ts # Functions to manipulate the Postgres database.
-
-    page-protections.ts # Functions to check for logged in users and their roles.
-
-    prisma.ts # Singleton Prisma client.
-
-    validationSchemas.ts # Yup schemas for validating forms.
-
-  tests/ # playwright acceptance tests.
-
-```
-
-### Application functionality
-
-The application implements a simple CRUD application for managing "Stuff", which is a PostgreSQL table consisting of a name (String), a quantity (Number), a condition (one of 'excellent', 'good', 'fair', or 'poor') and an owner.
-
-By default, each user only sees the Stuff that they have created. However, the settings file enables you to define default accounts. If you define a user with the role "admin", then that user gets access to a special page which lists all the Stuff defined by all users.
-
-#### Landing page
-
-When you retrieve the app at http://localhost:3000, this is what should be displayed:
-
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/landing-page.png)
-
-The next step is to use the Login menu to either Login to an existing account or register a new account.
+## Table of Contents: 
+* [Overview](Overview)
+* [User Guide](User-Guide)
+* [Landing Page](Landing-Page)
+* [Buy Page](Buy-Page)
+* [Sell Page](Sell-Page)
+* [Cart Page](Cart-Page)
+* [Account Page](Account-Page)
+* [Payment Page](Payment-Page)
+* [Admin Page](Admin-Page)
+* [Milestones](Milestones)
+* [Community Feedback](Community-Feedback)
+* [Developer Guide](Developer-Guide)
+
+## Overview: 
+Manoa TextSwap is a student-driven platform designed to simplify the process of buying and selling secondhand textbooks for the UH Manoa community. The platform enables users to upload used books for sale. Our admin review system ensures that only approved listings appear on the “Buy” page. Users can easily search and filter listings to find textbooks for their specific classes, making the process of acquiring course materials more efficient and affordable. Built with modern web development tools like Next.js and hosted on Vercel, Manoa TextSwap combines a user-friendly interface with tools to streamline textbook exchanges and promote sustainability through reuse.
+
+### [Deployment](https://manoa-textswap.vercel.app/)
+
+## User Guide: 
+### Landing Page
+<p align="center"> <img src="images/txsLanding.png" width=60%> </p>
+
+The sign-up process is accessible by clicking the ‘Get Started’ button or through the link at the top right of the page. The form requires only an email address and a password, ensuring a straightforward registration process. For users with existing accounts, the login page is also located at the top right of the navigation bar. This structure provides clear access to account management features for all users.
 
 #### Login page
+<p align="center"> <img src="images/txsSignIn.png" width=60%> </p>
 
-Clicking on the Login link, then on the Sign In menu item displays this page:
+#### Sign up page
+<p align="center"> <img src="images/txsSignUp.png" width=60%> </p>
 
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/signin-page.png)
+#### Modal
+Clicking on any of the boxes opens a preview modal that provides an overview of the website. This feature allows users without an account to still explore the platform’s functionality, offering insight into how textbooks are listed and sold.
 
-#### Register page
+<p align="center"> <img src="images/txsPreview1.png" width=60%> </p>
 
-Alternatively, clicking on the Login link, then on the Sign Up menu item displays this page:
+<p align="center"> <img src="images/txsPreview2.png" width=60%> </p>
 
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/register-page.png)
+### NavBar
+On typical laptop and full screens, the navigation bar is displayed horizontally and includes options such as Buy, Sell, Cart, and Account, with an additional Admin link for admin accounts positioned before the Buy option. On smaller screens, the navbar transitions into a compact hamburger-style menu, represented by an icon that expands to show the same navigation options in a dropdown format for ease of use.
+<p align="center"> <img src="images/txsNavbar.png" width=60%> </p>
 
-#### Landing (after Login) page, non-Admin user
+### Change password page
+Changing your password and logging out are straightforward processes. By clicking on your email address at the top right of the page, a dropdown menu appears with options to change your password or log out. Selecting "Change Password" prompts you to confirm your current password before allowing you to set a new one, ensuring security. Choosing "Sign Out" logs you out of your account and redirects you to the landing page of the website. This setup ensures quick and secure access to account management functions.
+<p align="center"> <img src="images/txsChangePass.png" width=60%> </p>
 
-Once you log in (either to an existing account or by creating a new one), the navbar changes as follows:
+### Sign out page
+<p align="center"> <img src="images/txsSignOut.png" width=60%> </p>
 
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/landing-after-login-page.png)
+### Buy
 
-You can now add new Stuff documents, and list the Stuff you have created. Note you cannot see any Stuff created by other users.
+#### Filters
+<p align="center"> <img src="images/txsBuy.png" width=60%> </p>
 
-#### Add Stuff page
+### List of Subjects
+The Buy page includes a comprehensive filter system to help users find the right textbook. It features a price range slider for setting budget preferences, a dropdown menu to select from various subjects, and an optional input field for typing a course name, keywords, or ISBN. Additionally, users can specify their preferred condition for the textbook, ensuring a tailored and efficient search experience.
+<p align="center"> <img src="images/txsSubList.png" width=60%> </p>
 
-After logging in, here is the page that allows you to add new Stuff:
+### View Details
+The Available Textbooks section dynamically displays textbooks based on the filters applied, including information about the owner of each textbook. Each textbook entry includes a "View Details" button, which provides more in-depth information about the selected book. Additionally, there are two action buttons: "Buy Now," which redirects the user to the payment page for immediate purchase, and "Add to Cart," which saves the selected textbook to the user's cart page for future review or purchase. This setup streamlines the browsing and purchasing process for users. 
 
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/add-stuff-page.png)
+<p align="center"> <img src="images/txsBkDetails.png" width=60%> </p>
 
-#### List Stuff page
+#### Account pictures 
+Admin has the remove button 
+For our admin account, the View Details page includes an additional feature: a "Remove Book" button. This functionality allows the admin to delete a textbook listing if necessary. This feature is designed to ensure the accuracy and quality of the listings by enabling the team to manage and maintain the database effectively.
+<p align="center"> <img src="images/txsRemoveBk.png" width=60%> </p>
 
-After logging in, here is the page that allows you to list all the Stuff you have created:
+## Sell
+<p align="center"> <img src="images/txsList.png" width=60%> </p>
 
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/list-stuff-page.png)
+#### Image Preview
+Ability to upload straight from their laptop (not just image links)
+Draggable 
+Just copying & pasting image links in the bottom box works
+This will also show the preview image in the picture section above 
+<p align="center"> <img src="images/txsImgPreview.png" width=60%> </p>
 
-You click the "Edit" link to go to the Edit Stuff page, shown next.
+## Cart
+The Cart Page displays a list of textbooks saved by users via the "Add to Cart" button. Each textbook entry includes a "Buy Now" button that directs the user to the payment form for immediate purchase and a delete icon for removing the textbook from the cart if it is no longer needed. Additionally, the author of each listed textbook is shown, making it easy for users to manage their selections while having all relevant details readily available.
+If a user is the owner of a textbook, the "Add to Cart" button is disabled to prevent them from adding their own books to the cart.
 
-#### Edit Stuff page
+<p align="center"> <img src="images/txsCart.png" width=60%> </p>
 
-After clicking on the "Edit" link associated with an item, this page displays that allows you to change and save it:
+## Account Page 
+Profile picture is presetup for 
+<p align="center"> <img src="images/txsAcc1.png" width=40%> <img src="images/txsAcc2.png" width=40%> </p>
+<p align="center"> <img src="images/txsAcc3.png" width=40%> <img src="images/txsAcc4.png" width=40%> </p>
 
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/edit-stuff-page.png)
+#### Listing of books owned
+<p align="center"> <img src="images/txsOwnList.png" width=60%> </p>
 
-#### Landing (after Login), Admin user
+## Payment Page 
 
-You can define an "admin" user in the settings.json file. This user, after logging in, gets a special entry in the navbar:
+The payment page serves as a placeholder to simulate a secure payment process, accessible through the “Buy Now” button. While users can type in information such as card details, names, and billing addresses, no actual payment or transaction occurs. This feature is designed to demonstrate how a payment system would function within the platform, providing a realistic user experience without processing real transactions. 
+<p align="center"> <img src="images/txsPayment.png" width=60%> </p>
 
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/admin-landing-page.png)
+## Admin Page 
 
-#### Admin page (list all users stuff)
+The admin page serves as a central hub for monitoring and managing books uploaded by users, ensuring a safe and reliable environment for all participants. Admins can either approve or remove listings. Approved books are immediately displayed on the “Buy” page, making them accessible for users to browse and purchase. Removed listings are permanently deleted from the system, maintaining the platform’s quality and relevance. Clicking on a book title redirects to a detailed view, allowing admins to review critical information before making decisions. This active monitoring by admins ensures that all interactions on the platform are secure and trustworthy.
+<p align="center"> <img src="images/txsAdmin.png" width=60%> </p>
 
-To provide a simple example of a "super power" for Admin users, the Admin page lists all of the Stuff by all of the users:
+## Milestones
 
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/admin-list-stuff-page.png)
+### M1
+Our first milestone was to get the basic skeleton up and running, with functionality of the landing page and the ability to swap between tabs, but not to have any actually working pages yet. In this goal it was specifically to have a mock-up of the page in order to slowly add functionality over the course of the next two milestones. View our project page [here]().
 
-Note that non-admin users cannot get to this page, even if they type in the URL by hand.
+### M2
+Our second milestone was to start adding minor functionality to the whole site, but not worrying too much about everything working smoothly. This milestone is more of a progress check in to ensure that we can complete the website on time in alignment with our current schedule. In addition, we intended to no longer need mock-ups for this milestone. View our project page [here]().
 
-### Tables
+### M3
+Our third and final milestone was to have the project completely finished and polished. In addition, in this milestone we started to collect community feedback from students in our college who are not part of our class. The feedback from the individuals we got reviews from are listed in the "Community Feedback" section. View our project page [here]().
 
-The application implements two tables "Stuff" and "User". Each Stuff row has the following columns: id, name, quantity, condition, and owner. The User table has the following columns: id, email, password (hashed using bcrypt), role.
+## Community Feedback: 
 
-The Stuff and User models are defined in [prisma/schema.prisma](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/prisma/schema.prisma).
+### From 5 people: 
+#### Sam Tiwanak: 
+Manoa Textswap is an intuitive site that simplifies a common issue for UH students. Often books just go unused after a course. With this website, I was able to easily navigate and even upload potential books I would want to sell. I think it’s a great idea and the layout works well.
 
-The tables are initialized in [prisma/seed.ts](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/prisma/seed.ts) using the command `npx prisma db seed`.
-
-### CSS
-
-The application uses the [React implementation of Bootstrap 5](https://react-bootstrap.github.io/). You can adjust the theme by editing the `src/app/globals.css` file. To change the theme override the Bootstrap 5 CSS variables.
-
-```css
-/* Change bootstrap variable values.
- See https://getbootstrap.com/docs/5.2/customize/css-variables/
- */
-body {
-  --bs-light-rgb: 236, 236, 236;
-}
-
-/* Define custom styles */
-.gray-background {
-  background-color: var(--bs-gray-200);
-  color: var(--bs-dark);
-  padding-top: 10px;
-  padding-bottom: 20px;
-}
-```
-
-### Routing
-
-For display and navigation among its four pages, the application uses [Next.js App Router](https://nextjs.org/docs/app/building-your-application/routing).
-
-Routing is defined by the directory structure.
-
-### Authentication
-
-For authentication, the application uses the NextAuth package.
-
-When the database is seeded, a settings file (such as [config/settings.development.json](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/config/settings.development.json)) is used to create users and stuff in the PostgreSQL database. That will lead to a default accounts being created.
-
-The application allows users to register and create new accounts at any time.
-
-### Authorization
-
-Only logged in users can manipulate Stuff items (but any registered user can manipulate any Stuff item, even if they weren't the user that created it.)
-
-### Configuration
-
-The [config](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/config) directory is intended to hold settings files. The repository contains one file: [config/settings.development.json](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/config/settings.development.json).
-
-The [.gitignore](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/.gitignore) file prevents a file named settings.production.json from being committed to the repository. So, if you are deploying the application, you can put settings in a file named settings.production.json and it will not be committed.
-
-### Quality Assurance
-
-#### ESLint
-
-The application includes a [.eslintrc.json](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/.eslintrc.json) file to define the coding style adhered to in this application. You can invoke ESLint from the command line as follows:
-
-```
-[~/nextjs-application-template]-> npm run lint
-
-> nextjs-application-template-1@0.1.0 lint
-> next lint
-
-✔ No ESLint warnings or errors
-[~/nextjs-application-template]->
-```
-
-ESLint should run without generating any errors.
-
-It's significantly easier to do development with ESLint integrated directly into your IDE (such as VSCode).
-
-<!--
-## Screencasts
-
-For more information about this system, please watch one or more of the following screencasts. Note that the current source code might differ slightly from the code in these screencasts, but the changes should be very minor.
-
-- [Walkthrough of system user interface (6 min)](https://youtu.be/48xu1hrqUi8)
-- [Data and accounts structure and initialization (18 min)](https://youtu.be/HZRjwrVBWp4)
-- [Navigation, routing, pages, components (34 min)](https://youtu.be/XztTdHpv6Jw)
-- [Forms (32 min)](https://youtu.be/8FyWR3gUGCM)
-- [Authorization, authentication, and roles (12 min)](https://youtu.be/9HX5vuXTlvA)
--->
+## Developer Guide: 
+### Downloading
+* Clone to GitHub Desktop
+* Open in Visual Studio Code
+### Installing
+* npm install 
+* Other dependencies as necessary (bootstrap react, formik, axios, yup,etc)
+### Running/Modifying
+* Set up a .env file in the root of the project. Configure PostgreSQL database. Sign up with a GitHub on Cloudinary account and then include in .env file the following fields. 
+* DATABASE_URL="postgresql:/username:password@localhost:5432/mydb?schema=public"
+* CLOUDINARY_CLOUD_NAME= 
+* CLOUDINARY_API_KEY= 
+* CLOUDINARY_API_SECRET=
+* npm run dev
