@@ -19,12 +19,12 @@ Manoa TextSwap is a student-driven platform designed to simplify the process of 
 
 ## User Guide: 
 ### Landing Page
-<p align="center"> <img src="images/txsLanding.png" width=60%> </p>
+<p align="center"><img src="images/txsLanding.png" width=60%></p>
 
 The sign-up process is accessible by clicking the ‘Get Started’ button or through the link at the top right of the page. The form requires only an email address and a password, ensuring a straightforward registration process. For users with existing accounts, the login page is also located at the top right of the navigation bar. This structure provides clear access to account management features for all users.
 
 #### Login page
-<p align="center"> <img src="images/txsSignIn.png" width=60%> </p>
+<img src="images/txsSignIn.png" width=60%>
 
 #### Sign up page
 <p align="center"> <img src="images/txsSignUp.png" width=60%> </p>
@@ -131,3 +131,5 @@ Manoa Textswap is an intuitive site that simplifies a common issue for UH studen
 * CLOUDINARY_API_KEY= 
 * CLOUDINARY_API_SECRET=
 * npm run dev
+
+#### This page is ran and maintained by Ellie Ishii, Xingyao He, Dhaniel Bolosan, and Logan Teachout
