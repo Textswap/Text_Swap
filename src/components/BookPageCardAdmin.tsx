@@ -204,13 +204,13 @@ const BookPageCardAdmin = ({ book }: { book: Book }) => {
                   <Card.Text>
                     <span className="book-info-label">Subject: </span>
                     <span className="book-info-value" style={{ color: '#225f49' }}>
-                      {book.subject || 'N/A'}
+                      {book.subject.charAt(0).toUpperCase() + book.subject.slice(1) || 'N/A'}
                     </span>
                   </Card.Text>
                   <Card.Text>
                     <span className="book-info-label">Course Name: </span>
                     <span className="book-info-value" style={{ color: '#225f49' }}>
-                      {book.courseName || 'N/A'}
+                      {book.courseName ? book.courseName.charAt(0).toUpperCase() + book.courseName.slice(1) : 'N/A'}
                     </span>
                   </Card.Text>
                   <Card.Text>

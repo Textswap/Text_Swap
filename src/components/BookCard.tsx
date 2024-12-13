@@ -51,13 +51,13 @@ const BookCard = ({ book }: { book: Book }) => {
           {book.title}
         </Card.Title>
         <Card.Text style={{ textAlign: 'center', marginTop: '10px' }}>
-          <strong>Price:</strong> ${book.price}
+          <strong>Price:</strong> ${book.price.toFixed(2)}
         </Card.Text>
         <Card.Text style={{ textAlign: 'center' }}>
-          <strong>Subject:</strong> {book.subject}
+          <strong>Subject:</strong> {book.subject.charAt(0).toUpperCase() + book.subject.slice(1)}
         </Card.Text>
         <Card.Text style={{ textAlign: 'center' }}>
-          <strong>Condition:</strong> {book.condition}
+          <strong>Condition:</strong> {book.condition.charAt(0).toUpperCase() + book.condition.slice(1)}
         </Card.Text>
         <div
           className="details-wrapper"

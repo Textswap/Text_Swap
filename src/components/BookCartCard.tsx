@@ -13,9 +13,11 @@ import { useRouter } from 'next/navigation';
 const getProfilePicture = (email: string | undefined) => {
   if (email === 'admin@foo.com') {
     return 'https://www.sogefiproperties.com/wp-content/uploads/2020/07/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075259.jpg';
-  } if (email === 'john@foo.com') {
+  }
+  if (email === 'john@foo.com') {
     return 'https://thumbs.dreamstime.com/b/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075253.jpg';
-  } if (email === 'jane@foo.com') {
+  }
+  if (email === 'jane@foo.com') {
     return 'https://st2.depositphotos.com/1006318/5909/v/450/depositphotos_59094837-stock-illustration-businesswoman-profile-icon.jpg';
   }
   return 'https://icons.veryicon.com/png/o/system/crm-android-app-icon/app-icon-person.png';
@@ -77,7 +79,9 @@ const BookCartCard = ({ book }: { book: Book }) => {
             <Link className="book-link" href={`/book/${book.id}`}>
               <Card.Title style={{ fontSize: '2rem' }}>{book.title}</Card.Title>
             </Link>
-            <Card.Text style={{ fontSize: '1rem' }}>Condition: {book.condition}</Card.Text>
+            <Card.Text style={{ fontSize: '1rem' }}>
+              Condition: {book.condition.charAt(0).toUpperCase() + book.condition.slice(1)}
+            </Card.Text>
             <Card.Text style={{ fontSize: '1.25rem' }}>${book.price.toFixed(2)}</Card.Text>
             <div className="cart-description-box">
               <Card.Text style={{ fontSize: '0.75rem' }} className="text-truncate text-muted">
