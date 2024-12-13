@@ -1,6 +1,4 @@
 
-# TextSwap 📗
-
 <p align="center"> <img src="images/txsLogo.png" width=500px> </p>
 
 ## Table of Contents: 
