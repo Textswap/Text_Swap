@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 
@@ -9,9 +10,11 @@ import { Image, Card, Button, Col, Row } from 'react-bootstrap';
 const getProfilePicture = (email: string | undefined) => {
   if (email === 'admin@foo.com') {
     return 'https://www.sogefiproperties.com/wp-content/uploads/2020/07/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075259.jpg';
-  } if (email === 'john@foo.com') {
+  }
+  if (email === 'john@foo.com') {
     return 'https://thumbs.dreamstime.com/b/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075253.jpg';
-  } if (email === 'jane@foo.com') {
+  }
+  if (email === 'jane@foo.com') {
     return 'https://st2.depositphotos.com/1006318/5909/v/450/depositphotos_59094837-stock-illustration-businesswoman-profile-icon.jpg';
   }
   return 'https://icons.veryicon.com/png/o/system/crm-android-app-icon/app-icon-person.png';
@@ -81,7 +84,7 @@ const BookPageCard = ({ book }: { book: Book }) => {
         style={{
           position: 'absolute',
           top: '1px', // Place at the top
-          right: '100px', // Place at the right
+          left: '120px', // Place at the left
           zIndex: 10,
           borderRadius: '20px',
           border: 'none',
@@ -115,53 +118,58 @@ const BookPageCard = ({ book }: { book: Book }) => {
                   {book.title}
                 </Card.Title>
                 <Card.Text style={{ fontSize: '1.5rem', marginBottom: '0rem', color: 'black' }}>
-                  $
-                  {book.price.toFixed(2)}
+                  ${book.price.toFixed(2)}
                 </Card.Text>
                 <Card.Text style={{ fontSize: '1.25rem', color: '#225f49' }}>
-                  Condition:
-                  {' '}
-                  {book.condition.charAt(0).toUpperCase() + book.condition.slice(1)}
+                  Condition: {book.condition.charAt(0).toUpperCase() + book.condition.slice(1)}
                 </Card.Text>
               </Row>
               {/* Buttons */}
               {source !== 'account' && (
-              <Row style={{ marginBottom: '1.5rem' }}>
-                <Col>
-                  <Button variant="primary" className="buy-now" onClick={handleBuyNow}>
-                    Buy Now
-                  </Button>
-                </Col>
-                <Col>
-                  <Button
-                    variant="secondary"
-                    className="add-to-cart"
-                    onClick={handleAddToCart}
-                    disabled={isLoadingAddToCart}
-                  >
-                    {isLoadingAddToCart ? 'Adding to Cart...' : 'Add to Cart'}
-                  </Button>
-                </Col>
-              </Row>
+                <Row style={{ marginBottom: '1.5rem' }}>
+                  <Col>
+                    <Button variant="primary" className="buy-now" onClick={handleBuyNow}>
+                      Buy Now
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button
+                      variant="secondary"
+                      className="add-to-cart"
+                      onClick={handleAddToCart}
+                      disabled={isLoadingAddToCart}
+                    >
+                      {isLoadingAddToCart ? 'Adding to Cart...' : 'Add to Cart'}
+                    </Button>
+                  </Col>
+                </Row>
               )}
               {/* More Info */}
               <Row style={{ marginTop: '0rem' }}>
                 <Col>
                   <Card.Text>
                     <span className="book-info-label">ISBN: </span>
-                    <span className="book-info-value" style={{ color: '#225f49' }}>{book.isbn || 'N/A'}</span>
+                    <span className="book-info-value" style={{ color: '#225f49' }}>
+                      {book.isbn || 'N/A'}
+                    </span>
                   </Card.Text>
                   <Card.Text>
                     <span className="book-info-label">Subject: </span>
-                    <span className="book-info-value" style={{ color: '#225f49' }}>{book.subject || 'N/A'}</span>
+                    <span className="book-info-value" style={{ color: '#225f49' }}>
+                      {book.subject.charAt(0).toUpperCase() + book.subject.slice(1) || 'N/A'}
+                    </span>
                   </Card.Text>
                   <Card.Text>
                     <span className="book-info-label">Course Name: </span>
-                    <span className="book-info-value" style={{ color: '#225f49' }}>{book.courseName || 'N/A'}</span>
+                    <span className="book-info-value" style={{ color: '#225f49' }}>
+                      {book.courseName ? book.courseName.charAt(0).toUpperCase() + book.courseName.slice(1) : 'N/A'}
+                    </span>
                   </Card.Text>
                   <Card.Text>
                     <span className="book-info-label">Course CRN: </span>
-                    <span className="book-info-value" style={{ color: '#225f49' }}>{book.courseCrn || 'N/A'}</span>
+                    <span className="book-info-value" style={{ color: '#225f49' }}>
+                      {book.courseCrn || 'N/A'}
+                    </span>
                   </Card.Text>
                 </Col>
               </Row>
@@ -211,11 +219,7 @@ const BookPageCard = ({ book }: { book: Book }) => {
                     alt="Seller"
                   />
                   <small className="ms-2 text-nowrap">
-                    Sold by
-                    {' '}
-                    <span style={{ color: '#225f49' }}>
-                      {book.owner || 'Unknown'}
-                    </span>
+                    Sold by <span style={{ color: '#225f49' }}>{book.owner || 'Unknown'}</span>
                   </small>
                 </Col>
               </Row>

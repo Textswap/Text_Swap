@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import useSWR from 'swr';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import { Book } from '@prisma/client';
-import BookBuyCard from '@/components/BookCard';
+import BookCard from '@/components/BookCard';
 import styles from './BuyPageClient.module.css';
 
 const fetcher = async (url: string) => {
@@ -217,7 +217,7 @@ const BuyPageClient: React.FC = () => {
                 {filteredBooks.map((book) => (
                   <Col key={book.id} xs={12} sm={6} md={4}>
                     <div className="textbookCard">
-                      <BookBuyCard book={book} />
+                      <BookCard book={book} />
                     </div>
                   </Col>
                 ))}

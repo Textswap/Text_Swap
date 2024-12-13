@@ -67,13 +67,13 @@ const BookCardAdmin = ({ book }: { book: Book }) => {
           <Card.Title>{book.title}</Card.Title>
         </Link>
         <Card.Text>
-          <strong>Price:</strong> ${book.price}
+          <strong>Price:</strong> ${book.price.toFixed(2)}
         </Card.Text>
         <Card.Text>
-          <strong>Subject:</strong> {book.subject}
+          <strong>Subject:</strong> {book.subject.charAt(0).toUpperCase() + book.subject.slice(1)}
         </Card.Text>
         <Card.Text>
-          <strong>Condition:</strong> {book.condition}
+          <strong>Condition:</strong> {book.condition.charAt(0).toUpperCase() + book.condition.slice(1)}
         </Card.Text>
         <div className="admin-buttons">
           <Button
