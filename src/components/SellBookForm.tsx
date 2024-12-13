@@ -235,7 +235,11 @@ const AddBookForm = () => {
 
                 <div className={styles.field}>
                   <label htmlFor="subject">Subject</label>
-                  <Field as="select" name="subject" className="form-control">
+                  <Field
+                    as="select"
+                    name="subject"
+                    className={`form-control ${errors.subject && touched.subject ? 'is-invalid' : ''}`}
+                  >
                     <option value="">Select Subject</option>
                     {[
                       'Architecture',
@@ -303,7 +307,14 @@ const AddBookForm = () => {
 
                 <div className={styles.field}>
                   <label htmlFor="condition">Condition</label>
-                  <Field as="select" name="condition" className="form-control">
+                  <Field
+                    as="select"
+                    name="condition"
+                    className={`form-control ${
+                      errors.condition && touched.condition ? 'is-invalid' : ''
+                    }`}
+                  >
+                    <option value="" label="Select a condition" />
                     <option value="new">New</option>
                     <option value="excellent">Excellent</option>
                     <option value="good">Good</option>
