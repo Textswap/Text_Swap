@@ -121,13 +121,17 @@ Our third and final milestone was to have the project completely finished and po
 #### Sam Tiwanak: 
 Manoa Textswap is an intuitive site that simplifies a common issue for UH students. Often books just go unused after a course. With this website, I was able to easily navigate and even upload potential books I would want to sell. I think it’s a great idea and the layout works well.
 
-#### Person 2:
+#### Alexis Kleeman:
+The website looks excellent. I thought I had the wrong link and that it was a real service, not a student project until I was told otherwise. It appeared to be very user-friendly and easily accessible to the public, with clear, large text and multiple filters to help people find the products they are looking for. The color scheme and layout gave it a professional appearance and quickly fooled me into believing it was a real service, especially with the make an account function.
 
-#### Person 3: 
+#### Ayden Herrera: 
+I think that the functionality of the website works well and is very simplistic. The layout and stylings of the website allow for easy understanding of where everything is, and mae it a lot easier to add listings or find textbooks you need.
 
-#### Person 4: 
+#### Xavier Bledsoe: 
+The design of the site really feels like it's an actual part of the UH system. The colorations and simplified logo make it appear like something the school would implement itself, or at the very least looks like something that was explicitly made for UH. Overall the simplistic styling and the well-made landing page allow for something that's easy on the eyes.
 
-#### Person 5: 
+#### Jerome Demesillo: 
+Overall the website is made in a way where it wouldn't be hard to add new functionalities in the future. You could easily add more features or custimization if you had more time. However, I still think it's well made as it is. It makes for a very good baseline website that could easily be a good addition to the UH community.
 
 ## Developer Guide: 
 
