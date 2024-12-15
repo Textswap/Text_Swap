@@ -1,4 +1,4 @@
-name: Textswap
+name: textswap
 on:
   push:
     branches: [main, master]
