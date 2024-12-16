@@ -28,7 +28,7 @@ Manoa TextSwap is a student-driven platform designed to simplify the process of 
 The sign-up process is accessible by clicking the ‘Get Started’ button or through the link at the top right of the page. The form requires only an email address and a password, ensuring a straightforward registration process. For users with existing accounts, the login page is also located at the top right of the navigation bar. This structure provides clear access to account management features for all users.
 
 #### Login Page
-<p align="center"> <img src="images/txsSignIn.png" width=700px> </p>
+<p align="center"> <img src="images/txs_SignIn.png" width=700px> </p>
 
 #### Sign Up Page
 <p align="center"> <img src="images/txsSignUp.png" width=700px> </p>
