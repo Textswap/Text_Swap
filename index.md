@@ -1,7 +1,7 @@
 
 <p align="center"> <img src="images/txsLogo.png" width=500px> </p>
 
-[![textswap-nextjs](https://github.com/ics-software-engineering/nextjs-application-template/actions/workflows/ci.yml/badge.svg)](https://github.com/ics-software-engineering/nextjs-application-template/actions/workflows/ci.yml)
+[![textswap-nextjs](https://github.com/Textswap/Textswap/actions/workflows/ci.yml/badge.svg)](https://github.com/Textswap/Textswap/actions/workflows/ci.yml)
 
 ## Table of Contents: 
 - [Overview](#overview)
