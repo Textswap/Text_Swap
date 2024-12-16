@@ -3,7 +3,7 @@
 
 [![textswap-nextjs](https://github.com/Textswap/Textswap/actions/workflows/ci.yml/badge.svg)](https://github.com/Textswap/Textswap/actions/workflows/ci.yml)
 
-## Table of Contents: 
+## Table of Contents
 - [Overview](#overview)
 - [User Guide](#user-guide)
   - [Landing Page](#landing-page)
@@ -17,12 +17,12 @@
 - [Community Feedback](#community-feedback)
 - [Developer Guide](#developer-guide)
 
-## Overview: 
+## Overview 
 Manoa TextSwap is a student-driven platform designed to simplify the process of buying and selling secondhand textbooks for the UH Manoa community. The platform enables users to upload used books for sale. Our admin review system ensures that only approved listings appear on the “Buy” page. Users can easily search and filter listings to find textbooks for their specific classes, making the process of acquiring course materials more efficient and affordable. Built with modern web development tools like Next.js and hosted on Vercel, Manoa TextSwap combines a user-friendly interface with tools to streamline textbook exchanges and promote sustainability through reuse.
 
 ## [Deployment](https://manoa-textswap.vercel.app/) 
 
-## User Guide: 
+## User Guide
 
 ### Landing Page
 <p align="center"> <img src="images/txs_Landing.png" width=700px> </p>
@@ -120,7 +120,7 @@ Our second milestone was to start adding minor functionality to the whole site, 
 ### Milestone 3
 Our third and final milestone was to have the project completely finished and polished. In addition, during this milestone, we started to collect community feedback from students in our college who are not part of our class. The feedback from the individuals we got reviews from are listed in the "Community Feedback" section. View our project page [here](https://github.com/orgs/Textswap/projects/8).
 
-## Community Feedback: 
+## Community Feedback
 
 #### Sam Tiwanak: 
 Manoa Textswap is an intuitive site that simplifies a common issue for UH students. Often books just go unused after a course. With this website, I was able to easily navigate and even upload potential books I would want to sell. I think it’s a great idea and the layout works well.
@@ -137,7 +137,7 @@ The design of the site really feels like it's an actual part of the UH system. T
 #### Jerome Demesillo: 
 Overall the website is made in a way where it wouldn't be hard to add new functionalities in the future. You could easily add more features or custimization if you had more time. However, I still think it's well made as it is. It makes for a very good baseline website that could easily be a good addition to the UH community.
 
-## Developer Guide: 
+## Developer Guide 
 
 ### Downloading
 * Clone to GitHub Desktop
