@@ -110,13 +110,13 @@ The admin page serves as a central hub for monitoring and managing books uploade
 ## Milestones
 
 ### Milestone 1
-Our first milestone was to get the basic skeleton up and running, with the functionality of the landing page and the ability to swap between tabs, but not to have any actually working pages yet. In this goal, it was specifically to have a mock-up of the page in order to slowly add functionality over the course of the next two milestones. View our project page [here]().
+Our first milestone was to get the basic skeleton up and running, with the functionality of the landing page and the ability to swap between tabs, but not to have any actually working pages yet. In this goal, it was specifically to have a mock-up of the page in order to slowly add functionality over the course of the next two milestones. View our project page [here](https://github.com/orgs/Textswap/projects/12).
 
 ### Milestone 2
-Our second milestone was to start adding minor functionality to the whole site, but not worrying too much about everything working smoothly. This milestone is more of a progress check-in to ensure that we can complete the website on time in alignment with our current schedule. In addition, we intended to no longer need mock-ups for this milestone. View our project page [here]().
+Our second milestone was to start adding minor functionality to the whole site, but not worrying too much about everything working smoothly. This milestone is more of a progress check-in to ensure that we can complete the website on time in alignment with our current schedule. In addition, we intended to no longer need mock-ups for this milestone. View our project page [here](https://github.com/orgs/Textswap/projects/10).
 
 ### Milestone 3
-Our third and final milestone was to have the project completely finished and polished. In addition, during this milestone, we started to collect community feedback from students in our college who are not part of our class. The feedback from the individuals we got reviews from are listed in the "Community Feedback" section. View our project page [here]().
+Our third and final milestone was to have the project completely finished and polished. In addition, during this milestone, we started to collect community feedback from students in our college who are not part of our class. The feedback from the individuals we got reviews from are listed in the "Community Feedback" section. View our project page [here](https://github.com/orgs/Textswap/projects/8).
 
 ## Community Feedback: 
 
