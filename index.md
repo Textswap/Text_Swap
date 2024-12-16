@@ -73,11 +73,13 @@ For our admin account, the View Details page includes an additional feature: a "
 
 ### Sell Page
 <p align="center"> <img src="images/txs_List.png" width=700px> </p>
+The Sell Page enables users to list a textbook for sale with a user-friendly interface. Users can upload a textbook image by clicking, dragging, or providing an image URL, with the option to preview the uploaded image. The form includes four required fields: Title, Price, Subject, and Condition, ensuring that essential details are provided for each listing. Additionally, users can fill in optional fields such as Course Name, Course CRN, ISBN, and Description to provide more detailed information about the textbook. This setup ensures flexibility while maintaining a structured and straightforward listing process.
 
 #### Image Preview
 Ability to upload straight from their laptop (not just image links)
-Draggable 
-Just copying & pasting image links in the bottom box works
+<p align="center"> <img src="images/txs_PictureUpload.png" width=700px> </p>
+
+Draggable  and just copying & pasting image links in the bottom box works.
 This will also show the preview image in the picture section above 
 <p align="center"> <img src="images/txs_ImgPreview.png" width=700px> </p>
 
