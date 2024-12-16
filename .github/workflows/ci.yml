@@ -1,4 +1,4 @@
-name: Textswap
+name: textswap-nextjs
 on:
   push:
     branches: [main, master]
